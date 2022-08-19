@@ -1,0 +1,194 @@
+@import url("https://fonts.googleapis.com/css?family=Merienda+One|Noto+Serif:400,400i,700,700i");
+
+body {
+	font-size: medium;
+    font-family: "Noto Serif", serif;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+header {
+    padding: 1em;
+    background: #005685;
+    border-radius: 32px;
+}
+
+h1, h2, h3 { color: #005685 }
+
+#page_title {
+   font-family: "Merienda One", cursive;
+   font-size: 5em;
+   font-weight: bold;
+   vertical-align: middle;
+   color: gold;
+}
+
+#mw_logo {
+  vertical-align: middle;
+  height: 200px;
+  padding: 10px;
+}
+
+#header_logo {grid-area: image}
+#header_title {grid-area: title; align-self: center}
+#header_menu {grid-area: menu; align-self: center}
+
+#nav_menu {
+  margin: 0;
+  padding: 0 0 0 0px;
+  list-style: none;
+  width: 100%;
+
+}
+
+#nav_menu li {
+  margin: 0;
+  padding: 0;
+
+  float: left;
+  width: 50%;
+  }
+
+#nav_menu a,
+#nav_menu a:visited {
+  font-variant: small-caps;
+  display: block;
+  margin: 0;
+  padding: 4px 8px;
+  background: #13B0FF;
+  color: white;
+  border-color: #A7DFFF;
+  border-style: outset;
+  border-width: 3px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+#main {
+    margin-top: 2em;
+    clear: both;
+}
+
+.download-div {
+    float: left;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 20px;
+}
+
+.download-icon {
+    height: 200px
+}
+
+.download-info {
+    clear: both;
+    padding-top: 2em;
+}
+
+footer {
+    color: gray;
+    border-top: 1px solid silver;
+    padding-top: 1em;
+    font-size: 0.75em;
+}
+
+
+
+/*  help specific styles  */
+
+.metawin { font-style: italic }
+.menu { font-weight: bold }
+
+.toolbar-button { height: 1.5em; vertical-align: middle }
+
+.function_div h3 {background: lightgray;
+   border: 1px solid darkgray;
+   padding-left: 16px;}
+
+.function_div {padding-bottom: 1em}
+
+table { margin-left: auto; margin-right: auto }
+td, th { padding-top: 5px; padding-bottom: 5px;
+         padding-left: 15px; padding-right: 15px;
+         text-align: center; border: 1px solid silver }
+
+figure { text-align:center }
+figure img {vertical-align: middle}
+
+.output-example {
+  border: 1px solid silver;
+  padding: 20px;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+  color: blue;
+}
+
+#help-main h1 {
+   font-size: 2em;
+   color: white;
+   background-color: #005685;
+   padding-bottom: 0.25em;
+   padding-top: 0.25em;
+   margin-bottom: 0.25em;
+   padding-left: 0.5em;
+   margin-top: 2em;
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+  }
+
+#help-main h2 {
+   background-color: #13B0ff;
+   color: white;
+   padding-bottom: 0.25em;
+   padding-top: 0.25em;
+   margin-bottom: 0.25em;
+   padding-left: 0.5em;
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+  }
+
+
+#help-main h3 {
+   margin-bottom: 0.25em;
+   color: #005685;
+   border-bottom: 1px solid #A7DFFF;
+  }
+
+#help-main h4 {
+	font-variant: small-caps;
+	font-size: 1.25em;
+}
+
+
+
+@media screen and (min-width: 800px) {
+	a:hover {
+	  color: red;
+	}
+
+	#nav_menu a,
+	#nav_menu a:visited {
+	  margin: 0 3px 0 0 ;
+	  }
+
+	#nav_menu li {
+	  width: auto;
+	  }
+
+    header {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:  "image title"
+                              "image menu";
+    }
+
+    #offline-header {
+        grid-template-areas: "image title"
+    }

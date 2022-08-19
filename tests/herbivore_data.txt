@@ -1,0 +1,24 @@
+Species	CD	Var(CD)	CDWG	Var(CDWG)	CDWC	Var(CDWC)	CDCC	Var(CDCC)	MC	Var(MC)	CI	Var(CI)
+Arabidopsis_thaliana									0.401	0.007		
+Betula_pendula	-0.793	0.143					-0.793	0.143			-0.237	0.071
+Brassica_napus											-0.698	0.2
+Brassica_nigra											-0.56	0.008
+Cynoglossum_officinale											-0.327	0.071
+Datura_stramonium	0.5	0.01	0.5	0.01								
+Glycine_max											0.006	0.2
+Gossypium_hirsutum											-0.148	0.143
+Lotus_corniculatus	-1.673	0.333					-1.673	0.333				
+Pastinaca_sativa	0.617	0.02	0.617	0.02								
+Picea_sitchensis	1.306	0.012	1.306	0.012								
+Pinus_sylvestris	-2.092	0.083										
+Plantago_lanceolata	0.788	0.012	1.002	0.035			0.673	0.019				
+Populus_sp											-0.695	0.111
+Populus_tremuloides	0.441	0.012	0.971	0.02	-0.243	0.026						
+Pseudotsuga_menziesii	-0.104	0.143			-0.104	0.143						
+Raphanus_raphanistrum	0.161	0.04			0.161	0.04			-0.09	0.01		
+Salix_myrsinifolia	-0.166	0.03	-0.045	0.083	-0.235	0.048					-0.789	0.333
+Salix_sericea	0.355	0.044	0.355	0.044								
+Sorghum_bicolor	-0.829	0.125					-0.829	0.125				
+Triticum_aestivum											-1.875	1
+Triticum_sp											0.123	0.5
+Vitis_sp											-0.321	0.25

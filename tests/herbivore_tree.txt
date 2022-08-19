@@ -1,0 +1,9 @@
+((Picea_sitchensis:154.761902,
+Pseudotsuga_menziesii:154.761917,Pinus_sylvestris:154.761917):170.238083,((Sorghum_bicolor:12,(Triticum_sp:
+0.545457,Triticum_aestivum:0.545457):11.454545):149,((Pastinaca_sativa:112.000003,((Plantago_lanceolata:
+87.666664,Datura_stramonium:87.666664):9.666672,Cynoglossum_officinale:97.333336):14.666667):12,(Vitis_sp:
+113.333336,((Gossypium_hirsutum:95,(Raphanus_raphanistrum:33.166668,Arabidopsis_thaliana:33.166668,
+(Brassica_napus:16.583334,Brassica_nigra:16.583334):16.583334):61.833336):10.666664,((Betula_pendula:88.5,
+(Lotus_corniculatus:56,Glycine_max:56):32.5):9.5,((Salix_myrsinifolia:40.333328,Salix_sericea: 40.333328):
+20.333334,(Populus_tremuloides:30.333332,Populus_sp:30.333332):30.333332):37.333336):7.666664):7.666672):
+10.666667):37):164):0;

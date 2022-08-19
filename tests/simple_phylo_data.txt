@@ -1,0 +1,5 @@
+Species	Effect	Var	NoWeight
+A	1.711	0.078	1
+B	2.024	0.101	1
+C	2.423	0.12	1
+D	3.159	0.161	1

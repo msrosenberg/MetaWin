@@ -1,0 +1,2630 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>MetaWin Help/Manual</title>
+        <meta name="description" content="MetaWin Help/Manual"/>
+        <link rel="author" href="mailto:msrosenberg@vcu.edu"/>
+        <link rel="stylesheet" href="metawin.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    </head>
+
+    <body>
+        <header id="offline-header">
+            <div id="header_logo">
+                <img id="mw_logo" src="images/metawin3icon.png">
+            </div>
+            <div id="header_title">
+                <span id="page_title">MetaWin</span>
+            </div>
+        </header>
+
+        <div id="main">
+
+        <!╌copy help contents here starting with toc╌>
+
+         <div id="toc">
+          <h1>Help Table of Contents</h1>
+            <ul>
+              <li><a href="#page-title">MetaWin</a>
+               <ul>
+                 <li><a href="#what_is_metawin">What is MetaWin?</a></li>
+                 <li><a href="#how_to">How to Conduct a Meta-Analysis</a></li>
+                 <li><a href="#citation">Citation</a></li>
+                 <li><a href="#suggestions">Suggestions and Bugs</a></li>
+               </ul>
+              </li>
+              <li><a href="#general_interface">General Interface</a>
+                <ul>
+                  <li><a href="#data_tab">Data Tab</a>
+                    <ul>
+                      <li><a href="#importing_data">Importing Data</a></li>
+                      <li><a href="#saving_data">Saving Data</a></li>
+                      <li><a href="#clearing_data">Clearing Data</a></li>
+                      <li><a href="#filtering_data">Filtering Data</a></li>
+                      <li><a href="#data_tab_options">Data Options</a></li>
+                    </ul>
+                   </li>
+                  <li><a href="#output_tab">Output Tab</a>
+                    <ul>
+                      <li><a href="#saving_output">Saving Output</a></li>
+                      <li><a href="#output_tab_options">Output Options</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#graph_tab">Graph Tab</a>
+                    <ul>
+                      <li><a href="#graph_edit">Editing Figures</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#phylogeny_tab">Phylogeny Tab</a></li>
+                  <li><a href="#additional_options">Additional Options</a></li>
+                </ul>
+              </li>
+              <li><a href="#effect_sizes">Calculating Effect Sizes</a>
+                <ul>
+                    <li><a href="#es_interface">General Interface</a></li>
+                    <li><a href="#es_means">Pairs of Means</a>
+                      <ul>
+                          <li><a href="#es_hedgesd">Hedges' <em>d</em></a></li>
+                          <li><a href="#es_lnrr">ln Response Ratio</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#es_2x2">Two &times; Two Contingency Table</a>
+                        <ul>
+                          <li><a href="#es_odds">ln Odds Ratio</a></li>
+                          <li><a href="#es_rate_dif">Rate Difference</a></li>
+                          <li><a href="#es_rel_rate">ln Relative Rate</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#es_corr">Correlation Coefficients</a>
+                      <ul>
+                          <li><a href="#es_fisher_z">Fisher's <em>Z</em>-transform</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#es_prob">Probabilities</a>
+                      <ul>
+                          <li><a href="#es_logit">Logit</a></li>
+                      </ul>
+                    </li>
+                </ul>
+              </li>
+              <li><a href="#analsyses">Analyses</a>
+                <ul>
+                    <li><a href="#basic_analysis">Basic Meta-Analysis</a></li>
+                    <li><a href="#rank_correlation">Rank Correlation Analysis</a></li>
+                    <li><a href="#trim_fill">Trim and Fill Analysis</a></li>
+                    <li><a href="#jackknife_analysis">Jackknife Meta-Analysis</a></li>
+                    <li><a href="#cumulative_analysis">Cumulative Meta-Analysis</a></li>
+                    <li><a href="#grouped_analysis">Grouped Meta-Analysis</a></li>
+                    <li><a href="#nested_analysis">Nested Group Meta-Analysis</a></li>
+                    <li><a href="#linear_analysis">Linear Meta-Regression Analysis</a></li>
+                    <li><a href="#glm_analysis">Complex/GLM Meta-Analysis</a></li>
+                    <li><a href="#phylogenetic_glm">Phylogenetic GLM Meta-Analysis</a></li>
+                </ul>
+              </li>
+              <li><a href="#graphs">Graphs and Figures</a>
+                <ul>
+                    <li><a href="#scatter_plot">Scatter/Funnel Plot</a></li>
+                    <li><a href="#weighted_histogram">Weighted Histogram</a></li>
+                    <li><a href="#forest_plot">Forest Plot</a></li>
+                    <li><a href="#normal_quantile_plot">Normal Quantile Plot</a></li>
+                    <li><a href="#galbraith_plot">Galbraith (Radial) Plot</a></li>
+                </ul>
+              </li>
+              <li><a href="#references">References</a></li>
+            </ul>
+      </div>
+
+      <div id="help-main">
+        <div class="major_div">
+          <h1 id="metawin">MetaWin</h1>
+          <h2 id="what_is_metawin">What is MetaWin?</h2>
+            <figure><img src="images/metawin3splash_square.png"></figure>
+            <p>
+                <span class="metawin">MetaWin</span> 3 is free, open source software for conducting the quantitative
+                meta-analysis portion of research synthesis. It has been rewritten from scratch relative
+                to earlier versions (see <a href="#history">history</a>). The new version is written entirely
+                in Python, and the code is available on Github at
+                <span style="color: red; font-weight: bold">put link here when release is official</span>. Single
+                file executable versions of the software for Windows and Mac operating systems can be downloaded from
+                <a href="https://www.metawinsoft.com">https://www.metawinsoft.com</a>.
+            </p>
+          <h3>A Brief History</h3>
+            <p>
+                <span class="metawin">MetaWin</span> (<a href="#rosenberg_et_1997">Rosenberg <em>et al.</em> 1997</a>)
+                was first published as a small, commercial piece of software that made meta-analytical calculations
+                more accessible to the burgeoning research synthesis community, particularly in the ecological
+                sciences, and helped introduce the use of resampling methods into the meta-analytic statistical
+                repertoire (<a href="#adams_et_1997">Adams <em>et al.</em> 1997</a>).
+            </p>
+            <figure><img style="height:300px" src="images/mw1_cover.jpg">
+                <img  style="height:300px" src="images/mw2_cover.jpg"></figure>
+            <p>
+                Version 2 of the software (<a href="#rosenberg_et_2000">Rosenberg <em>et al.</em> 2000</a>) was
+                substantially expanded over the original version, easier to use, and more flexible and powerful.
+            </p>
+            <p>
+                The original versions of <span class="metawin">MetaWin</span> were written in Pascal and Delphi
+                and depended on a number of commercially licensed packages. These developmental environments
+                combined to functionally restrict the software to the Windows operating system and prevented
+                any practial open source release as the software was otherwise uncompilable without these components.
+                These also restricted further development and updates as the developmental components and systems
+                gradually became incompatible with newer operating systems.
+            </p>
+            <p>
+                Despite these limitations, <span class="metawin">MetaWin</span> 2 continued to be regularly used and
+                cited decades after its original release.
+            </p>
+
+          <h2 id="how_to">How to Conduct a Meta-Analysis</h2>
+            <p>
+            The purpose of this manual is to explain the software, not to teach the entire process of conducting
+            a systematic review, of which the computational meta-analytic portion is only a part. Many books and
+            tutorials have been written on the subject. One I would recommend (full disclosure: I was a contributor
+            to the work) is the
+            <a href="https://press.princeton.edu/books/hardcover/9780691137285/handbook-of-meta-analysis-in-ecology-and-evolution">Handbook of Meta-Analysis in Ecology and Evolution</a>,
+            although there are many alternatives to consider.
+           </p>
+            <p>
+            The computational methodology in <span class="metawin">MetaWin</span> is largely independent
+            of discipline, although different research disciplines do have their own eccentricities when it comes
+            to analytical approaches, as well as particular challenges based on the sorts questions they tend to
+            ask and data they tend to deal with.
+           </p>
+
+
+          <h2 id="citation">Citation</h2>
+          <p>While we are still establishing a proper citation for this version of the software, until that is
+              finalized, we would suggest the following as a minimal placeholder:</p>
+            <blockquote>Rosenberg, M.S. (2022) <em>MetaWin</em> 3. https://www.metawinsoft.com</blockquote>
+          <p>Depending on the context, you might want to consider specifying the version (3.x.x) as part of your
+              methods.</p>
+
+          <h2 id="suggestions">Suggestions and Bugs</h2>
+          <p>
+            Suggestions and bug reports can be submitted either through the Github site
+              (<span style="color: red; font-weight: bold">NOT YET PUBLIC</span>), which allows public and formal
+              tracking of feedback, or via email to <a href="mailto:msrosenberg@vcu.edu">msrosenberg@vcu.edu</a>.
+          </p>
+          <p>
+              For bug reports, please be specific about details including (1) what release of <em>MetaWin</em>
+              were you using (listed at beginning of output or via <span class="menu">Help&rarr;About MetaWin</span>),
+              (2) what Operating System were you using, and (3) as many specifics about the type of analysis you
+              were conducting, including specific choices you made. We may secondarily request a copy of the dataset
+              if we are cannot readily duplicate the bug.
+          </p>
+        </div>
+
+        <div class="major_div">
+          <h1 id="general_interface">General Interface</h1>
+            <p>The primary graphical user interface (GUI) of <span class="metawin">MetaWin</span> is a tabbed
+            window, with each tab containing a different type of information. A typical menu bar and toolbar are
+            shown at the top of the window, while each tab has a unique toolbar on the left side. At the start,
+            only two tabs will be visible, but a few others may appear as needed.</p>
+
+            <figure><img src="images/main_window.png"></figure>
+
+          <h2 id="data_tab">Data Tab</h2>
+            <p>The Data Tab contains a spreadsheet like view of data imported or created within
+                <span class="metawin">MetaWin</span>. Data within the spreadsheet is not editable, that is, values
+            cannot be changed or deleted. That level of manipulation must be done externally. The toolbar on the
+                left side of the Data Tab can be hidden/displayed by choosing
+                <span class="menu">Hide/Show Toolbar</span> from the <span class="menu">Options&rarr;Data
+                    Options</span> menu.</p>
+
+          <h3 id="importing_data">Importing Data</h3>
+            <p><span class="metawin">MetaWin</span> will only import text files, so data held in a traditional
+                spreadsheet such as Microsoft Excel will first have to be exported. Any type of text delimiter can be
+            used, although we recommend tab delimited as the simplest and most effective.</p><p>Data should be organized
+            in a typical row &times; column table, with each row representing a study and each column a type of data
+            associated with the study. Although not required, it is
+                <strong>highly recommended</strong> that the first row of the imported file contain column
+                headers. While less important, it is also generally recommended that the first column contain study
+                labels.</p>
+            <p>Data can be imported into <span class="metawin">MetaWin</span> by choosing
+                <span class="menu">Load Data</span> from the  <span class="menu">File</span> menu or by pressing the
+                <img class="toolbar-button" src="images/folder-action-open-filled@256px.png"/> button in the toolbar on
+                the left side of the tab. Upon doing so, the user will first choose the file to import using the system
+            file browser. This will be followed by the Import Text Options dialog window.</p>
+
+            <figure><img src="images/import_data_dialog.png"></figure>
+
+            <p>In this window, you can choose which delimiter(s) were used to separate columns within the file, as well
+            as whether or not the first row and/or first column contains row and column headers, respectively. The
+            remainder of the window illustrates a live view of how the data will be input based on the current choices.</p>
+            <p>Upon acceptance of your options, the data will be imported and displayed in the Data Tab grid.</p>
+
+
+          <h3 id="saving_data">Saving Data</h3>
+            <p>If you have modified the imported data through the cacluation of effect sizes, this updated
+                data table can be saved to a text file by choosing
+                <span class="menu">Save Data</span> from the <span class="menu">File</span> menu or by pressing the
+                <img class="toolbar-button" src="images/save-filled-table@256px.png"/> button in the toolbar on
+                the left side of the tab.</p>
+            <p>You will first be presented with a choice of column delimter, either Tabs, Spaces, or Commas, as well as
+            the number of decimal places for real numbers, followed by a system file browser to choose the file name
+            and location for the output.</p>
+
+            <figure><img src="images/save_data_dialog.png"></figure>
+
+            <h3 id="clearing_data">Clearing Data</h3>
+            <p>To erase all data currently loaded into memory, choose
+                <span class="menu">Clear Data</span> from the <span class="menu">File</span> menu or press the
+                <img class="toolbar-button" src="images/table-eraser@256px.png"/> button in the toolbar on
+                the left side of the tab.</p>
+
+          <h3 id="filtering_data">Filtering Data</h3>
+            <p>Data filtering allows one to remove studies from subsequent analyses and graphs. The only operation which
+                ignores filtering is the calculation of effect sizes (<em>i.e.</em>, <span class="metawin">MetaWin</span>
+                will attempt to calculate effect sizes for all rows, regardless of filtering choices).
+                There are two ways in which studies can be filtered.</p>
+            <h4>Filtering Rows</h4>
+            <p>Individual studies can be directly filtered by right-clicking on the row header and choosing
+                <span class="menu">Toggle Row Filter</span> from the popup menu. The background of the row will change
+                color (light pink by
+                default) indicating the row is currently filtered from future analyses. Toggling the row again will remove
+                the filter.</p>
+
+            <h4>Filtering within Columns</h4>
+            <p>Instead of filtering studies directly, one can specify values within a column to filter. To do this,
+            right-click on the column and choose <span class="menu">Filter within Column</span>. This will open a
+            new window with a series of checkboxes indicating all of the values found within the column. Uncheck
+            those you want to exclude from the study. Studies with that particular value will be colored light pink
+            (by default), just as with row filtering, but the column containing the value which is leading to the
+            filtering will be given a different color (red by default).</p>
+
+            <h4>Clearing Filters</h4>
+            <p>Individual filters can be removed by repeating and reversing the process used to create the filter.
+                Alternatively, all filters can be removed by clicking the
+                <img class="toolbar-button" src="images/filter-filled-eraser@256px.png"/> button in the toolbar on
+                the left side of the Data Tab.</p>
+
+          <h3 id="data_tab_options">Data Options</h3>
+
+          <h4>Filtered Colors</h4>
+          <p>Two colors are used to indicate rows of the data table that are actively filtered from subsequent analyses.
+            The first color generally indicates that the row has been filtered, while the second highlights specific columns
+            leading to the row filtering, when applicable. By default, these colors are light pink and red, but can be
+            customized by choosing <span class="menu">Filtered Row Color</span> and
+            <span class="menu">Filtered within Column Color</span> from the
+            <span class="menu">Options&rarr;Data Options</span> menu or
+            <img class="toolbar-button" src="images/table-row-color-wheel@256px.png"/> and
+            <img class="toolbar-button" src="images/table-column-color-wheel@256px.png"/> from the toolbar on the
+            left side of the Data Tab. If you change these colors, <span class="metawin">MetaWin</span> will attempt
+            to remember these choices the next time you run the program.</p>
+
+          <h4>Decimal Places</h4>
+          <p>By default, real numbers that appear in the data table will be displayed to 2 decimal places. You can change
+            this amount by choosing <span class="menu">Decimal Places</span> from the
+            <span class="menu">Options&rarr;Data Options</span> menu or
+            <img class="toolbar-button" src="images/format-decimal@256px.png"/> from the toolbar on the
+            left side of the Data Tab. Valid options are integers from 0&ndash;15. If you change the number
+            of decimal places displayed in the data table, <span class="metawin">MetaWin</span> will attempt to remember
+            this choice the next time you run the program.</p>
+
+          <h2 id="output_tab">Output Tab</h2>
+          <p>All textual output is displayed in the Output Tab, which will generally be automatically shown upon
+            completion of an analysis.</p>
+
+            <figure><img src="images/output_tab.png"></figure>
+
+          <p>Text displayed in this tab can be manually edited
+            by the user and standard text edit commands, such as Copy, Cut, and Paste work through typical keyboard
+            commands (<em>e.g.,</em> Control-C, Control-X, and Control-V, respectively) or by right-clicking
+            within the output area. The toolbar on the left side of the Output Tab can be
+            hidden/displayed by choosing <span class="menu">Hide/Show Toolbar</span> from the
+            <span class="menu">Options&rarr;Output Options</span> menu.</p>
+
+          <section>
+            <h3 id="saving_output">Saving Output</h3>
+            <p>Output can be exported to a file by choosing <span class="menu">Save Output</span> from the
+              <span class="menu">File</span> menu or
+              <img class="toolbar-button" src="images/save-filled-text-box@256px.png"/> from the toolbar on the
+              left side of the Output Tab. Output can be saved in three formats:
+            </p>
+            <ul>
+              <li>Plain Text: The plain text format strips all formatting (font size, bold, etc.) from the output
+              and just saves the raw characters.</li>
+              <li>HTML: The HTML format preserves all of the formatting as is; this output file is best displayed in a
+              browser or converted by a word processor.</li>
+              <li>Markdown: Attempts to preserve some of the output semantics through conversion to Markdown. Not all
+              formatting will necessarily be maintained.</li>
+            </ul>
+            <p>Note that all three formats are fundamentally text files, the difference is whether a form of text
+              formatting is included within the files or not.</p>
+          </section>
+
+          <section>
+            <h3 id="output_tab_options">Output Options</h3>
+            <h4>Decimal Places</h4>
+            <p>By default, real numbers that appear in the output will be displayed to 4 decimal places. You can change
+              this amount by choosing <span class="menu">Decimal Places</span> from the
+              <span class="menu">Options&rarr;Output Options</span> menu or
+              <img class="toolbar-button" src="images/format-decimal@256px.png"/> from the toolbar on the
+              left side of the Output Tab. Valid options are integers from 0&ndash;15. Note that changing this value will
+              only affect future output; vales already written to the output will not be changed. If you change the number
+              of decimal places to use in the output, <span class="metawin">MetaWin</span> will attempt to remember this
+              choice the next time you run the program.</p>
+            <p>One exception to this choice are <em>p</em>-values generated from randomization tests. The number of decimal
+              places used to display these values is automatically determined by the software based on the number of desired
+              replicates.</p>
+
+            <h4 id="alpha_level">Significance Level</h4>
+            <p>By default, significance levels for generating confidence intervals and certain types of tests are
+                based on a standard value of 5% (&alpha; = 0.05). This value can be changed by
+                choosing <span class="menu">Significance Level</span> from the
+              <span class="menu">Options&rarr;Output Options</span> menu or
+              <img class="toolbar-button" src="images/letter-alpha@256px.png"/> from the toolbar on the
+              left side of the Output Tab. Valid options are numbers between 0.01 and 1.0).
+                Note that changing this value will
+              only affect future output; vales already computed will not be changed. If you change the significance
+                level to use in the output, <span class="metawin">MetaWin</span> will attempt to remember this
+              choice the next time you run the program.</p>
+              <p>This choice also effects a few of the direct figures you can draw, such as
+                  <a href="#forest_plot">Forest Plots</a>
+                  and <a href="#normal_quantile_plot">Normal Quantile Plots</a>.</p>
+
+            <h4>Font</h4>
+            <p>You can change the font and it's properties used in the Output Tab by choosing
+              <span class="menu">Font</span> from the
+              <span class="menu">Options&rarr;Output Options</span> menu or
+              <img class="toolbar-button" src="images/text-fonts@256px.png"/> from the toolbar on the
+              left side of the Output Tab. Changing the font will affect the entire output already displayed, not just new
+              output. Tables in the output are always displayed in a monospace font, regardless of the primary font chosen
+              for the rest of the output.</p>
+          </section>
+
+          <h2 id="graph_tab">Graph Tab</h2>
+            <p>
+                The Graph Tab will automatically appear the first time a figure is created by the software. Only a
+                single figure can be displayed at a time; each new figure will erase the previous one. To save a
+                figure, press the <img class="toolbar-button" src="images/save-filled-picture-filled@256px.png"/>
+                button from the Graph Tab toolbar.
+            </p>
+            <figure><img src="images/graph_tab.png"></figure>
+            <p>
+                In addition to the toolbar and the figure itself, the Graph Tab has an automatically generated
+               caption at the bottom of the window, based on the type of figure and the user decisions made
+               in creating it. The caption will sometimes include citations to methods, when appropriate.
+           </p>
+            <p>
+                All of the underlying data making up a figure can be exported by clicking
+                <img class="toolbar-button" src="images/data-export@256px.png"/> from the Graph Tab toolbar. This
+                could allow a user to redraw the figure in a program of their choice to give them greater control
+                over the precise figure style and form.
+            </p>
+            <h3 id="graph_edit">Editing Figures</h3>
+            <p>
+                Figures can be edited by clicking the
+                <img class="toolbar-button" src="images/picture-edit-filled@256px.png"/> from the Graph Tab toolbar.
+                This will bring up a window with a variety of options, depending on the exact elements that make
+                up the figure.
+           </p>
+            <figure><img src="images/graph_edit.png"></figure>
+            <p>
+                Most elements will have a checkbox next to their name (checked by default).
+                Unchecking this box will hide the element when the figure is redrawn. Most of the editing options fall
+                into just two major types of plot elements:
+            </p>
+            <h4 id="line_styles">Lines</h4>
+            <p>
+                Many figures have lines of various sorts. Each type of line in a figure has three basic properties:
+                color, width, and style. Styles include solid, dashed, dotted, and dash-dot.
+            </p>
+            <h4 id="markers_styles">Markers</h4>
+            <p>
+                Markers represent specific points drawn in a figure, such as those from a scatter plot. Markers have
+                three basic properties and three extended properties. The three basic properties are color, size, and
+                shape. Note that size is measured in terms of marker area. The color property for markers has an
+                additional checkbox titled &ldquo;No fill color&rdquo;. Checking this box will eliminate the primary
+                color the marker and only use the edge color, assuming the chosen marker is a filled marker (see
+                below). Unfilled markers will turn invisible if the no fill option is checked.
+            </p>
+            <p>
+                Marker shapes fall into two basic categories: filled and unfilled markers. Unfilled markers are mostly,
+                but not exclusively made up drawn lines (<em>e.g.,</em> an X or a + symbol). Unfilled markers only use
+                a single color. In contrast, filled markers (<em>e.g.,</em> squares, circles, or diamonds) have both
+                a primary color (the fill) as well as an outside edge. The edge not only has an independent color,
+                but also has both a width and a style (identical to standard lines). These extended edge properties are
+                ignored when unfilled markers are chosen.
+            </p>
+            <p>
+                The primary color property for markers has an additional checkbox titled &ldquo;No fill color&rdquo;.
+                Checking this box will eliminate the primary color of the marker and only use the edge color, assuming
+                the chosen marker is a filled marker. Unfilled markers will turn invisible if the no fill option is
+                checked.
+            </p>
+
+          <h2 id="phylogeny_tab">Phylogeny Tab</h2>
+            <p>
+                The Phylogeny Tab is not shown by default because it represents a specialty analysis that may only
+                be of interest to a subset of users. In order to activate the tab, one must first choose
+                <span class="menu">Show Phylogeny Tab</span> from the <span class="menu">Options</span> menu. This
+                will open the tab, which allows a user to import a phylogeny as part of a meta-analysis.
+            </p>
+
+            <figure><img src="images/phylogeny_tab.png"></figure>
+
+            <p>
+                The Phylogeny Tab only has a single option, a Load Phylogeny button
+                <img class="toolbar-button" src="images/folder-action-open-filled@256px.png"/> on the left-hand
+                side of the tab. Pressing this will bring up the system file browser, allowing one to specify the
+                file containing the phylogeny to import. <span class="metawin">MetaWin</span> will only read text
+                files containing a phylogeny in <a href="https://en.wikipedia.org/wiki/Newick_format">Newick
+                format</a>. The phylogeny is expected to be the first item within the file.
+            </p>
+            <p>
+                Upon a successful import, the top of the phylogeny tab will list the number of tips found in the
+                imported phylogeny and a visualization of the phylogeny will be displayed in the remainder of the
+                tab. This visualization is minimalistic and simply meant to allow a user to visually validate that the
+                phylogeny was imported correctly. Currently, the entire phylogeny is squeezed into the window and thus
+                may appear overly compressed if the window is not expanded.
+            </p>
+            <figure><img src="images/phylogeny_tab_loaded.png"></figure>
+            <p>
+                Once a phylogeny has been loaded into memory, the <a href="#phylogenetic_glm">Phylogenetic GLM
+                Meta-Analysis</a> option becomes available.
+            </p>
+
+          <h2 id="additional_options">Additional Options</h2>
+
+            <h3 id="updates">Check for Updates</h3>
+            <p>By default, <span class="metawin">MetaWin</span> will automatically try to check to see if an updated
+            version of the program is available when first opened. This option can be disabled under the
+            <span class="menu">Options</span> menu. A manual check for an update can also be initiated at any time via
+                an option under the <span class="menu">Help</span> menu. If an updated version is found, the user
+            will be given the option to go the download website (the program will not automatically download nor
+            install updates). If the internet is unavailable or otherwise blocked, the program will report this as
+            no updates found.</p>
+
+            <h3 id="localization">Languages and Localization</h3>
+            <p><span class="metawin">MetaWin</span> 3 is designed to allow for localization of the interface and output to
+                languages other than English. However, the author is neither comfortable nor capable of doing these
+                translations by themselves. If you would like to see <span class="metawin">MetaWin</span> available in a
+                particular language, please contact us at <a href="mailto:msrosenberg@vcu.edu">msrosenberg@vcu.edu</a>
+                and we will provide a list of English words and
+                phrases which will require translation into your language of choice. With your translation in hand, we can
+                then add that language as an option within the program to make it more accessible to the global community.
+                Credit will be provided for all translators.</p>
+        </div>
+
+        <div class="major_div">
+           <h1 id="effect_sizes">Calculating Effect Sizes</h1>
+            <p>
+                Effect sizes are fundamental to meta-analysis. A number of standardized measures can be
+                calculated within <span class="metawin">MetaWin</span>, or the user can directly import
+                effect sizes and their associated variances and skip straight to analysis. Effect size calculation
+                can be accessed by choosing <span class="menu">Effect Sizes</span> from the
+              <span class="menu">Computation</span> menu or
+              <img class="toolbar-button" src="images/tool-ruler-filled@256px.png"/> from the toolbar.
+            </p>
+
+
+            <h2 id="es_interface">General Interface</h2>
+            <p>
+                The effect size calculation dialog has four sections: (1) specification of data type, (2)
+                specification of effect size metric, (3) specification of data sources, and (4) an optional
+                specification of effect size polarity. Three data types are currently supported, each with its
+                own set of effect size metrics and data requirements, described below.
+            </p>
+            <p>
+                Effect size polarity should be used to standardize the sign (polarity) of the effect size metrics,
+                when not all experimental conditions were conducted in the same direction. As an example, if some
+                studies were based on the addition of CO<sub>2</sub> to a system while others were based on the
+                removal of CO<sub>2</sub> from a system, the expectation is that a positive effect for one would be
+                equivalent to a negative for the other. The polarity indicator let's a user specify which studies
+                were measured in the same "direction" and will automatically reverse signs of those in the opposite
+                so that all calculated effect sizes represent the same thing.
+            </p>
+            <p>
+                The polarity columns can contain numbers or text. Generally one would use a simple indicator, such as
+                the numbers 1 and -1 or the symbols + and -. The actual programatic interpretation, is that if the
+                value is a number, negative values are used to indicate negative polarity, while positive values
+                and zero indicate positive polarity. If the  value is not a number, a negative sign "-" indicates
+                negative polarity, while any other value indicates positive polarity.
+            </p>
+            <p>
+                <span class="metawin">MetaWin</span> will attempt to calculate effect sizes for all rows in the
+                data matrix, whether <a href="#filtering_data">filtering</a> has been enabled or not. Rows for which
+                an effect size cannot be calculated, whether because of missing data or invalid values, will be
+                left blank in the resulting columns in the data table and will be indicated in the text output.
+            </p>
+
+            <h3 id="es_output">Effect Size Calculation Output</h3>
+            <p>
+                When effect sizes are calculated, two new columns are added to the data matrix, one containing the
+                effect size for each study and one the estimated variance of that effect size. Rows containing
+                missing or invalid data for the effect size chosen will remain blank. In addition, the data
+                options and the values are reported in the
+                <a href="#output_tab">Output Tab</a>, as in this example of output:
+            </p>
+<blockquote class="output-example">
+<strong>Calculate Effect Sizes</strong>
+<p>
+ln Response Ratio<br/>
+→ Citation: Hedges <em>et al.</em> (1999)
+</p><p>
+Data obtained from columns:<br/>
+→ Control Means: Xc<br/>
+→ Control Sample Sizes: Nc<br/>
+→ Control Standard Deviations: Sc<br/>
+→ Treatment Means: Xe<br/>
+→ Treatment Sample Sizes: Ne<br/>
+→ Treatment Standard Deviations: Se<br/>
+→ Effect Size Polarity Indicator: +/-</p>
+<pre><code>
+Study    ln Response Ratio   var(ln Response Ratio)
+---------------------------------------------------
+Row 1               0.0199                   0.0758
+Row 2               0.3211                   0.0515
+Row 3              -0.1542                   0.0214
+Row 4              -0.2412                   0.0072
+Row 5              -0.3567                   0.0067
+Row 6              -0.6022                   0.0217
+Row 7               1.2088                   0.7026
+ Row 8       No effect size could be calculated
+ Row 9       No effect size could be calculated
+Row 10       No effect size could be calculated
+Row 11              0.0000                   0.0599
+Row 12             -0.2392                   0.0225
+Row 13              1.1399                   0.1608
+Row 14       No effect size could be calculated
+Row 15       No effect size could be calculated
+Row 16              1.5072                   0.4254
+Row 17       No effect size could be calculated
+Row 18       No effect size could be calculated
+Row 19              1.3030                   0.2828
+Row 20       No effect size could be calculated
+Row 21       No effect size could be calculated
+Row 22              0.3045                   0.0161
+Row 23              3.1676                   4.5598
+Row 24       No effect size could be calculated
+Row 25       No effect size could be calculated
+Row 26       No effect size could be calculated
+Row 27              0.1341                   0.0135
+Row 28              0.2351                   0.4182
+Row 29       No effect size could be calculated
+Row 30              1.6285                   0.4528
+Row 31       No effect size could be calculated
+Row 32             -0.4783                   0.4762
+Row 33       No effect size could be calculated
+Row 34       No effect size could be calculated
+Row 35              1.4748                   2.0064
+Row 36              1.7636                   3.4144
+Row 37       No effect size could be calculated
+Row 38       No effect size could be calculated
+Row 39       No effect size could be calculated
+Row 40             -0.6931                   1.1990
+Row 41              0.5613                   0.1377
+Row 42             -0.6870                   0.0613
+Row 43             -0.2818                   0.1472
+
+</code></pre>
+<strong>References</strong>
+<p>
+Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response ratios in experimental
+    ecology. <em>Ecology</em> 80(4):1150&ndash;1156.</p>
+</blockquote>
+
+            <h2 id="es_means">Pairs of Means</h2>
+            <p>
+                One common type of data comes from studies which compare two estimated means (\(\bar{y}_1\) and
+                \(\bar{y}_2\)), along with
+                associated sample sizes (\(n_1\) and \(n_2\)) and standard deviations (\(s_1\) and \(s_2\)).
+                The common effect sizes calculated from pairs of means are based on their standardized difference or
+                their ratio.
+            </p>
+            <figure><img src="images/effects_means.png"></figure>
+            <h3 id="es_hedgesd">Hedges' <em>d</em></h3>
+            <p>
+                Many estimates of a standardized difference of means have been proposed for meta-analysis, but the
+                most widely used and preferred metric is generally known as Hedges' <em>d</em>
+                (<a href="#hedges_olkin_1985">Hedges and Olkin 1985</a>). It is calculated as
+            </p>
+
+            <p>$$d=\frac{\bar{y}_1 - \bar{y}_2}{\sqrt{\frac{\left(n_1 - 1\right)s^{2}_i + \left(n_2 - 1\right)s^{2}_2}{n_1 + n_2 - 2}}}J,$$</p>
+            <p>where</p>
+            <p>$$J=1-\frac{3}{4\left(n_1 + n_2 - 2\right) - 1}$$</p>
+            <p>is a correction for small sample size. Hedges' <em>d</em> has an associaed variance estimate of </p>
+            <p>$$v_d=\frac{n_1 + n_2}{n_1 n_2} + \frac{d^2}{2\left(n_1 + n_2\right)}.$$</p>
+
+            <h3 id="es_lnrr">ln Response Ratio</h3>
+            <p>
+                An alternate effect size to the standardized mean difference is the ratio of the means, also known
+                as the response ratio (<a href="#hedges_et_1999">Hedges <em>et al.</em> 1999</a>). It is useful
+                when one wishes to compare the magnitudes of two means with the same sign. However, as ratios
+                generally have poor statistical properties, one instead transforms the ratio to a metric with more
+                desirable properties using the natural log. The natural log of the response ratio is calculated as
+            </p>
+            <p>$$\ln{R}=\ln{\frac{\bar{y}_1}{\bar{y}_2}},$$</p>
+            <p>with variance</p>
+            <p>$$v_{\ln{R}}=\frac{s_1^2}{n_1 \bar{y}_1^2} + \frac{s_2^2}{n_2 \bar{y}_2^2}.$$</p>
+
+
+          <h2 id="es_2x2">Two &times; Two Contingency Table</h2>
+            <p>
+                A common form of contrasting data in medical research and related fields is a contingency table.
+                This compares two groups (generally, a treatment and a control) and the observed counts (A, B, C,
+                and D in the following table) for two
+                possible outcomes (frequently a positive and a negative outcome, <em>e.g.</em>, alive vs. dead).
+            </p>
+            <table>
+                <tr><th></th><th>Control</th><th>Treatment</th><th>Total</th></tr>
+                <tr><th>Response</th><td>\(A\)</td><td>\(B\)</td><td>\(A+B\)</td></tr>
+                <tr><th>No Response</th><td>\(C\)</td><td>\(D\)</td><td>\(C+D\)</td></tr>
+                <tr><th>Total</th><td>\(n_1 = A+C\)</td><td>\(n_2 = B+D\)</td><td>\(A+B+C+D\)</td></tr>
+            </table>
+            <p>
+                Before effect sizes can be calculated for this sort of data, one must generally first determine
+                the rate of response for each group. The rate ranges from zero to one, and can be interpreted as
+                the probability of a member of that group showing the response. The rate \(P\) is simply the number
+                that show the response divided by the total, or
+            </p>
+            <p>$$P_1 = \frac{A}{n_1}\text{, }P_2 = \frac{B}{n_2}.$$</p>
+            <p>
+                From these there are three common effect size measures.
+            </p>
+            <figure><img src="images/effects_2x2.png"></figure>
+            <h3 id="es_odds">ln Odds Ratio</h3>
+            <p>
+                While there are a number of simple ways to calculate the odds ratio and its variance, but for the
+                purposes of meta-analysis there is a more complicated approach (<a href="mantel_haenszel_1959">Mantel
+                and Haenzel 1959</a>) that gives better statistical results, particularly when sample sizes are small.
+                In this approach the observed response from the first (control) group is simply
+            </p>
+            <p>$$O = A.$$</p>
+            <p>
+                The expected response for this group if there were no differences between the two groups is
+            </p>
+            <p>$$\hat{O} = \frac{\left(A+B\right)\left(A+C\right)}{\left(A+B+C+D\right)}.$$</p>
+            <p>
+                The variance of the difference between these two values is
+            </p>
+            <p>$$V = \hat{O}\left(\frac{A+C}{A+B+C+D}\right) \left(\frac{C+D}{A+B+C+D-1}\right).$$</p>
+            <p>
+                These allow the ln odds ratio to be estimated as
+            </p>
+            <p>$$\ln OR = \frac{O - \hat{O}}{V},$$</p>
+            <p>
+                with variance
+            </p>
+            <p>$$v_{\ln OR} = \frac{1}{V}.$$</p>
+
+
+            <h3 id="es_rate_dif">Rate Difference</h3>
+            <p>
+                The rate difference (<a href="#dersimonian_laird_1986">DerSimonian and Laird 1986</a>,
+                <a href="#labbe_et_1987">L’Abbé <em>et al.</em> 1987</a>,
+                <a href="#berlin_et_1989">Berlin <em>et al.</em> 1989</a>,
+                <a href="#normand_1999">Normand 1999</a>) is simply the difference in rates, or</p>
+            <p>$$RD = P_1 - P_2,$$</p>
+            <p>with variance</p>
+            <p>$$v_{RD} = \frac{P_1 \left(1-P_1\right)}{n_1} + \frac{P_2 \left(1-P_2\right)}{n_2}.$$</p>
+
+            <h3 id="es_rel_rate">ln Relative Rate</h3>
+            <p>The relative rate (or rate ratio) (<a href="#greenland_1987">Greenland 1987</a>,
+                <a href="#labbe_et_1987">L’Abbé <em>et al.</em> 1987</a>, <a href="#normand_1999">Normand 1999</a>) is
+            generally log-transformed as
+            <p>$$\ln RR = \ln\frac{P_1}{P_2}$$</p>
+            <p>with variance</p>
+            <p>$$v_{\ln RR} = \frac{1 - P_1}{n_1 P_1} + \frac{1 - P_2}{n_2 P_2}.$$</p>
+
+
+          <h2 id="es_corr">Correlation Coefficients</h2>
+            <p>When association between two continuous variables is of interest, Pearson's correlation coefficient
+                <em>r</em>, combined with it's sample size, is commonly used as an effect-size measure. </p>
+            <figure><img src="images/effects_r.png"></figure>
+            <h3 id="es_fisher_z">Fisher's <em>Z</em>-transform</h3>
+            <p>
+                Because the distribution of Pearson's
+                correlation is skewed as it approaches &plusmn;1, it is generally first transformed using
+                Fisher's <em>Z</em>-transformation (<a href="#fisher_1928">Fisher 1928</a>):
+            </p>
+            <p>$$z=\frac{1}{2}\ln\left(\frac{1+r}{1-r} \right),$$</p>
+            <p>
+                whose asymptotic variance estimate (<a href="#sokal_rohlf_1995">Sokal and Rohlf 1995</a>) is simply
+            </p>
+            <p>$$v_z=\frac{1}{n-3}.$$</p>
+
+
+          <h2 id="es_prob">Probabilities</h2>
+            <p>When probabilities are available, combined with their sample size, one can use the logit as
+            an effect size measure (<a href="#mengersen_gurevitch_2013">Mengersen and Gurevitch 2013</a>).</p>
+            <figure><img src="images/effects_p.png"></figure>
+            <h3 id="es_logit">Logit</h3>
+            <p>
+                The logit is essentially the log-odds, and is calculated as
+            </p>
+            <p>$$\text{logit}=\ln\left(\frac{p}{1-p}\right),$$</p>
+            <p>
+                with variance
+            </p>
+            <p>$$v_{\text{logit}}=\sqrt{\frac{1}{np} + \frac{1}{n\left(1-p\right)}}.$$</p>
+
+
+        </div>
+
+        <div class="major_div">
+          <h1 id="analyses">Analyses</h1>
+            <p>
+                All primary meta-analysis computation can be accessed by choosing
+                <span class="menu">Analysis</span> from the
+              <span class="menu">Computation</span> menu or
+              <img class="toolbar-button" src="images/sum-work-filled@256px.png"/> from the toolbar. Doing so
+                will bring up a dialog where you can choose the type of analysis you want to perform. The
+                Phylogenetic GLM Meta-Analysis option will only be enabled if you have already
+                <a href="#phylogeny_tab">loaded a phylogeny into memory.</a>
+            </p>
+            <figure><img src="images/analysis_dialog.png"></figure>
+            <p>
+                Choosing a particular analysis will bring up two (in most cases) additional dialogs where
+                the user can specify data inputs and options for that particular analysis type.
+            </p>
+            <p>
+                Remember that any studies that have been <a href="#filtering_data">marked for filtering</a> will
+                automatically be excluded from these analyses. Any filtered studies will be listed at the top of the
+                output, as well as any studies which could not be included due to missing or invalid data.
+            </p>
+          <h2 id="analysis_common">Common Options</h2>
+            <p>
+                Options common to all or most of the analyses will be described here, with specifics on each analysis
+                described in their own section below.
+            </p>
+          <h3>Effect Size and Variance</h3>
+            <p>
+                All analyses require the user to specify an effect size and its associated variance. If the effect
+                size was calculated within <span class="metawin">MetaWin</span>, it will set that value (and its
+                variance) as the default choices, although users can choose another. The program will also
+                remember the last choices from previous analyses.
+            </p>
+            <p>
+                In the equations in the following sections, the effect size from the <em>i</em><sup>th</sup> study
+                will be indicated as \(\theta_i\), its associated variance as \(v_i\), and its associated weight
+                \(w_i = 1/v_i\). The total number of studies included in the analysis is \(n\).
+            </p>
+            <p>
+                Most analyses also have a checkbox titled <strong>Log Transformed Measure</strong>. If the effect
+                size was calculated by <span class="metawin">MetaWin</span>, it will automaticaly check this box
+                if that effect size is chosen for the analysis, although the user can uncheck it. The user can
+                also choose this option for an imported effect size. It is important to note that whether the box
+                is checked or not does not change the primary analysis in any manner. If the box is checked,
+                additional output will be provided reporting mean effect sizes (and confidence intervals) as
+                exponentiated ("de-logged") values. The log transformed values will still be reported as normal.
+            </p>
+          <h3>Random Effects Variance</h3>
+            <p>
+                Most analyses include a checkbox for specifying random effects variance. By default, analyses will
+                be conducted in a fixed-effects model framework. Checking this box will conduct the analysis in
+                a random-effects model framework (for some types of analyses, alternative referred to as a
+                mixed-effects model).
+            </p>
+
+          <h2 id="basic_analysis">Basic Meta-Analysis</h2>
+            <p>
+                The basic meta-analysis option represents a "classic" meta-analysis where all studies are
+                being combined into a single (global) mean value. This is a weighted mean, calculated as
+            </p>
+            <p>$$\bar{\theta} = \frac{\sum{w_i \theta_i}}{\sum{w_i}},$$</p>
+           <p>
+               with variance
+           </p>
+            <p>$$s_{\bar{\theta}}^2 = \frac{1}{\sum{w_i}},$$</p>
+           <p>
+               and a confidence interval determined through a normal distribution or a bootstrap procedure,
+               if desired. The total heterogeneity statistic is determined as
+           </p>
+            <p>$$Q_T = \sum{w_i\left(\theta_i - \bar{\theta}\right)^2},$$</p>
+           <p>
+               which can be tested against a χ<sup>2</sup> distribution with \(n-1\) degrees of freedom.
+           <p>
+               \(I^2\), an alternative to Q-statistics (<a href="#higgins_thompson_2002">Higgins and
+               Thompson 2002</a>) is calculated as
+           </p>
+            <p>$$I^2 = \max \left[{0, 100 \times \frac{Q_T - \left(n - 1\right)}{Q_T}}\right],$$</p>
+           <p>
+               with its confidence interval determined through the methods of
+               <a href="#higgins_thompson_2002">Higgins and Thompson (2002)</a> and
+               <a href="#huedo_medina_et_2006">Huedo-Medina <em>et al.</em> (2006)</a>. An estimate of pooled variance
+               is determined as
+           </p>
+            <p>$$\hat{\sigma}^2 = \frac{Q_T - (n - 1)}{\sum{w_i} - \frac{\sum{w_i^2}}{\sum{w_i}}}.$$</p>
+           <p>
+               For a random-effects model, the weights are recalculated as
+           </p>
+            <p>$$w_i^* = 1/{\left(v_i + \hat{\sigma}^2\right)} ,$$</p>
+           <p>
+               and the rest of the calculations repeated using these new weights.
+           </p>
+
+
+           <h3>Running a basic analysis</h3>
+            <p>
+                The basic options are just specification of the
+                effect size and variance and whether one wishes to implement a random-effects model (rather than
+                the fixed-effects default).
+            </p>
+            <figure><img src="images/analysis_basic1.png"> <img src="images/analysis_basic2.png"></figure>
+            <p>
+                The second dialog includes a number of additional options.
+            </p>
+           <h3>Resampling procedures</h3>
+            <p>
+                One can optionally conduct a bootstrap procedure in order to estimate confidence intervals around the
+                mean (<a href="#adams_et_1997">Adams <em>et al.</em> 1997)</a>. The number of iterations for the
+                bootstrap can also be specified.
+            </p>
+           <h3>Failsafe Tests</h3>
+            <p>
+                Failsafe tests can be conducted using three different methods, that of
+                <a href="#rosenthal_1979">Rosenthal (1979)</a>,  <a href="#orwin_1983">Orwin (1983)</a>, and
+                <a href="#rosenberg_2005">Rosenberg(2005)</a>. For each method you can specify the desired threshold.
+                Failesafe tests are only included as an option of the basic analysis because the logic of the
+                failsafe estimate only applies to this simple model.
+            </p>
+           <h3>Graphical Output</h3>
+            <p>
+                One can optionally include a graphical figure as output. For this analysis this will be a
+                <a href="#forest_plot">forest plot</a>a>, showing the global mean and its confidence intervals at
+                the top of the figure, with all of the individual studies beneath.
+            </p>
+
+           <h3>Output</h3>
+            <p>
+                The following is an example of the output from a basic analysis. Specifics are dependent on the
+                options chosen as well as the data.
+            </p>
+<blockquote class="output-example">
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+<p>
+Structure: None
+→ Citation: Hedges and Olkin (1985)
+</p>
+<p>
+→ Effect Sizes: Hedges' d<br />
+→ Effect Size Variances: Var (d)<br />
+→ Fixed Effects Model
+</p>
+<p>
+→ Use bootstrap for confidence intervals around means: 999 iterations<br />
+→ Citations: Adams <em>et al.</em> (1997), Dixon (1993)
+</p>
+<p>
+25 studies will be included in this analysis
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+Source      Q      df   P(χ<sup>2</sup>)
+------------------------------
+Total    46.5517   24   0.0038
+</code></pre>
+<p>
+→ Citation: Hedges and Olkin (1985)
+</p>
+<pre><code>
+Source     I<sup>2</sup>            95% CI
+-------------------------------------
+Total    48.4444   34.9546 to 59.1366
+</code></pre>
+<p>
+→ Citations: Higgins and Thompson (2002), Huedo-Medina <em>et al.</em> (2006)
+</p>
+<p>
+<strong>Mean Effect Size</strong>
+</p>
+<pre><code>
+   n     Mean    Median        95% CI          Bootstrap CI     Bias-corrected CI
+---------------------------------------------------------------------------------
+   25   0.3588   0.3585   0.2706 to 0.4470   0.2161 to 0.4887    0.2310 to 0.4980
+</code></pre>
+<p>
+Sqrt Pooled Variance = 0.2205<br />
+Mean Study Variance = 0.0838<br />
+ratio = 2.6309
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Rosenberg's Fail-safe Number</span>
+</p>
+<p>
+→ Citation: Rosenberg (2005)<br />
+→ alpha: 0.0500
+</p>
+<p>
+Fail-safe n (normal distribution) = 388.8247<br />
+Fail-safe n (t distribution, 1 study of n × avg weight) = 349.7769<br />
+Fail-safe n (t distribution, n studies of avg weight) = 386.3860
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Rosenthal's Fail-safe Number</span>
+</p>
+<p>
+→ Citation: Rosenthal (1979)<br />
+→ alpha: 0.0500
+</p>
+<p>
+Fail-safe n = 302.6107
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Orwin's Fail-safe Number</span>
+</p>
+<p>
+→ Citation: Orwin (1983)<br />
+→ Minimal Effect Size: 0.2000
+</p>
+<p>
+Fail-safe n = 19.8523
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data. <em>Ecology</em> 78:1277–1283.</p>
+<p>Dixon, P.M. (1993) The bootstrap and the jackknife: Describing the precision of ecological indices. Pp. 290—318 in <em>Design and Analysis of Ecological Experiments</em>, S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall, New York.</p>
+<p>Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for Meta-analysis</em>. Academic Press, Orlando, FL.</p>
+<p>Higgins, J.P.T. and S.G. Thompson (2002) Quantifying heterogeneity in a meta-analysis. <em>Statistics in Medicine</em> 21:1539–1558.</p>
+<p>Huedo-Medina, T.B., F. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) Assessing heterogeneity in meta-analysis: Q statistic or I2 index? <em>Psychological Methods</em> 11:193–206.</p>
+<p>Orwin, R.G. (1983) A fail-safe N for effect size in meta-analysis. <em>Journal of Educational Statistics</em> 8(2):157–159.</p>
+<p>Rosenberg, M.S. (2005) The file-drawer problem revisited: A general weighted method for calculating fail-safe numbers in meta-analysis. <em>Evolution</em> 59(2):464–468.</p>
+<p>Rosenthal, R. (1979) The “file drawer problem” and tolerance for null results. <em>Psychological Bulletin</em> 86(3):638–641.</p>
+</blockquote>
+            <figure><img src="images/analysis_basic_fig.png"></figure>
+<blockquote class="output-example">
+    Forest plot of individual effect sizes for each study, as well as the overall mean. Effect size measured
+    as Hedges' d. The dotted vertical line represents no effect, or a mean of zero. Circles represent mean effect
+    size, with the corresponding line the 95% confidence interval. X's represent the median. Upward-pointing
+    triangles mark the confidence interval from a bootstrap (999 iterations) procedure, following Adams <em>et
+        al.</em> (1997); downward-pointing triangles mark the bias-corrected bootstrap interval.
+    <p><strong>References</strong></p>
+Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.
+</blockquote>
+
+
+          <h2 id="rank_correlation">Rank Correlation Analysis</h2>
+            <p>
+                Rank Correlation Analysis (<a href="#begg_1994">Begg 1994</a>; <a href="#begg_mazumdar_1994">Begg and
+                Mazumdar 1994</a>) is a simple test for publication bias, which uses a correlation of ranks to
+                look for a relationship between a standardized effect size and either sample size or a standardized
+                variance. The test is considered a statistical analogue of a funnel plot. For each study, the
+                standardized variance is calculated as:
+            </p>
+            <p>$$v_i^* = v_i - 1/{\sum{w}} ,$$</p>
+            <p>
+                and the standardized effect size of each study is calculated as
+            <p>$$\theta_i^* = \frac{\theta_i - \bar{\theta}}{\sqrt{v_i^*}}.$$</p>
+            <p>
+                This standardized effect size is then compared to either the individual study sample sizes or the
+                standardized variance using a rank correlation test (<a href="sokal_rohlf_1995">Sokal and Rohlf
+                1995</a>). A significant correlation may indicate a
+                publication bias where larger effect sizes (in one direction, <em>e.g.</em>, positive) are more likely
+                to be published than smaller ones.
+            </p>
+
+           <h3>Running a Rank Correlation Analysis</h3>
+            <p>
+                The Rank Correlation Analysis only uses a single dialog. Other than choosing the data sources, the
+                dialog asks whether the user wants the correlation to be vs. standardized variance or sample size,
+                where the latter choice then also requires the user to input the column containing sample sizes.
+            </p>
+            <p>
+                Additionally, there is an option to perform the rank correlation using Kendall's &tau;
+                (<a href="#kendall_1938">Kendall 1938</a>) or Spearman's &rho; (<a href="#spearman_1904">Spearman
+                1904</a>). Because the distribution of these metrics can be complicated, particularly when the
+                number of studies is low, <span class="metawin">MetaWin</span> autmoatically uses a randomization
+                procedure to thest their significance, with the number of iterations user-specifiable.
+            </p>
+
+            <figure><img src="images/analysis_rank_cor_dialog.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The following is an example of the output from a Rank Correlation Analysis.
+            </p>
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Rank Correlation Analysis<br/>
+→ Citations: Begg (1994), Begg and Mazumdar (1994)
+</p>
+<p>
+→ Effect Sizes: effect<br/>
+→ Effect Size Variances: variance<br/>
+→ Rank Correlation Method: Kendall's τ<br/>
+→ Citation: Kendall (1938)<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Randomization to test correlation: 999 iterations
+</p>
+<p>
+85 studies will be included in this analysis
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Rank Correlation Results</span>
+</p>
+<p>
+Kendall's τ = 0.2826<br/>
+Probability = 0.0010
+<p>
+<strong>References</strong>
+</p>
+<p>Begg, C.B. (1994) Publication bias. Pp. 399-409 in <em>The Handbook of Research Synthesis</em>, H. Cooper and
+    L.V. Hedges, eds. Sage, New York.</p>
+<p>Begg, C.B., and M. Mazumdar (1994) Operating characteristics of a rank correlation test for publication bias.
+    <em>Biometrics</em> 50:1088–1101.</p>
+<p>Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>. 30(1–2):81–89.</p>
+<p>Sokal, R.R., and F.J. Rohlf (1995) <em>Biometry</em> (3rd edition). Freeman, San Francisco.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+          <h2 id="trim_fill">Trim and Fill Analysis</h2>
+            <p>
+                "Trim and Fill" is a simple method to adjust for funnel plot asymmetry. It analyzes the distribution
+                of points and estimates "missing" studies in order to create the expected symmetry of an unbiased
+                funnel plot (<a href="#duval_tweedie_2000a">Duval and Tweedie 2000a</a>,
+                <a href="#duval_tweedie_2000b">2000b</a>).
+            </p>
+            <p>
+                Fundamentally the analysis works by iteratively estimating the asymmetry of the data around the mean,
+                and then removing a number of studies until symmetry is achieved. At this point the removed studies
+                are added back into the dataset, along with imputed "missing" studies that are the mirror image
+                (reflected across the mean) of those same re-added studies. The mean (and median) pre- and
+                post-addition of the imputed studies are reported.
+            </p>
+            <p>
+                Three different estimators of the number of missing studies are described by
+                <a href="#duval_tweedie_2000a">Duval and Tweedie (2000a)</a>, all of which are options within
+                <span class="metawin">MetaWin</span>.
+            </p>
+
+           <h3>Running a Trim and Fill analysis</h3>
+            <p>
+                The Trim and Fill analysis only uses a single dialog. Other than choosing the data sources and
+                whether you want a graph of the results, the one additional option is which of the three
+                estimators you wish to use for the analysis:
+                <em>R</em><sub>0</sub>, <em>L</em><sub>0</sub>, or <em>Q</em><sub>0</sub>.
+            </p>
+
+            <figure><img src="images/analysis_trim_fill_dialog.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The following is an example of the output from a trim and fill analysis. It includes the estimated
+                number of missing studies and the mean and median before and after imputation of these missing
+                studies.
+            </p>
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Trim and Fill Analysis<br/>
+→ Citations: Duval and Tweedie (2000a), Duval and Tweedie (2000b)
+</p>
+<p>
+→ Effect Sizes: effect<br/>
+→ Effect Size Variances: variance<br/>
+→ Estimator of Missing Studies: L0<br/>
+→ Fixed Effects Model
+</p>
+<p>
+85 studies will be included in this analysis
+</p>
+<p>
+Trim and Fill Analysis estimated 19 missing studies.
+</p>
+<strong>Mean Effect Sizes</strong>
+<pre><code>
+                             n     Mean    Median        95% CI
+--------------------------------------------------------------------
+Original Mean effect         85   5.0777   4.9119   4.9019 to 5.2534
+Trim and Fill Mean effect   104   4.9453   4.8298   4.7747 to 5.1159
+</code></pre>
+<p>
+<strong>References</strong>
+</p>
+<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
+    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
+<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
+    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
+</blockquote>
+
+<figure><img src="images/analysis_trim_fill_fig.png"></figure>
+<blockquote class="output-example">
+Funnel plot of effect vs. precision, showing the results of a Trim and Fill Analysis (Duval and Tweedie 2000a, b).
+    Solid black circles represent the original data; open red circles represent inferred "missing" data.
+    The dashed line represents the mean effect size of the original data, the dotted line the mean effect size
+    including the inferred data.
+<p>
+<strong>References</strong>
+</p>
+<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
+    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
+<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
+    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
+</blockquote>
+
+
+          <h2 id="jackknife_analysis">Jackknife Meta-Analysis</h2>
+            <p>
+                Jacknnife Meta-Analysis (also known as Leave-one-out Meta-analysis) is a statistical procedure for
+                examining the effects of individual studies on the global mean. The full analysis is run
+                with a single study left out, systematically repeating the procedure across all possible studies.
+                This is a form of sensitivity analysis to potentially identify outliers and allows one to judge
+                whether the overall results are being skewed by a single study.
+            </p>
+           <h3>Running a Jackknife analysis</h3>
+            <p>The options for a Jackknife Meta-Analysis are essentially identical to the
+                <a href="#basic_analysuis">Basic Analysis</a>, except that the Failsafe Number tests are not
+                included.
+            </p>
+            <figure><img src="images/analysis_jackknife_dialog1.png"> <img src="images/analysis_jackknife_dialog2.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The output for a Jacknife Meta-Analysis is similar to that from a <a href="#basic_analysuis">Basic
+                Analysis</a>, except with the addition of tables illustrating the heterogenity and means for each case
+                of a study being excluded from the analysis. The other difference is in the graphical output, if
+                requested. In a Basic Analysis, the forest plot illustrates the global mean as well as the individual
+                effect size for each study. In the Jackknife analysis the plot illustrates the global mean, as well
+                as the estimated mean when each study is excluded from the analysis.
+            </p>
+
+
+<blockquote class="output-example">
+
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+<p>
+Jackknife Meta-Analysis
+</p>
+<p>
+→ Effect Sizes: Hedges' d<br/>
+→ Effect Size Variances: Var (d)<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Use bootstrap for confidence intervals around means: 999 iterations<br/>
+→ Citations: Adams <em>et al.</em> (1997), Dixon (1993)
+</p>
+<p>
+25 studies will be included in this analysis
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Jackknife Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+     Source            Q      df   P(χ2)
+-----------------------------------------
+w/o Row 1 Qtotal    45.7844   23   0.0032
+w/o Row 2 Qtotal    46.5360   23   0.0026
+w/o Row 3 Qtotal    46.4003   23   0.0027
+w/o Row 4 Qtotal    44.4476   23   0.0046
+w/o Row 5 Qtotal    43.3642   23   0.0063
+w/o Row 6 Qtotal    45.4801   23   0.0035
+w/o Row 7 Qtotal    33.8172   23   0.0678
+w/o Row 8 Qtotal    46.4768   23   0.0026
+w/o Row 9 Qtotal    43.9570   23   0.0053
+w/o Row 10 Qtotal   46.2407   23   0.0028
+w/o Row 11 Qtotal   46.5282   23   0.0026
+w/o Row 12 Qtotal   46.5510   23   0.0026
+w/o Row 13 Qtotal   44.6085   23   0.0044
+w/o Row 14 Qtotal   46.5517   23   0.0026
+w/o Row 15 Qtotal   46.1621   23   0.0029
+w/o Row 16 Qtotal   46.4752   23   0.0026
+w/o Row 17 Qtotal   37.2017   23   0.0310
+w/o Row 18 Qtotal   43.9570   23   0.0053
+w/o Row 19 Qtotal   45.1825   23   0.0038
+w/o Row 20 Qtotal   40.8919   23   0.0122
+w/o Row 21 Qtotal   45.4327   23   0.0035
+w/o Row 22 Qtotal   45.9154   23   0.0031
+w/o Row 23 Qtotal   45.7182   23   0.0032
+w/o Row 24 Qtotal   46.4262   23   0.0026
+w/o Row 25 Qtotal   44.7292   23   0.0043
+</code></pre>
+<p>
+<strong>Mean Effect Sizes</strong>
+</p>
+<pre><code>
+                       n     Mean    Median        95% CI          Bootstrap CI     Bias-corrected CI
+-----------------------------------------------------------------------------------------------------
+w/o Row 1 Hedges' d    24   0.3502   0.3585   0.2599 to 0.4405   0.2039 to 0.4895    0.2164 to 0.4979
+w/o Row 2 Hedges' d    24   0.3570   0.3585   0.2643 to 0.4497   0.2101 to 0.5066    0.2218 to 0.5138
+w/o Row 3 Hedges' d    24   0.3560   0.3585   0.2667 to 0.4453   0.2158 to 0.4835    0.2260 to 0.4952
+w/o Row 4 Hedges' d    24   0.3523   0.3585   0.2637 to 0.4409   0.2070 to 0.4836    0.2070 to 0.4840
+w/o Row 5 Hedges' d    24   0.3750   0.3585   0.2850 to 0.4649   0.2400 to 0.5079    0.2499 to 0.5143
+w/o Row 6 Hedges' d    24   0.3686   0.3585   0.2785 to 0.4587   0.2248 to 0.5006    0.2366 to 0.5128
+w/o Row 7 Hedges' d    24   0.3203   0.3585   0.2296 to 0.4110   0.1899 to 0.4347    0.2008 to 0.4407
+w/o Row 8 Hedges' d    24   0.3573   0.3585   0.2684 to 0.4462   0.2178 to 0.4968    0.2178 to 0.5004
+w/o Row 9 Hedges' d    24   0.3698   0.3585   0.2806 to 0.4591   0.2381 to 0.5196    0.2468 to 0.5266
+w/o Row 10 Hedges' d   24   0.3614   0.3585   0.2727 to 0.4500   0.2191 to 0.4940    0.2294 to 0.5005
+w/o Row 11 Hedges' d   24   0.3597   0.3585   0.2708 to 0.4486   0.2098 to 0.4936    0.2099 to 0.4947
+w/o Row 12 Hedges' d   24   0.3586   0.3585   0.2691 to 0.4481   0.2222 to 0.4913    0.2252 to 0.5020
+w/o Row 13 Hedges' d   24   0.3722   0.3585   0.2820 to 0.4624   0.2212 to 0.5058    0.2266 to 0.5130
+w/o Row 14 Hedges' d   24   0.3589   0.3656   0.2649 to 0.4528   0.2026 to 0.5083    0.2158 to 0.5218
+w/o Row 15 Hedges' d   24   0.3650   0.3585   0.2747 to 0.4553   0.2296 to 0.5088    0.2354 to 0.5186
+w/o Row 16 Hedges' d   24   0.3603   0.3585   0.2715 to 0.4490   0.2187 to 0.4979    0.2227 to 0.4991
+w/o Row 17 Hedges' d   24   0.3168   0.3585   0.2245 to 0.4090   0.1904 to 0.4472    0.1980 to 0.4533
+w/o Row 18 Hedges' d   24   0.3523   0.3585   0.2638 to 0.4409   0.2107 to 0.4864    0.2123 to 0.4874
+w/o Row 19 Hedges' d   24   0.3701   0.3585   0.2799 to 0.4604   0.2256 to 0.5104    0.2336 to 0.5255
+w/o Row 20 Hedges' d   24   0.3812   0.3585   0.2911 to 0.4713   0.2470 to 0.5163    0.2574 to 0.5224
+w/o Row 21 Hedges' d   24   0.3435   0.3585   0.2509 to 0.4362   0.1967 to 0.4847    0.2102 to 0.4971
+w/o Row 22 Hedges' d   24   0.3638   0.3585   0.2748 to 0.4528   0.2281 to 0.4996    0.2305 to 0.5075
+w/o Row 23 Hedges' d   24   0.3655   0.3585   0.2762 to 0.4549   0.2263 to 0.5105    0.2323 to 0.5120
+w/o Row 24 Hedges' d   24   0.3615   0.3585   0.2721 to 0.4509   0.2198 to 0.4880    0.2230 to 0.4883
+w/o Row 25 Hedges' d   24   0.3696   0.3585   0.2800 to 0.4591   0.2405 to 0.5156    0.2406 to 0.5198
+</code></pre>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Global Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+Source      Q      df   P(χ2)
+------------------------------
+Total    46.5517   24   0.0038
+</code></pre>
+<p>
+→ Citation: Hedges and Olkin (1985)
+</p>
+<pre><code>
+Source     I2            95% CI
+-------------------------------------
+Total    48.4444   34.9546 to 59.1366
+</code></pre>
+<p>
+→ Citations: Higgins and Thompson (2002), Huedo-Medina <em>et al.</em> (2006)
+</p>
+<p>
+<strong>Mean Effect Size</strong>
+</p>
+<pre><code>
+   n     Mean    Median        95% CI          Bootstrap CI     Bias-corrected CI
+---------------------------------------------------------------------------------
+   25   0.3588   0.3585   0.2706 to 0.4470   0.2156 to 0.4898    0.2309 to 0.5003
+</code></pre>
+<p>
+Sqrt Pooled Variance = 0.2201<br/>
+Mean Study Variance = 0.0838<br/>
+ratio = 2.6266
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+<p>Dixon, P.M. (1993) The bootstrap and the jackknife: Describing the precision of ecological indices. Pp. 290—318
+    in <em>Design and Analysis of Ecological Experiments</em>, S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall,
+    New York.</p>
+<p>Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for Meta-analysis</em>. Academic Press, Orlando, FL.</p>
+<p>Higgins, J.P.T. and S.G. Thompson (2002) Quantifying heterogeneity in a meta-analysis. <em>Statistics in
+    Medicine</em> 21:1539–1558.</p>
+<p>Huedo-Medina, T.B., F. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) Assessing heterogeneity in
+    meta-analysis: Q statistic or I2 index? <em>Psychological Methods</em> 11:193–206.</p>
+</blockquote>
+
+<figure><img src="images/analysis_jackknife_fig.png"></figure>
+<blockquote class="output-example">
+Forest plot of mean effect sizes from a jackknife meta-analysis, with the summary repeated with each study removed,
+    one by one. Effect size measured as Hedges' d. The dotted vertical line represents no effect, or a mean of zero.
+    Circles represent mean effect size, with the corresponding line the 95% confidence interval. X's represent the
+    median. Upward-pointing triangles mark the confidence interval from a bootstrap (999 iterations) procedure,
+    following Adams <em>et al.</em> (1997); downward-pointing triangles mark the bias-corrected bootstrap interval.
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+</blockquote>
+
+          <h2 id="cumulative_analysis">Cumulative Meta-Analysis</h2>
+            <p>
+                Cumulative Meta-Analysis (<a href="#chalmers_1991">Chalmers 1991</a>) is a process by which one
+                performs an analysis on just two studies, then repeats by adding one additional study until all
+                studies have been included. It's generally used to show when an effect has become stabilized.
+            </p>
+           <h3>Running a Cumulative Meta-Analysis</h3>
+            <p>The options for a Cumulative Meta-Analysis are essentially identical to the
+                <a href="#basic_analysuis">Basic Analysis</a>, except that the Failsafe Number tests are not
+                included and a data column must be specified which contains the order in which the studies should
+                be added. Traditionally this variable would represent time, but other options are possible.
+            </p>
+            <figure><img src="images/analysis_cumulative1.png"> <img src="images/analysis_cumulative2.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The output for a Cumulative Meta-Analysis is similar to that from a <a href="#basic_analysuis">Basic
+                Analysis</a>, except that the tables of heterogenities and means are shown for each step in the
+                cumulative analysis. The other primary difference is in the graphical output, if
+                requested. In a Basic Analysis, the forest plot illustrates the global mean as well as the individual
+                effect size for each study. In the Cumulative analysis the plot illustrates the change in estimated
+                mean as more and more studies are added (from top to bottom), with the final mean equal to the
+                global mean including all studies.
+            </p>
+
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Cumulative Meta-Analysis<br/>
+→ Citation: Chalmers (1991)
+</p>
+<p>
+→ Effect Sizes: Hedges' d<br/>
+→ Effect Size Variances: Var (d)<br/>
+→ Cumulative Order: Year<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Use bootstrap for confidence intervals around means: 999 iterations<br/>
+→ Citations: Adams <em>et al.</em> (1997), Dixon (1993)
+</p>
+<p>
+25 studies will be included in this analysis
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Cumulative Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+     Source            Q      df   P(χ2)
+-----------------------------------------
+2 studies Qtotal     0.0088    1   0.9253
+3 studies Qtotal     0.1264    2   0.9387
+4 studies Qtotal     0.2893    3   0.9620
+5 studies Qtotal     0.6159    4   0.9613
+6 studies Qtotal     0.7839    5   0.9780
+7 studies Qtotal     0.9891    6   0.9860
+8 studies Qtotal     1.0607    7   0.9938
+9 studies Qtotal     1.3277    8   0.9952
+10 studies Qtotal    1.6082    9   0.9963
+11 studies Qtotal    2.4313   10   0.9918
+12 studies Qtotal    2.6697   11   0.9944
+13 studies Qtotal    3.1745   12   0.9942
+14 studies Qtotal    3.5687   13   0.9950
+15 studies Qtotal    7.0163   14   0.9341
+16 studies Qtotal    7.6698   15   0.9363
+17 studies Qtotal    9.6369   16   0.8849
+18 studies Qtotal   10.1785   17   0.8960
+19 studies Qtotal   11.0756   18   0.8911
+20 studies Qtotal   14.8515   19   0.7320
+21 studies Qtotal   16.7843   20   0.6669
+22 studies Qtotal   28.5583   21   0.1250
+23 studies Qtotal   30.9686   22   0.0968
+24 studies Qtotal   43.9570   23   0.0053
+25 studies Qtotal   46.5517   24   0.0038
+</code></pre>
+<p>
+<strong>Mean Effect Sizes</strong>
+</p>
+<pre><code>
+                       n     Mean     Median         95% CI            Bootstrap CI      Bias-corrected CI
+-----------------------------------------------------------------------------------------------------------
+2 studies Hedges' d     2   -0.1402   -0.1524   -0.4871 to 0.2067   -0.1524 to -0.1176   -0.1524 to -0.1402
+3 studies Hedges' d     3   -0.1030   -0.1176   -0.3773 to 0.1712   -0.1524 to -0.0411   -0.1524 to -0.0584
+4 studies Hedges' d     4   -0.0761   -0.0411   -0.3173 to 0.1650   -0.1402 to -0.0110   -0.1471 to -0.0163
+5 studies Hedges' d     5   -0.0412   -0.0411   -0.2506 to 0.1681    -0.1106 to 0.0271    -0.1173 to 0.0271
+6 studies Hedges' d     6   -0.0277   -0.0411   -0.2267 to 0.1713    -0.1001 to 0.0519    -0.1030 to 0.0431
+7 studies Hedges' d     7   -0.0120    0.0155   -0.1990 to 0.1751    -0.0884 to 0.0574    -0.0892 to 0.0570
+8 studies Hedges' d     8   -0.0066    0.0155   -0.1896 to 0.1763    -0.0740 to 0.0690    -0.0765 to 0.0674
+9 studies Hedges' d     9    0.0126    0.0655   -0.1550 to 0.1803    -0.0575 to 0.0767    -0.0613 to 0.0734
+10 studies Hedges' d   10    0.0291    0.0655   -0.1270 to 0.1853    -0.0389 to 0.0916    -0.0418 to 0.0885
+11 studies Hedges' d   11    0.0549    0.1000   -0.0910 to 0.2008    -0.0212 to 0.1239    -0.0208 to 0.1251
+12 studies Hedges' d   12    0.0617    0.1000   -0.0817 to 0.2050    -0.0120 to 0.1344    -0.0108 to 0.1358
+13 studies Hedges' d   13    0.0751    0.1070   -0.0634 to 0.2136    -0.0005 to 0.1435    -0.0012 to 0.1422
+14 studies Hedges' d   14    0.0837    0.1070   -0.0522 to 0.2196     0.0119 to 0.1557     0.0005 to 0.1490
+15 studies Hedges' d   15    0.1440    0.1140    0.0239 to 0.2640     0.0251 to 0.2403     0.0324 to 0.2474
+16 studies Hedges' d   16    0.1550    0.1371    0.0380 to 0.2721     0.0441 to 0.2487     0.0515 to 0.2560
+17 studies Hedges' d   17    0.1867    0.2317    0.0784 to 0.2951     0.0766 to 0.2674     0.0842 to 0.2725
+18 studies Hedges' d   18    0.1929    0.2317    0.0858 to 0.2999     0.0763 to 0.2779     0.0805 to 0.2842
+19 studies Hedges' d   19    0.2026    0.2317    0.0974 to 0.3077     0.0966 to 0.2812     0.1082 to 0.2845
+20 studies Hedges' d   20    0.2382    0.2631    0.1394 to 0.3371     0.1215 to 0.3309     0.1265 to 0.3346
+21 studies Hedges' d   21    0.2546    0.3043    0.1585 to 0.3507     0.1419 to 0.3365     0.1419 to 0.3372
+22 studies Hedges' d   22    0.3057    0.3585    0.2141 to 0.3972     0.1788 to 0.4223     0.1875 to 0.4348
+23 studies Hedges' d   23    0.3131    0.3585    0.2220 to 0.4042     0.1824 to 0.4279     0.2024 to 0.4406
+24 studies Hedges' d   24    0.3523    0.3585    0.2638 to 0.4409     0.2142 to 0.4916     0.2299 to 0.5072
+25 studies Hedges' d   25    0.3588    0.3585    0.2706 to 0.4470     0.2352 to 0.4925     0.2406 to 0.5015
+</code></pre>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+<p>Chalmers, T.C. (1991) Problems induced by meta-analyses. <em>Statistics in Medicine</em> 10:971–980.</p>
+<p>Dixon, P.M. (1993) The bootstrap and the jackknife: Describing the precision of ecological indices. Pp. 290—318
+    in <em>Design and Analysis of Ecological Experiments</em>, S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall,
+    New York.</p>
+</blockquote>
+
+<figure><img src="images/analysis_cumulative_fig.png"></figure>
+<blockquote class="output-example">
+<p>
+Forest plot of effect sizes from a cumulative meta-analysis, ranging from the fewest studies at the top to the most
+    at the bottom, ordered by Year. Effect size measured as Hedges' d. The dotted vertical line represents no effect,
+    or a mean of zero. Circles represent mean effect size, with the corresponding line the 95% confidence interval.
+    X's represent the median. Upward-pointing triangles mark the confidence interval from a bootstrap (999 iterations)
+    procedure, following Adams <em>et al.</em> (1997); downward-pointing triangles mark the bias-corrected bootstrap
+    interval.
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+</blockquote>
+
+          <h2 id="grouped_analysis">Grouped Meta-Analysis</h2>
+            <p>
+                Grouped meta-analysis goes beyond the single global mean of the <a href="basic_analysis">basic
+                analysis</a> and examines the
+                mean effect size when studies are divided into two or more groups or categories. This type of
+                analysis is conceptually similar to ANVOA. Structurally, the \(n\) studies are divided into \(k\)
+                groups, where the <em>j</em><sup>th</sup> group contains \(n_j\) studies.
+            </p>
+            <p>
+                Global means and variances are calculated just as in a <a href="basic_analysis">basic
+                analysis</a>, but additionally, each group has its own mean, variance, and confidence interval
+                calculated, using the same equations as in the basic analysis, except that studies are restricted
+                to the group. The Q statistic for each indiviudal group is generally considered to be within-group
+                heterogeneity, while the sum of these Q's is the total within-group heterogeneity,
+                <em>Q</em><sub>W</sub> (or more generally referred to as the model heterogeneity,
+                <em>Q</em><sub>M</sub>).
+            </p>
+            <p>
+                The difference between the total heterogeneity (<em>Q</em><sub>T</sub>) and the within (model)
+                heterogeneity (<em>Q</em><sub>W</sub> or <em>Q</em><sub>M</sub>) is the between-group heterogeneity,
+                <em>Q</em><sub>B</sub>
+                (or more generally referred to as the error heterogeneity, <em>Q</em><sub>E</sub>).
+            </p>
+            <p>$$Q_T = Q_M + Q_E, \text{  or alternatively, } Q_W + Q_B.$$</p>
+            <p>
+                Note that <em>Q</em><sub>B</sub>/<em>Q</em><sub>E</sub> can also be calculated as the weighted sum
+                of squares differences between the group means and the global mean, where each group mean is
+                weighted by the sum of the weights of the studies within the group, or
+            </p>
+            <p>$$Q_B = \sum{\sum{w_{ij}\left(\bar{\theta}_j - \bar{\theta}\right)^2}},$$</p>
+           <p>
+               where \(\bar{\theta}_j\) is the mean of the <em>j</em><sup>th</sup> group and \(w_{ij}\) is the
+               weight of the <em>i</em><sup>th</sup> study in the <em>j</em><sup>th</sup> group.
+           </p>
+            <p>
+                The total, model (within), and error (between) group heterogeneities can be compared in an
+                ANOVA like table, where each value is compared to a χ<sup>2</sup> distribution with
+                \(k-1\), \(n-k\), and \(n-1\) degrees of freedom.
+            </p>
+
+            <table>
+                <tr><th>Source of Heterogeneity</th><th>Symbol</th><th>df</th><th>Equation</th></tr>
+                <tr><td>Model</td><td>\(Q_M\)</td><td>\(k-1\)</td><td>\(\sum{\sum{w_{ij}\left(\theta_{ij} - \bar{\theta}_j\right)^2}}\)</td></tr>
+                <tr><td>Error</td><td>\(Q_E\)</td><td>\(n-k\)</td><td>\(\sum{\sum{w_{ij}\left(\bar{\theta}_j - \bar{\theta}\right)^2}}\)</td></tr>
+                <tr><td>Total</td><td>\(Q_T\)</td><td>\(n-1\)</td><td>\(\sum{\sum{w_{ij}\left(\theta_{ij} - \bar{\theta}\right)^2}}\)</td></tr>
+            </table>
+           <p>
+               Alternatively, the significance of the model (the group structure) can be tested through a randomization
+               test where the association between specific studies and the group they belong to is randomized.
+           </p>
+           <p>
+               For a random effects model, the estimate of pooled variance is dependent on the model structure; for
+               this type of analysis (often referred to as a mixed-effects model) the estimate is determined by
+           </p>
+            <p>$$\hat{\sigma}^2 = \frac{Q_E - (n - k)}{\sum\limits_{j=1}^k{\left[ \sum\limits_{i=1}^{n_k}w_{ij} - \frac{\sum\limits_{i=1}^{n_k}{{w_{ij}^2}}}{\sum\limits_{i=1}^{n_k}w_{ij}}\right]}}.$$</p>
+           <p>
+               As before, when conducting a random-effects model, the weights are recalculated as
+           </p>
+            <p>$$w_i^* = 1/{\left(v_i + \hat{\sigma}^2\right)} ,$$</p>
+           <p>
+               and the rest of the calculations repeated using these new weights.
+           </p>
+
+           <h3>Running a grouped analysis</h3>
+            <p>The options for a Grouped Meta-Analysis are similar to the
+                <a href="#basic_analysuis">Basic Analysis</a>, except that the Failsafe Number tests are not
+                included and a data column must be specified which contains the group structure. This column can
+                contain numbers or text; studies with the same value would be considered to be in the same group.
+            </p>
+            <figure><img src="images/analysis_grouped1.png"></figure>
+            <p>
+                <strong>Data Requirement: </strong> Each group included in the analysis must contain at least two
+                studies. If a group appears to contain only one study, the analysis will not be conducted and the
+                output will identify the groups with too few studies. Studies in these groups
+                <a href="#filtering_data">can be filtered</a> in
+                order to run the analysis on those groups which do have at least two studies present.
+            </p>
+            <figure><img src="images/analysis_grouped2.png"></figure>
+            <p>
+                The one other difference is the addition of an option to test the significance of the model through
+                a randomization test. This test is conducted independently of bootstrapping, if chosen.
+            </p>
+
+           <h3>Output</h3>
+            <p>
+                The output for a Grouped Meta-Analysis includes group specific output, as well as the
+                same general output found in a <a href="#basic_analysuis">Basic
+                Analysis</a>. The graphical output, if requested, is a forest plot which shows the global mean
+                and the group means.
+            </p>
+
+
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Structure: Grouped<br/>
+→ Citation: Hedges and Olkin (1985)
+</p>
+<p>
+→ Effect Sizes: Hedges' d<br/>
+→ Effect Size Variances: Var (d)<br/>
+→ Groups: Suborder<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Use bootstrap for confidence intervals around means: 999 iterations<br/>
+→ Citations: Adams <em>et al.</em> (1997), Dixon (1993)
+</p>
+<p>
+→ Use randomization to test model structure: 999 iterations<br/>
+→ Citation: Adams <em>et al.</em> (1997)
+</p>
+<p>
+25 studies will be included in this analysis
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Group Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+       Source             Q      df   P(χ2)
+--------------------------------------------
+Heterocera (within)    40.3206   17   0.0012
+Rhopalocera (within)    6.1872    6   0.4026
+</code></pre>
+
+<pre><code>
+       Source            I2            95% CI
+---------------------------------------------------
+Heterocera (within)    57.8379   45.2319 to 67.5424
+Rhopalocera (within)    3.0254    0.0000 to 16.5089
+</code></pre>
+<p>
+→ Citations: Higgins and Thompson (2002), Huedo-Medina <em>et al.</em> (2006)
+</p>
+<p>
+<pre><code>
+    Source           Q      df   P(χ2)    P(randomization)
+----------------------------------------------------------
+Model (Between)    0.0439    1   0.8340             0.2470
+Error (Within)    46.5078   23   0.0026
+---------------------------------------------------------------------
+Total             46.5517   24   0.0038
+</code></pre>
+<p>
+<strong>Mean Effect Sizes</strong>
+</p>
+<pre><code>
+                        n     Mean    Median        95% CI          Bootstrap CI     Bias-corrected CI
+------------------------------------------------------------------------------------------------------
+Heterocera Hedges' d    18   0.3627   0.3585   0.2675 to 0.4579   0.2004 to 0.5169    0.2148 to 0.5335
+Rhopalocera Hedges' d    7   0.3356   0.2317   0.1014 to 0.5698   0.2006 to 0.6005    0.2045 to 0.6207
+</code></pre>
+<p>
+    <span style="font-weight: bold; font-size: 1.25em">Global Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+Source      Q      df   P(χ2)
+------------------------------
+Total    46.5517   24   0.0038
+</code></pre>
+<p>
+→ Citation: Hedges and Olkin (1985)
+</p>
+<pre><code>
+Source     I2            95% CI
+-------------------------------------
+Total    48.4444   34.9546 to 59.1366
+</code></pre>
+<p>
+→ Citations: Higgins and Thompson (2002), Huedo-Medina <em>et al.</em> (2006)
+</p>
+<p>
+<strong>Mean Effect Size</strong>
+</p>
+<pre><code>
+                   n     Mean    Median        95% CI          Bootstrap CI     Bias-corrected CI
+-------------------------------------------------------------------------------------------------
+Global Hedges' d   25   0.3588   0.3585   0.2706 to 0.4470   0.2144 to 0.4868    0.2305 to 0.4992
+</code></pre>
+<p>
+Sqrt Pooled Variance = 0.2293<br/>
+Mean Study Variance = 0.0838<br/>
+ratio = 2.7361
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+<p>Dixon, P.M. (1993) The bootstrap and the jackknife: Describing the precision of ecological indices. Pp. 290—318
+    in <em>Design and Analysis of Ecological Experiments</em>, S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall,
+    New York.</p>
+<p>Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for Meta-analysis</em>. Academic Press, Orlando, FL.</p>
+<p>Higgins, J.P.T. and S.G. Thompson (2002) Quantifying heterogeneity in a meta-analysis. <em>Statistics in
+    Medicine</em> 21:1539–1558.</p>
+<p>Huedo-Medina, T.B., F. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) Assessing heterogeneity in
+    meta-analysis: Q statistic or I2 index? <em>Psychological Methods</em> 11:193–206.</p>
+</blockquote>
+
+<figure><img src="images/analysis_grouped_fig.png"></figure>
+
+<blockquote class="output-example">
+<p>
+Forest plot of effect sizes for the mean of all studies, as well as subgroups of studies designated by Suborder.
+    Effect size measured as Hedges' d. The dotted vertical line represents no effect, or a mean of zero. Circles
+    represent mean effect size, with the corresponding line the 95% confidence interval. X's represent the median.
+    Upward-pointing triangles mark the confidence interval from a bootstrap (999 iterations) procedure,
+    following Adams <em>et al.</em> (1997); downward-pointing triangles mark the bias-corrected bootstrap interval.
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+</blockquote>
+
+
+          <h2 id="nested_analysis">Nested Group Meta-Analysis</h2>
+            <p>
+                Nested group meta-analysis is similar to nested ANOVA in the same manner that
+                <a href="grouped_analysis">Grouped Meta-Analysis</a> is similar to one-way ANVOA. In nested
+                meta-analysis there are two or more levels of groupings, but the groupings are specifically nested
+                within one another rather than independent (as one would find a two or more way ANOVA).
+            </p>
+            <p>
+                Mathematically, the procedure for Nested group meta-analysis is very similar to that of
+                <a href="grouped_analysis">Grouped Meta-Analysis</a>, in that one can calculate means,
+                variances, and within-group heterogeneities for each group at each level, and then compare
+                different levels of nesting by contrasting means at one level with means at a higher level
+                (<a href="#Rosenberg_2013">Rosenberg 2013</a>).
+            </p>
+            <p>
+                The major catch with a nested analysis is that a random-effects model is not possible, at least
+                with the least-squares/moments approach for calculations used in <span class="metawin">MetaWin</span>.
+                For this particular analysis option, only fixed-effects models are implemented.
+            </p>
+
+           <h3>Running a Nested Group Meta-Analysis</h3>
+            <p>The dialog for a Nested Grouped Meta-Analysis is a bit different than those already described. While
+                the basic options are the same (except for the absence of the random effects model), the bottom of
+                the first dialog window contains two boxes, starting with the one on the left listing all columns and
+                the one on the right blank. The right box will contain the nesting structure, with the top level
+                group first, followed by second, third, etc. To create this structure, you can drag and drop names
+                between the two boxes.
+            </p>
+            <figure><img src="images/analysis_nested1.png"></figure>
+            <p>
+                <strong>Data Requirement: </strong> Each group included in the analysis, at every level, must contain
+                at least two studies. If a group appears to contain only one study, the analysis will not be conducted
+                and the output will identify the group with too few studies. Studies in these groups
+                <a href="#filtering_data">can be filtered</a> in
+                order to run the analysis on those groups which do have at least two studies present.
+                <span class="metawin">MetaWin</span> may not be able to detect all problematic groups at a time, so
+                multiple attempts to run/filter may be necessary to meet the data requirement.
+            </p>
+            <figure><img src="images/analysis_nested2.png"></figure>
+            <p>
+                The secondary options for nested group meta-analysis are identical to those of
+                 <a href="grouped_analysis">Grouped Meta-Analysis</a>, with bootstrapping and randomization tests,
+                and graphical output.
+            </p>
+
+           <h3>Output</h3>
+            <p>
+                The output for a Nested Grouped Meta-Analysis includes group specific output, as well as the
+                same general output found in a <a href="#basic_analysuis">Basic
+                Analysis</a>. The graphical output, if requested, is a forest plot which shows the global mean
+                and the group means. Data tables and the figure represent nesting by the presence of an arrow (→).
+                Multiple arrows indicate multiple levels of nesting.
+            </p>
+
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Structure: Nested Groups<br/>
+→ Citation: Rosenberg (2013)
+</p>
+<p>
+→ Effect Sizes: Hedges' d<br/>
+→ Effect Size Variances: Var (d)<br/>
+→ Nested Variables (top to bottom): Suborder, Family<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Use bootstrap for confidence intervals around means: 999 iterations<br/>
+→ Citations: Adams <em>et al.</em> (1997), Dixon (1993)
+</p>
+<p>
+→ Use randomization to test model structure: 999 iterations<br/>
+→ Citation: Adams <em>et al.</em> (1997)
+</p>
+<p>
+Pre-filtered studies excluded from analysis: Row 1, Row 12, Row 23
+</p>
+<p>
+22 studies will be included in this analysis
+</p>
+<p>
+    <span style="font-weight: bold; font-size: 1.25em">Group Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+         Source                Q      df   P(χ2)
+-------------------------------------------------
+Heterocera (within)         39.5798   16   0.0009
+  → Gelechiidae (within)     2.0062    1   0.1567
+  → Noctuidae (within)       4.9239    5   0.4252
+  → Pyralidae (within)       3.0375    3   0.3859
+  → Tortricidae (within)    19.1049    4   0.0007
+Rhopalocera (within)         5.3599    4   0.2523
+  → Papilionidae (within)    0.0018    1   0.9662
+  → Pieridae (within)        3.0609    2   0.2164
+</code></pre>
+
+<pre><code>
+   Source          Q      df   P(χ2)    P(randomization)
+--------------------------------------------------------
+Qm (Suborder)    0.0653    1   0.7983             0.9820
+Qm (Family)     12.8045    4   0.0123             0.4960
+Qe              32.1352   16   0.0096
+-------------------------------------------------------------------
+Total           45.0050   21   0.0017
+</code></pre>
+<p>
+<strong>Mean Effect Sizes</strong>
+</p>
+<pre><code>
+                             n     Mean    Median        95% CI           Bootstrap CI      Bias-corrected CI
+-------------------------------------------------------------------------------------------------------------
+Heterocera Hedges' d         17   0.3527   0.3585    0.2549 to 0.4506    0.1818 to 0.5182    0.1905 to 0.5248
+  → Gelechiidae Hedges' d     2   0.6515   0.5072    0.4428 to 0.8601    0.5072 to 0.8090    0.5072 to 0.6515
+  → Noctuidae Hedges' d       6   0.2450   0.3762    0.0584 to 0.4316    0.0070 to 0.3776    0.0070 to 0.3788
+  → Pyralidae Hedges' d       4   0.2441   0.3585    0.0546 to 0.4335    0.0415 to 0.3698    0.0168 to 0.3698
+  → Tortricidae Hedges' d     5   0.3228   0.0655    0.1222 to 0.5233   -0.0145 to 0.7536   -0.0122 to 0.7661
+Rhopalocera Hedges' d         5   0.3936   0.2317    0.0955 to 0.6917    0.2106 to 0.8675    0.2106 to 0.8675
+  → Papilionidae Hedges' d    2   0.2358   0.2317   -0.1254 to 0.5971    0.2317 to 0.2506    0.2317 to 0.2506
+  → Pieridae Hedges' d        3   0.7304   1.0125    0.2026 to 1.2582    0.1105 to 1.1690    0.1105 to 1.1090
+
+</code></pre>
+<p>
+    <span style="font-weight: bold; font-size: 1.25em">Global Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+Source      Q      df   P(χ2)
+------------------------------
+Total    45.0050   21   0.0017
+</code></pre>
+<p>
+→ Citation: Hedges and Olkin (1985)
+</p>
+<pre><code>
+Source     I2            95% CI
+-------------------------------------
+Total    53.3385   40.5512 to 63.3753
+</code></pre>
+<p>
+→ Citations: Higgins and Thompson (2002), Huedo-Medina <em>et al.</em> (2006)
+</p>
+<p>
+<strong>Mean Effect Size</strong>
+</p>
+<pre><code>
+                   n     Mean    Median        95% CI          Bootstrap CI     Bias-corrected CI
+-------------------------------------------------------------------------------------------------
+Global Hedges' d   22   0.3567   0.3585   0.2580 to 0.4553   0.2096 to 0.4883    0.2226 to 0.5024
+</code></pre>
+<p>
+Sqrt Pooled Variance = 0.0000<br/>
+Mean Study Variance = 0.0864<br/>
+ratio = 0.0000
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+<p>Dixon, P.M. (1993) The bootstrap and the jackknife: Describing the precision of ecological indices. Pp. 290—318 in
+    <em>Design and Analysis of Ecological Experiments</em>, S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall,
+    New York.</p>
+<p>Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for Meta-analysis</em>. Academic Press, Orlando, FL.</p>
+<p>Higgins, J.P.T. and S.G. Thompson (2002) Quantifying heterogeneity in a meta-analysis.
+    <em>Statistics in Medicine</em> 21:1539–1558.</p>
+<p>Huedo-Medina, T.B., F. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) Assessing heterogeneity in
+    meta-analysis: Q statistic or I2 index? <em>Psychological Methods</em> 11:193–206.</p>
+<p>Rosenberg, M.S. (2013) Moment and least-squares based approaches to meta-analytic inference. Pp. 108–124 in
+    <em>Handbook of Meta-analysis in Ecology and Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds.
+    Princeton University Press: Princeton, NJ.</p>
+</blockquote>
+
+<figure><img src="images/analysis_nested_fig.png"></figure>
+
+<blockquote class="output-example">
+<p>
+Forest plot of effect sizes for the mean of all studies as well as nested subgroups. Arrows in front of labels
+    along the y-axis indicate the degree of nesting. Effect size measured as Hedges' d. The dotted vertical line
+    represents no effect, or a mean of zero. Circles represent mean effect size, with the corresponding line the 95%
+    confidence interval. X's represent the median. Upward-pointing triangles mark the confidence interval from a
+    bootstrap (999 iterations) procedure, following Adams <em>et al.</em> (1997); downward-pointing triangles mark the
+    bias-corrected bootstrap interval.
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+</blockquote>
+
+          <h2 id="linear_analysis">Linear Meta-Regression Analysis</h2>
+            <p>
+                Linear Meta-Regression Analysis examines the relationship between the effecct size and an
+                independent variable in a typical regression framework, estimating the parameters for the equation
+            </p>
+            <p>$$\theta_i = \beta_0 + \beta_1 x_i + \epsilon_i,$$</p>
+            <p>
+                where \(\beta_0\) is the intercept, \(\beta_1\) is the slope, and \(x_i\) is the independent variable.
+                The equations for estimating the slope and intercept are:
+            </p>
+            <p>$$\beta_1 = \frac{\sum{w_i x_i \theta_i} - \frac{\sum{w_i x_i} \sum{w_i \theta_i}}{\sum{w_i}}}{\sum{w_i x_i^2} - \frac{\left(\sum{w_i x_i} \right)^2}{\sum{w_i}}}$$</p>
+            <p>
+                and
+            </p>
+            <p>$$\beta_0 = \frac{\sum{w_i \theta_i} - \beta_1 \sum{w_i x_i}}{\sum{w_i}},$$</p>
+            <p>
+                with standard errors of
+            </p>
+            <p>$$s_{\beta_1} = \frac{1}{\sum{w_i x_i^2} - \frac{\left(\sum{w_i x_i} \right)^2}{\sum{w_i}}}$$</p>
+            <p>
+                and
+            </p>
+            <p>$$s_{\beta_0} = \frac{1}{\sum{w_i} - \frac{\left(\sum{w_i x_i}\right)^2}{\sum{w_i x_i^2}}},$$</p>
+            <p>
+                respectively (<a href="hedges_olkin_1985">Hedges and Olkin 1985</a>;
+                <a href="Greenland_1987">Greenland 1987</a>). The heterogeneity of the regression model,
+                <em>Q</em><sub>M</sub>, which has one degree of freedom, can be estimated as the square of the slope
+                over the square of its standard error, or
+            </p>
+            <p>$$Q_M = \frac{\beta_1^2}{s_{\beta_1}^2}.$$</p>
+            <p>
+                Total heterogeneity can be estimated as normal and the error heterogeneity is once again the difference
+                between the total and the model, allowing us to create a heterogeneity table for regression
+                much like that of other analyses:
+            </p>
+
+            <table>
+                <tr><th>Source of Heterogeneity</th><th>Symbol</th><th>df</th><th>Equation</th></tr>
+                <tr><td>Model</td><td>\(Q_M\)</td><td>1</td><td>\(\frac{\beta_1^2}{s_{\beta_1}^2}\)</td></tr>
+                <tr><td>Error</td><td>\(Q_E\)</td><td>\(n-2\)</td><td>\(Q_T - Q_M\)</td></tr>
+                <tr><td>Total</td><td>\(Q_T\)</td><td>\(n-1\)</td><td>\(\sum{w_{i}\left(\theta_{i} - \bar{\theta}\right)^2}\)</td></tr>
+            </table>
+           <p>
+               Alternatively, the significance of the model (the group structure) can be tested through a randomization
+               test where the association between specific studies and the independent variable is randomized.
+           </p>
+           <p>
+               For a random effects model, the estimate of pooled variance is dependent on the model structure; for
+               this type of analysis the estimate is determined by
+               (<a href="#Rosenberg_et_2000">Rosenberg <em>et al.</em> 2000</a>;
+               <a href="#Rosenberg_2013">Rosenberg 2013</a>):
+           </p>
+            <p>$$\hat{\sigma}^2 = \frac{Q_E - \left(n - 2\right)}{\sum\limits_{i=1}^n{w_i} - \sum\limits_{j=1}^n{w_j^2}\left[\frac{\sum\limits_{i=1}^n{w_i x_i^2} - 2x_j\sum\limits_{i=1}^n{w_i x_i} + x_j^2\sum\limits_{i=1}^n{w_i}}{\sum\limits_{i=1}^n{w_i} \sum\limits_{i=1}^n{w_i x_i^2} - \left(\sum\limits_{i=1}^n{w_i x_i} \right)^2} \right]}.$$</p>
+           <p>
+               As before, when conducting a random-effects model, the weights are recalculated as
+           </p>
+            <p>$$w_i^* = 1/{\left(v_i + \hat{\sigma}^2\right)} ,$$</p>
+           <p>
+               and the rest of the calculations repeated using these new weights.
+           </p>
+
+           <h3>Running a regression analysis</h3>
+            <p>The options for a Linear Regression Meta-Analysis are similar to the
+                <a href="#basic_analysuis">Basic Analysis</a>, except that a data column must be specified which
+                contains the independent variable.
+            </p>
+            <figure><img src="images/analysis_regression1.png"> <img src="images/analysis_regression2.png"></figure>
+            <p>
+                The one other difference is the addition of an option to test the significance of the model through
+                a randomization test. This test is conducted independently of bootstrapping, if chosen.
+            </p>
+
+           <h3>Output</h3>
+            <p>
+                The output for a Linear Regression Meta-Analysis includes information on the predictors (intercept
+                and slope), a heterogeneity model table, as well as the same general output found in
+                a <a href="#basic_analysuis">Basic Analysis</a>. The graphical output, if requested, is a scatter
+                plot of the effect sizes vs. independent variables, including the regression line.
+            </p>
+
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Structure: Linear Regression<br/>
+→ Citations: Hedges and Olkin (1985), Greenland (1987)
+</p>
+<p>
+→ Effect Sizes: Hedges' d<br/>
+→ Effect Size Variances: Var (d)<br/>
+→ Independent Variable: %Polyandry<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Use bootstrap for confidence intervals around means: 999 iterations<br/>
+→ Citations: Adams <em>et al.</em> (1997), Dixon (1993)
+</p>
+<p>
+→ Use randomization to test model structure: 999 iterations<br/>
+→ Citation: Adams <em>et al.</em> (1997)
+</p>
+<p>
+Studies with invalid data: Row 3, Row 10, Row 16
+</p>
+<p>
+22 studies will be included in this analysis
+</p>
+<p>
+    <span style="font-weight: bold; font-size: 1.25em">Regression Results</span>
+</p>
+<p>
+<strong>Predictors</strong>
+</p>
+<pre><code>
+Predictor   Value      SE     P(Normal)
+---------------------------------------
+Intercept   0.1161   0.0918      0.2059
+Slope       0.0059   0.0019      0.0021
+</code></pre>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+Source      Q      df   P(χ2)    P(randomization)
+-------------------------------------------------
+Model     9.4576    1   0.0021             0.3230
+Error    36.5623   20   0.0132
+------------------------------------------------------------
+Total    46.0199   21   0.0013
+</code></pre>
+<p>
+    <span style="font-weight: bold; font-size: 1.25em">Global Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+Source      Q      df   P(χ2)
+------------------------------
+Total    46.0199   21   0.0013
+</code></pre>
+<p>
+→ Citation: Hedges and Olkin (1985)
+</p>
+<pre><code>
+Source     I2            95% CI
+-------------------------------------
+Total    54.3676   41.9334 to 64.1391
+</code></pre>
+<p>
+→ Citations: Higgins and Thompson (2002), Huedo-Medina <em>et al.</em> (2006)
+</p>
+<p>
+<strong>Mean Effect Size</strong>
+</p>
+<pre><code>
+                   n     Mean    Median        95% CI          Bootstrap CI     Bias-corrected CI
+-------------------------------------------------------------------------------------------------
+Global Hedges' d   22   0.3601   0.3585   0.2697 to 0.4505   0.2117 to 0.5022    0.2122 to 0.5050
+</code></pre>
+<p>
+Sqrt Pooled Variance = 0.2008<br/>
+Mean Study Variance = 0.0754<br/>
+ratio = 2.6649
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+<p>Dixon, P.M. (1993) The bootstrap and the jackknife: Describing the precision of ecological indices. Pp. 290—318 in
+    <em>Design and Analysis of Ecological Experiments</em>, S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall,
+    New York.</p>
+<p>Greenland, S. (1987) Quantitative methods in the review of epidemiologic literature.
+    <em>Epidemiologic Review</em> 9:1–30.</p>
+<p>Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for Meta-analysis</em>. Academic Press, Orlando, FL.</p>
+<p>Higgins, J.P.T. and S.G. Thompson (2002) Quantifying heterogeneity in a meta-analysis.
+    <em>Statistics in Medicine</em> 21:1539–1558.</p>
+<p>Huedo-Medina, T.B., F. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) Assessing heterogeneity in
+    meta-analysis: Q statistic or I2 index? <em>Psychological Methods</em> 11:193–206.</p>
+</blockquote>
+
+<figure><img src="images/analysis_regression_fig.png"></figure>
+
+<blockquote class="output-example">
+<p>
+Plot of Hedges' d vs. %Polyandry, with a fixed effects meta-analytic linear regression following the methods of
+    Hedges and Olkin (1985) and Greenland (1987).
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Greenland, S. (1987) Quantitative methods in the review of epidemiologic literature. <em>Epidemiologic Review</em> 9:1–30.</p>
+<p>Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for Meta-analysis</em>. Academic Press, Orlando, FL.</p>
+</blockquote>
+
+          <h2 id="glm_analysis">Complex/GLM Meta-Analysis</h2>
+
+            <p>
+                Previous analyses mostly allowed examination of effect sizes with simple structural models, either
+                one-way grouping or univariate regression. The Complex/GLM framework allows any number of
+                explanatory variables, including two-or-more independent groupings (as in a two-or-more way ANOVA),
+                multivariate regression, or a combination of both in an ANCOVA or MANCOVA-like framework. This
+                analysis is conducted in a generalized regression framework, where we are estimating parameters for
+                the equation
+            </p>
+            <p>$$\theta_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{3i}...,$$</p>
+            <p>
+                with the number of predictors dependent on the desired model structure. The first predictor is a
+                constant (intercept), while each continuous variable contributes one predictor, and each
+                grouping variable contributes \(k-1\) predictors, where \(k\) is the number of groups for that
+                particular variable. If this analysis is run without any parameters but the constant, it is
+                equivalent to a <a href="#basic_analysis">basic meta-analysis</a> and \(\beta_0\) is the global mean.
+                If it is run with a single continuous variable, it is equivalent to a <a href="#linear_analysis">linear
+                meta-regression</a> and \(\beta_0\) and \(\beta_1\) are the
+                intercept and slope. If it is run with a single group column, it is equivalent to a
+                <a href="#grouped_analysis">grouped
+                    meta-analysis</a>, although interpretation of the predictors is slightly more complicated as they
+                represent contrasts among groups.
+            </p>
+            <p>
+                This meta-analytic framework is computed using matrix algebra. The effect sizes are placed in a
+                column vector \(\boldsymbol{\theta}\), while the continuous and categorical variables are placed in a
+                matrix called \(\boldsymbol{X}\) which includes a column of 1's (for the constant), a column for
+                each continuous variable, and \(k-1\) columns for each group in each categorical variable. In matrix
+                notation form we are estimating parameters for the equation
+            </p>
+            <p>$$\boldsymbol{\theta} = \boldsymbol{\beta X} + \boldsymbol{E},$$</p>
+            <p>
+                where \(\boldsymbol{\beta}\) contains the predictor (regression) coefficients. To solve this we
+                use a weighted-GLM approach, where the matrix \(\boldsymbol{W}\) is an <em>n</em>&times;<em>n</em>
+                matrix with the individual study weights on the diagonal and the rest of the matrix containing zeros.
+                From this we can calculate \(\boldsymbol{\beta}\) as
+            </p>
+            <p>$$\boldsymbol{\beta} = \left( \boldsymbol{X}^T \boldsymbol{W} \boldsymbol{X}\right)^{-1} \boldsymbol{X}^T \boldsymbol{W} \boldsymbol{\theta}.$$</p>
+            <p>
+                The variance of each component of \(\boldsymbol{\beta}\) can be calculated as
+            </p>
+            <p>$$\boldsymbol{\Sigma_{\beta}} = \left( \boldsymbol{X}^T \boldsymbol{W} \boldsymbol{X}\right)^{-1},$$</p>
+            <p>
+                where the variance is the corresponding element of the diagonal of \(\boldsymbol{\Sigma_{\beta}}\). If
+                \(\boldsymbol{\beta^*}\) is simply \(\boldsymbol{\beta}\) with the first value removed, and
+                \(\boldsymbol{\Sigma_{\beta}^*}\) is \(\boldsymbol{\Sigma_{\beta}}\) with the first row and column
+                removed, then the model heterogeneity can be determined as:
+            </p>
+            <p>$$Q_M = \boldsymbol{\beta^{*T}} {\boldsymbol{\Sigma_{\beta}^{*}}}^{-1} \boldsymbol{\beta^*},$$</p>
+            <p>
+                while the error heterogeneity can be calculated as
+            </p>
+            <p>$$Q_E = \left(\boldsymbol{\theta} - \boldsymbol{X}\boldsymbol{\beta}\right)^T \boldsymbol{W} \left(\boldsymbol{\theta} - \boldsymbol{X}\boldsymbol{\beta}\right).$$</p>
+            <p>
+                Total heterogeneity is most readily calculated as the sum of \(Q_M\) and \(Q_E\), and thus our model
+                hetereogeneity table is
+            </p>
+            <table>
+                <tr><th>Source of Heterogeneity</th><th>Symbol</th><th>df</th><th>Equation</th></tr>
+                <tr><td>Model</td><td>\(Q_M\)</td><td>p</td><td>\(\boldsymbol{\beta^{*T}} {\boldsymbol{\Sigma_{\beta}^{*}}}^{-1} \boldsymbol{\beta^*}\)</td></tr>
+                <tr><td>Error</td><td>\(Q_E\)</td><td>\(n-p-1\)</td><td>\(\left(\boldsymbol{\theta} - \boldsymbol{X}\boldsymbol{\beta}\right)^T \boldsymbol{W} \left(\boldsymbol{\theta} - \boldsymbol{X}\boldsymbol{\beta}\right)\)</td></tr>
+                <tr><td>Total</td><td>\(Q_T\)</td><td>\(n-1\)</td><td>\(Q_M + Q_E\)</td></tr>
+            </table>
+            <p>
+                where <em>p</em> is the number of columns of \(\boldsymbol{X}\) minus one.
+            </p>
+           <p>
+               Alternatively, the significance of the model can be tested through a randomization
+               test where the association between specific studies and the independent variables is randomized.
+           </p>
+           <p>
+               For a random effects model, the estimate of pooled variance is dependent on the model structure; for
+               this type of analysis the estimate is determined by
+               (<a href="#hedges_olkin_1985">Hedges and Olkin 1985</a>;
+               <a href="#Rosenberg_2013">Rosenberg 2013</a>):
+           </p>
+            <p>$$\hat{\sigma}^2 = \frac{Q_E - \left(n - p - 1\right)}{\text{tr}\left(\boldsymbol{W}\right) - \text{tr}\left[\boldsymbol{W}\boldsymbol{X}\left(\boldsymbol{X}^T\boldsymbol{W}\boldsymbol{X}\right)^{-1}\boldsymbol{X}^T\boldsymbol{W}\right]},$$</p>
+           <p>
+               where \(\text{tr}\left(\right)\) indicates the trace of the matrix. The other formulas for random
+               effects variance presented earlier are simplifications of this general equation for specific
+               conformations of \(\boldsymbol{X}\).
+               As before, when conducting a random-effects model, the weights are recalculated as
+           </p>
+            <p>$$w_i^* = 1/{\left(v_i + \hat{\sigma}^2\right)} ,$$</p>
+           <p>
+               and the rest of the calculations repeated using these new weights.
+           </p>
+
+           <h3>Running a complex/GLM analysis</h3>
+            <p>The options for a Complex/GLM Meta-Analysis are a bit more complex, as one can include any number
+                of independent variables to the analysis. Beneath the standard options are three boxes, one
+                indicating unused variables, one for categorical (grouping) variables, and one for continuous
+                variables. The user can drag an drop variables among these categories to create the model structure
+                they wish to conduct the meta-analysis under.
+            </p>
+            <figure><img src="images/analysis_glm1.png"></figure>
+            <p>
+                The additional options include bootstrapping confidence intervals around the mean, as well as a
+                randomization test for model structure. Graphical output is not an option for the complex/glm
+                analysis.
+            </p>
+            <figure><img src="images/analysis_glm2.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The output for a Complex/GLM Meta-Analysis includes information on the predictors, a heterogeneity
+                model table, as well as the same general output found in
+                a <a href="#basic_analysuis">Basic Analysis</a>. No graphical output is produced as part of this
+                analysis.
+            </p>
+
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Structure: Complex/GLM<br/>
+→ Citations: Hedges and Olkin (1985), Rosenberg <em>et al.</em> (2000)
+</p>
+<p>
+→ Effect Sizes: Hedges' d<br/>
+→ Effect Size Variances: Var (d)<br/>
+→ Categorical Independent Variable(s): Suborder<br/>
+→ Continuous Independent Variable(s): %Polyandry<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Use bootstrap for confidence intervals around means: 999 iterations<br/>
+→ Citations: Adams <em>et al.</em> (1997), Dixon (1993)
+</p>
+<p>
+→ Use randomization to test model structure: 999 iterations<br/>
+→ Citation: Adams <em>et al.</em> (1997)
+</p>
+<p>
+Studies with invalid data: Row 3, Row 10, Row 16
+</p>
+<p>
+22 studies will be included in this analysis
+</p>
+<p>
+    <span style="font-weight: bold; font-size: 1.25em">Model Results</span>
+</p>
+<p>
+<strong>Predictors</strong>
+</p>
+<pre><code>
+   Predictor      Value      SE          95% CI         P(Normal)
+-----------------------------------------------------------------
+β0 (intercept)    0.1236   0.1042   -0.0807 to 0.3278      0.2358
+β1 (%Polyandry)   0.0059   0.0019    0.0021 to 0.0097      0.0021
+β2 (Suborder)     0.0106   0.0699   -0.1263 to 0.1475      0.8794
+</code></pre>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+Source      Q      df   P(χ2)    P(randomization)
+-------------------------------------------------
+Model     9.4807    2   0.0087             0.2390
+Error    36.5392   19   0.0091
+------------------------------------------------------------
+Total    46.0199   21   0.0013
+</code></pre>
+<p>
+    <span style="font-weight: bold; font-size: 1.25em">Global Results</span>
+</p>
+<p>
+<strong>Heterogeneity</strong>
+</p>
+<pre><code>
+Source      Q      df   P(χ2)
+------------------------------
+Total    46.0199   21   0.0013
+</code></pre>
+<p>
+→ Citation: Hedges and Olkin (1985)
+</p>
+<pre><code>
+Source     I2            95% CI
+-------------------------------------
+Total    54.3676   41.9334 to 64.1391
+</code></pre>
+<p>
+→ Citations: Higgins and Thompson (2002), Huedo-Medina <em>et al.</em> (2006)
+</p>
+<p>
+<strong>Mean Effect Size</strong>
+</p>
+<pre><code>
+                   n     Mean    Median        95% CI          Bootstrap CI     Bias-corrected CI
+-------------------------------------------------------------------------------------------------
+Global Hedges' d   22   0.3601   0.3585   0.2697 to 0.4505   0.2192 to 0.5069    0.2271 to 0.5283
+</code></pre>
+<p>
+Sqrt Pooled Variance = 0.2114<br/>
+Mean Study Variance = 0.0754<br/>
+ratio = 2.8047
+</p>
+<p>
+<strong>References</strong>
+</p>
+<p>Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
+    <em>Ecology</em> 78:1277–1283.</p>
+<p>Dixon, P.M. (1993) The bootstrap and the jackknife: Describing the precision of ecological indices. Pp. 290—318 in
+    <em>Design and Analysis of Ecological Experiments</em>, S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall,
+    New York.</p>
+<p>Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for Meta-analysis</em>. Academic Press, Orlando, FL.</p>
+<p>Higgins, J.P.T. and S.G. Thompson (2002) Quantifying heterogeneity in a meta-analysis. <em>Statistics in
+    Medicine</em> 21:1539–1558.</p>
+<p>Huedo-Medina, T.B., F. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) Assessing heterogeneity in
+    meta-analysis: Q statistic or I2 index? <em>Psychological Methods</em> 11:193–206.</p>
+<p>Rosenberg, M.S., D.C. Adams, and J. Gurevitch (2000) <em>MetaWin: Statistical Software for Meta-analysis</em>.
+    Sinauer Associates, Sunderland, MA.</p>
+</blockquote>
+
+          <h2 id="phylogenetic_glm">Phylogenetic GLM Meta-Analysis</h2>
+
+            <p>
+                Phylogenetic GLM Meta-Analysis is an analysis-type unique to the biological sciences, as it
+                conducts a meta-analysis while accounting for the non-independence of multi-taxonomic studies due to
+                shared phylogenetic history of the taxa. This method uses the approach of
+                <a href="#lajeunesse_2009">Lajeunesse (2009)</a> and
+                <a href="#lajeunesse_et_2013">Lajeunesse <em>et al.</em> (2013)</a>.
+            </p>
+            <p>
+                Fundamentally, this method is almost mathematically identical to the
+                <a href="#glm_analysis">Complex/GLM Meta-Analysis</a>. The only difference is in the specification of
+                the weight matrix  \(\boldsymbol{W}\). In the standard GLM analysis, this is an
+                <em>n</em>&times;<em>n</em> matrix with the individual study weights on the diagonal and zeros
+                throughout the rest of the matrix. To adjust an analysis for phylogenetic autocorrelation, the
+                off-diagonal elements are replaced with estimates of phylogenetic covariance, a value which
+                represents the shared history of the two taxa represented in a given pair of contrasting studies.
+                These covariances are estimated from a phylogeny which must be loaded into
+                <span class="metawin">MetaWin</span>.
+            </p>
+
+           <h3>Running a Phylogenetic GLM Meta-Analysis</h3>
+            <p>
+                To run a phylogenetic meta-analysis, one must first <a href="#phylogeny_tab">activate the phylogeny
+                tab and load a phylogeny into memory</a>. Until this step is completed, the Phylogenetic GLM
+                Meta-Analysis option will remain disabled.
+            </p>
+            <p>The options for a Phylogenetic GLM Meta-Analysis are almost identical to those of the
+                <a href="#glm_analysis">Complex/GLM Meta-Analysis</a>, except for the addition of a box where
+                the user must specify which data column contains the taxon names. In order for a study to be
+                included in an analysis, it's taxon must be represented on the pre-loaded phylogeny. If the name
+                cannot be matched, the study will be excluded. (Note: the reverse is not true; the phylogeny can
+                contain additional taxonomic names not represented within the studies). Additionally, there is
+                checkbox to activate including additional variables, but otherwise this works identically as to the
+                GLM dialog.
+            </p>
+            <figure><img src="images/analysis_phylogenetic1.png"></figure>
+            <p>
+                The additional options include bootstrapping confidence intervals around the mean, as well as a
+                randomization test for model structure. Graphical output is not an option for the complex/glm
+                analysis.
+            </p>
+            <figure><img src="images/analysis_phylogenetic2.png"></figure>
+
+
+
+
+
+
+
+
+
+        </div>
+
+        <div class="major_div">
+          <h1 id="graphs">Graphs and Figures</h1>
+            <p>
+                Graphs and figures are created by <span class="metawin">MetaWin</span> through two mechanisms:
+                (1) as an optional components of many <a href="#analyses">analyses</a>, or (2) directly through a
+                choice from the <span class="menu">Draw</span> menu. Whenever a figure is created, it will appear
+                in the <a href="#graph_tab">Graph Tab</a>, along with an automatically generated caption.
+            </p>
+            <p>
+                Remember that any studies that have been <a href="#filtering_data">marked for filtering</a> will
+                automatically be excluded from figures.
+            </p>
+
+          <h2 id="scatter_plot">Scatter/Funnel Plot</h2>
+            <p>
+                A scatter plot is simply a point plot of two continuous variables. A funnel plot is a special type
+                of scatter plot where a metric (in meta-analysis, usually an effect size) is plotted against an
+                estimate of variance (or sample size). The idea of a funnel plot is that if there is a single true
+                value being estimated by all of the studies, those with high variance (or low sample size) will tend
+                to vary a lot around the true value, while those with low variance (or high sample size) will tend
+                to vary only a little around the true value. With a large number of studies you would expect the
+                scatter to be funnel-shaped and symmetric around the true value. If the funnel is asymmetric, this
+                may be an indication of publication bias.
+            </p>
+            <figure><img src="images/draw_scatter.png"></figure>
+            <p>
+                To draw a scatter or funnel plot, simply choose <span class="menu">Scatter/Funnel Plot</span> from
+                the <span class="menu">Draw</span> menu. From here you can choose the two variables to contrast and
+                the figure will show up in the <a href="#graph_tab">Graph Tab</a>.
+            </p>
+           <h3>Output Example</h3>
+            <figure><img src="images/example_scatter.png"></figure>
+            <blockquote class="output-example">
+                Scatter plot of Hedges' d vs. %Polyandry.
+            </blockquote>
+
+
+          <h2 id="weighted_histogram">Weighted Histogram</h2>
+            <p>
+                A histogram is a bar plot illustrating the frequency of observations in a series of bins. A weighted
+                histogram weights the count (frequency) of each observation. In meta-analysis you generally would
+                create a histogram for effect sizes.
+            </p>
+            <figure><img src="images/draw_histogram.png"></figure>
+            <p>
+                To draw a histogram, choose <span class="menu">Weighted Histogram</span> from
+                the <span class="menu">Draw</span> menu. From here you can specify the Effect Size and the number of
+                bins to include, as well as whether you want the histogram to be unweighted, weighted by sample size,
+                or weighted by the inverse of the variance (which is generally how weights are determined in
+                meta-analysis). If either of the latter two options are chosen, the user can then specify the source
+                of the sample size or weights. The figure will show up in the <a href="#graph_tab">Graph Tab</a>.
+            </p>
+           <h3>Output Example</h3>
+            <figure><img src="images/example_histogram.png"></figure>
+            <blockquote class="output-example">
+                Histogram of Hedges' d from individual studies. Counts were weighted by the inverse of the
+                variance of each effect size.
+            </blockquote>
+
+
+          <h2 id="forest_plot">Forest Plot</h2>
+            <p>
+                A forest plot displays means and their confidence intervals for a series of observations or groups.
+                A number of <a href="#analyses">analyses</a> in <span class="metawin">MetaWin</span> will optionally
+                create forest plots, but this option allows the user to construct a forest plot for all of the
+                input studies. Note that the figure can become overwhelmed with a large number of studies. To draw a
+                forest plot, choose <span class="menu">Forest Plot</span> from
+                the <span class="menu">Draw</span> menu. From here you can specify the Effect Size and Variance.
+            </p>
+            <figure><img src="images/draw_forest.png"></figure>
+            <p>
+                The figure will show up in the <a href="#graph_tab">Graph Tab</a>. The forest plot will stack each
+                observation vertically, in the order they appear in the data matrix.
+                The point indicates the observed effect size and the corresponding line it's 95% confidence interval
+                based on the variance, with the corresponding study label (the row header) listed on the left side of
+                the figure. A vertical silver dotted line marks an effect size of zero (generally the null hypothesis for
+                standardized effect sizes).
+            </p>
+            <p>
+                The confidence interval can be modified by <a href="#alpha_level">choosing a different significance
+                level from the output options</a>.
+            </p>
+           <h3>Output Example</h3>
+            <figure><img src="images/example_forest.png"></figure>
+            <blockquote class="output-example">
+                Forest plot of individual effect sizes for each study. Effect size measured as Hedges' d. The
+                dotted vertical line represents no effect, or a mean of zero. Circles represent mean effect size,
+                with the corresponding line the 95% confidence interval.
+            </blockquote>
+
+          <h2 id="normal_quantile_plot">Normal Quantile Plot</h2>
+            <p>
+                The Normal Quantile Plot is as an alternative approach to looking for publication biases
+                (<a href="#wang_bushman_1998">Wang and Bushman, 1998</a>). The normal quantile plot is a special case
+                of a quantile quantile plot; this is a plot where two distributions are compared by plotting their
+                quantiles against each other. If the two distributions are similar the quantiles will also
+                be similar and the points will fall close to the line x = y. Deviations from this line reveal how
+                the distributions are different. In a normal quantile plot, the distributions along the x-axis is the
+                standard normal distribution while that along the y-axis is the effect size divided by the
+                square-root of its variance,
+            </p>
+            <p>$$\frac{E_i}{\sqrt{v_i}}.$$</p>
+            <p>
+                The normal quantile plot has a number of interesting features. Deviations from linearity indicate
+                deviations from normality; if the points do not fall within the confidence bands the data are not
+                normally distributed. The slope of the linear regression line indicates the standard deviation of the
+                data; this should be 1 for the standardized effect size if the studies come from a single population
+                and have large sample sizes. The y-intercept of the regression indicates the mean. Publication bias
+                will tend to leave strange gaps in the plot or lead to very non-linear curves. Multiple populations
+                in the same data set can also lead to strange curves. See <a href="#wang_bushman_1998">Wang and
+                Bushman (1998)</a> for more details on the interpretation of normal quantile plots in meta-analysis.
+            </p>
+            <p>
+                To draw a Normal Quantile plot, choose <span class="menu">Normal Quantile Plot</span> from
+                the <span class="menu">Draw</span> menu. From here you can specify the Effect Size and Variance.
+            </p>
+            <figure><img src="images/draw_normal_quantile.png"></figure>
+            <p>
+                The vertical dotted line represents a quantile of zero; the horizontal dotted line represents the
+                mean standardized effect size. The dashed lines represent the prediction confidence interval of the
+                regression line. The width of the prediction envelope
+                    can be modified by <a href="#alpha_level">choosing a different significance level from the output
+                    options</a>.
+            </p>
+           <h3>Output Example</h3>
+            <figure><img src="images/example_normal_quantile.png"></figure>
+            <blockquote class="output-example">
+                <p>
+                    Normal Quantile plot following Wang and Bushman (1998). The standardized effect size is the
+                    efffect size divided by the square-root of its variance. The solid line represents the regression
+                    and the dashed lines the 95% prediction envelope.
+            </p>
+                <p>
+                    <strong>References</strong>
+                </p>
+                <p>Wang, M.C., and B.J. Bushman (1998) Using the normal quantile plot to explore meta-analytic data
+                    sets. <em>Psychological Methods</em> 3:46–54.</p>
+            </blockquote>
+
+          <h2 id="galbraith_plot">Galbraith (Radial) Plot</h2>
+            <p>
+                A Galbraith Plot (also known as a Radial Plot) is a special type of scatter plot where a measure
+                of precision (the square-root of the variance) is plotted on the x-axis and a standardized effect
+                size (the effect size &times; precision) is plotted on the y-axis. A straight line drawn from the
+                origin through any point, intersects a curve on the right side of the plot with the magnitude of the
+                effect size, and the regression of the points through the origin intersects the curve at the mean
+                effect size. See Galbraith (<a href="#galbraith_1988">1988</a>, <a href="#galbraith_1994">1994</a>)
+                for more details.
+            </p>
+            <figure><img src="images/draw_radial.png"></figure>
+            <p>
+                To draw a Galbraith plot, choose <span class="menu">Galbraith (Radial) Plot</span> from
+                the <span class="menu">Draw</span> menu. From here you can specify the Effect Size and Variance.
+                Optionally you can also specify whether the Effect Size is a log-transformed measure; if you do so
+                the values indicated on the resulting radial arc will be displayed using "unlogged" ratios.
+            </p>
+
+           <h3>Output Example</h3>
+            <figure><img src="images/example_radial.png"></figure>
+            <blockquote class="output-example">
+                <p>
+                    Radial chart (Galbraith 1988, 1994) of standardized Hedges' d vs. precision. A line from the
+                    origin through any point intersects the curve at the effect size for that point. The regression
+                    line intersects the curve at the mean effect size.
+                </p>
+                <p>
+                    <strong>References</strong>
+                </p>
+                <p>Galbraith, R.F. (1988) A note on graphical presentation of estimated odds ratios from several
+                    clinical trials. <em>Statistics in Medicine</em> 7:889–894.</p>
+                <p>Galbraith, R.F. (1994) Some applications of radial plots. <em>Journal of the American
+                    Statistical Association</em> 89:1232–1242.</p>
+            </blockquote>
+
+        </div>
+
+        <div class="major_div">
+          <h1 id="references">References</h1>
+            <ul>
+                <li><span id="adams_et_1997">Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests
+                    for meta-analysis of ecological data. <em>Ecology</em> 78(4):1277&ndash;1283.</span></li>
+                <li><span id="begg_1994">Begg, C.B. (1994) Publication bias. Pp. 399-409 in <em>The Handbook of
+                    Research Synthesis</em>, H. Cooper and L.V. Hedges, eds. Sage, New York.</span></li>
+                <li><span id="begg_mazumdar_1994">Begg, C.B., and M. Mazumdar (1994) Operating characteristics of a
+                    rank correlation test for publication bias. <em>Biometrics</em> 50:1088&ndash;1101.</span></li>
+                <li><span id="berlin_et_1989">"Berlin, J.A., N.M. Laird, H.S. Sacks, and T.C. Chalmers (1989) A
+                    comparison of statistical methods for combining event rates from clinical trials.
+                    <em>Statistics in Medicine</em> 8:141&ndash;151.</span></li>
+                <li><span id="chalmers_1991">Chalmers, T.C. (1991) Problems induced by meta-analyses. <em>Statistics
+                    in Medicine</em> 10:971&ndash;980.</span></li>
+                <li><span id="dersimonian_laird_1986">"DerSimonian, R., and N. Laird (1986) Meta-analysis in
+                    clinical trials. <em>Controlled Clinical Trials</em> 7:177&ndash;188.</span></li>
+                <li><span id="duval_tweedie_2000a">Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill"
+                    method of accounting for publication bias in meta-analysis. <em>Journal of the American
+                        Statistical Association</em> 95(449):89–98.</span></li>
+                <li><span id="duval_tweedie_2000b">Duval, S. and R. Tweedie (2000b) Trim and fill: A simple
+                    funnel-plot-based method of testing and adjusting for publication bias in meta-analysis.
+                    <em>Biometrics</em> 56:455–463.</span></li>
+                <li><span id="fisher_1928">Fisher, R.A. (1928) <em>Statistical methods for research workers</em>
+                    (2nd edition). Oliver and Boyd, London.</span></li>
+                <li><span id="galbraith_1988">Galbraith, R.F. (1988) A note on graphical presentation of estimated
+                    odds ratios from several clinical trials. <em>Statistics in Medicine</em>
+                    7:889&ndash;894.</span></li>
+                <li><span id="galbraith_1994">Galbraith, R.F. (1994) Some applications of radial plots. <em>Journal
+                    of the American Statistical Association</em> 89:1232&ndash;1242.</span></li>
+                <li><span id="greenland_1987">Greenland, S. (1987) Quantitative methods in the review of epidemiologic
+                    literature. <em>Epidemiologic Review</em> 9:1&ndash;30.</span></li>
+                <li><span id="hedges_olkin_1985">Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for
+                    Meta-analysis</em>. Academic Press, Orlando, FL.</span></li>
+                <li><span id="hedges_et_1999">Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis
+                    of response ratios in experimental ecology. <em>Ecology</em> 80(4):1150&ndash;1156.</span></li>
+                <li><span id="higgins_thompson_2002">Higgins, J.P.T. and S.G. Thompson (2002) Quantifying
+                    heterogeneity in a meta-analysis. <em>Statistics in Medicine</em> 21:1539&ndash;1558.</span></li>
+                <li><span id="huedo_medina_et_2006">Huedo-Medina, T.B., F. Sánchez-Meca, F. Marín-Martínez, and J.
+                    Botella (2006) Assessing heterogeneity in meta-analysis: Q statistic or I2 index?
+                    <em>Psychological Methods</em> 11:193&ndash;206.</span></li>
+                <li><span id="kendall_1938">Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>.
+                    30(1&ndash;2):81&ndash;89.</span></li>
+                <li><span id="labbe_et_1987">L&rsquo;Abbé, K.A., A.S. Detsky, and K. O&rsquo;Rourke (1987)
+                    Meta-analysis in clinical research. <em>Annals of Internal Medicine</em>
+                    107:224&ndash;233.</span></li>
+                <li><span id="lajeunesse_2009">Lajeunesse, M.J. (2009) Meta-analysis and the comparative phylogenetic
+                    method. <em>American Naturalist</em> 174:369&ndash;381.</span></li>
+                <li><span id="lajeunesse_et_2013">Lajeunesse, M.J., M.S. Rosenberg, and M.D. Jennions (2013)
+                    Phylogenetically independent meta-analysis. Pp. 284–299 in <em>Handbook of Meta-analysis in
+                        Ecology and Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds.
+                    Princeton University Press: Princeton, NJ.</span></li>
+                <li><span id="mantel_haenszel_1959">Mantel, N., and W. Haenszel (1959) Statistical aspects of the
+                    analysis of data from retrospective studies of disease. <em>Journal of the National Cancer
+                        Institute</em> 22:719&ndash;748.</span></li>
+                <li><span id="mengersen_gurevitch_2013">Mengersen, K., and J. Gurevitch (2013)
+                    Using other Metricsmof effect size in meta-analysis. Pp. 72&ndash;85 in <em>Handbook of
+                        Meta-analysis in Ecology and Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds.
+                    Princeton University Press: Princeton, NJ.</span></li>
+                <li><span id="normand_1999">Normand, S.-L.T. (1999) Meta-analysis: Formulating, evaluating, combining,
+                    and reporting. <em>Statistics in Medicine</em> 18:321&mdash;359.</span></li>
+                <li><span id="orwin_1983">Orwin, R.G. (1983) A fail-safe <em>N</em> for effect size in
+                    meta-analysis. <em>Journal of Educational Statistics</em> 8(2):157&ndash;159.</span></li>
+                <li><span id="rosenberg_2005">Rosenberg, M.S. (2005) The file-drawer problem revisited: A general
+                    weighted method for calculating fail-safe numbers in meta-analysis. <em>Evolution</em>
+                    59(2):464&ndash;468.</span></li>
+                <li><span id="Rosenberg_2013">Rosenberg, M.S. (2013) Moment and least-squares based approaches to
+                    meta-analytic inference. Pp. 108–124 in <em>Handbook of Meta-analysis in Ecology and
+                        Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds. Princeton University
+                    Press: Princeton, NJ.</span></li>
+                <li><span id="rosenberg_et_1997">Rosenberg, M.S., D.C. Adams, and J. Gurevitch (1997) <em>MetaWin:
+                    Statistical Software for Meta-Analysis with Resampling Tests.</em> Version 1. Sinauer Associates:
+                    Sunderland, MA.</span></li>
+                <li><span id="rosenberg_et_2000">Rosenberg, M.S., D.C. Adams, and J. Gurevitch (2000) <em>MetaWin:
+                    Statistical Software for Meta-Analysis.</em> Version 2. Sinauer Associates: Sunderland,
+                    MA.</span></li>
+                <li><span id="rosenthal_1979">Rosenthal, R. (1979) The &ldquo;file drawer problem&rdquo; and tolerance
+                    for null results. <em>Psychological Bulletin</em> 86(3):638&ndash;641.</span></li>
+                <li><span id="sokal_rohlf_1995">Sokal, R.R., and F.J. Rohlf (1995) <em>Biometry: The Principles and
+                    Practice of Statistics in Biological Research</em>. 3rd edition. W.H. Freeman, New York.</span></li>
+                <li><span id="spearman_1904">Spearman C. (1904) The proof and measurement of association between two
+                    things. <em>American Journal of Psychology</em>. 15(1):72&ndash;101.</span></li>
+                <li><span id="wang_bushman_1998">Wang, M.C., and B.J. Bushman (1998) Using the normal quantile
+                    plot to explore meta-analytic data sets. <em>Psychological Methods</em> 3:46&ndash;54.</span></li>
+            </ul>
+        </div>
+      </div>
+
+
+        <!╌end of help contents╌>
+        </div>
+
+        <footer>
+           &copy; Michael S. Rosenberg
+        </footer>
+    </body>
+</html>

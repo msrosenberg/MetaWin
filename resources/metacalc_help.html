@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>MetaCalc Help/Manual</title>
+        <meta name="description" content="MetaCalc Help/Manual"/>
+        <link rel="author" href="mailto:msrosenberg@vcu.edu"/>
+        <link rel="stylesheet" href="metawin.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    </head>
+
+    <body>
+        <header id="offline-header">
+            <div id="header_logo">
+                <img id="mw_logo" src="images/metawin3icon.png">
+            </div>
+            <div id="header_title">
+                <span id="page_title">MetaWin</span>
+            </div>
+        </header>
+
+        <div id="main">
+
+        <!╌copy help contents here starting with toc╌>
+
+
+  <div id="help-main">
+    <h1>Metawin Statistical Calculator</h1>
+	<section>
+    <h2>What is MetaCalc?</h2>
+    <p><em>MetaCalc</em> is a small program which performs a number of useful statistical procedures which are
+        often used in meta-analysis.  It can be run as an independent program or can be called directly from
+        <span class="metawin">MetaWin</span> by
+        choosing <span class="menu">Statistical Calculator</span> from the <span class="metawin">MetaWin</span>
+        <span class="menu">Compute</span> menu.</p>
+    <p>The various procedures performed by <em>MetaCalc</em> are primarily useful in order to construct data for use in a
+        meta-analysis. When conducting a literature review, one quickly finds that the data presented in the primary
+        literature are often found in different forms. Some papers will present the results as correlation
+        coefficients, others will present means and standard deviations, others will present means and standard
+        errors, and others will present just the significance level. The functions in <em>MetaCalc</em> can be used to
+        convert this bewildering array of data into the &ldquo;raw&rdquo; data necessary to calculate effect sizes in a
+        meta-analysis.</p>
+    <p><em>MetaCalc</em> is simple and straight-forward to use. It consists of a single window divided into three parts.
+        The left part lists all of the functions and conversions in a selectable list. The middle part is the input
+        section, containing boxes for the user to input parameters necessary for the chosen function (the number and
+        labels of these boxes will automatically changes as the function is changed; functions currently require
+        between one and four inputs). The right part is the output section, which will record the requested
+        conversion, the entered inputs, and the output value. The output value is also automatically copied to the
+        clipboard for easy transferance to another program.</p>
+
+            <figure><img src="images/metacalc.png"></figure>
+
+    <p>The top of the window also contains a toolbar with four buttons. From left-to-right, pressing these will
+        (1) Close the program, (2) Allow the user to specify the number of decimal places to write output to
+        (default = 6), (3) Open the help/manual (this document), and (4) Show an About screen.</p>
+	</section>
+	
+	<section>
+    <h2>Statistical Functions</h2>
+    <p>Each of the statistical procedures performed by <em>MetaCalc</em> are described below.  For each function we
+        give the name, a brief description, the equation (when applicable), and a list of the required input
+        parameters (for more information on many of these and other similar functions, see Rosenthal, 1994).</p>
+	<h3>General Notes</h3>
+    <h4>Sample Sizes</h4>
+    <p>A number of the conversions require experimental and control sample sizes. These are simply the sample sizes of the two contrasting groups and, in some cases, may not actually represent experiment vs. control conditions. This is fine and none of the conversions are dependent on which group is labeled as experiment or control. If the sample size of the individual groups is not known, but the total sample size (<em>n</em>) is provided, one could choose to assume the two groups are equal in size and split the total evenly among the two contrasts, making the two group sizes <em>n</em>/2.</p>
+    <h4>One vs. Two-tailed Distributions</h4>
+    <p>A number of the conversions specify one- or two-tailed tests as part of the function. For consistency, the one-tailed versions always assume the user is interested in the significance of the positive tail of the distribution, <em>i.e.,</em> large positive values will be highly significant while negative values will be non-significant. In all of these cases, the distributions are symmetric around zero so if one needs the probability or a conversion based on a one-tailed test toward the negative tale, simply subtract the probability from one or reverse the sign of the input (or output) variate to account for the desired direction.</p>
+	<p>Conversions from two-tailed distributions will always produce the positive variate, although it should be noted there is a symmetric negative variate with the same probability</p>
+	
+    <div class="function_div">
+    <h3>Variance → Standard Deviation</h3>
+    <h4>Required Parameters</h4>
+	<ul>
+	    <li>Variance: \(\sigma^2\)</li>
+	</ul>
+    <p>This function will convert a variance to a standard deviation.</p>
+    <p>$$\sigma = \sqrt{\sigma^2}$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Standard Error → Standard Deviation</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Standard Error: \(\sigma_{\bar{x}}\)</li>
+		<li>Sample Size: \(n\)</li>
+	</ul>
+    <p>This function will convert a standard error (also known as standard error of the mean) to a standard deviation.</p>
+    <p>$$\sigma = \sigma_{\bar{x}}\sqrt{n}$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Z-score (Normal Deviate)</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Variate: \(X\)</li>
+		<li>Mean: \(\bar{X}\)</li>
+		<li>Standard Deviation: \(\sigma\)</li>
+	</ul>
+    <p>This function will calculate a <em>Z-</em>score (also known as a standard normal deviate) from a variate, a mean, and a standard deviation.</p>
+	<p>$$Z = \frac{X-\bar{X}}{\sigma}$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Z-score → Correlation</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Z-score: \(Z\)</li>
+		<li>Sample Size: \(n\)</li>
+	</ul>
+    <p>This function will calculate a correlation coefficient from a Z-score (Rosenthal 1994).</p>
+    <p>$$r = \frac{Z}{\sqrt{n}}$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Z-score → One-tailed Probability</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Z-score: \(Z\)</li>
+	</ul>
+    <p>This function will calculate the one-tailed probability associated with a standard normal deviate (Sokal and Rohlf 1995). This conversion assumes the one-tailed direction of interest is positive, thus a <em>Z</em> of 1.96 would yield a probability of 0.025, while a <em>Z</em> of -1.96 would yield a probability of 0.975. If one is interested in the negative tail, simply subtract the resulting probability from 1.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Z-score → Two-tailed Probability</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Z-score: \(Z\)</li>
+	</ul>
+    <p>This function will calculate the two-tailed probability associated with a standard normal deviate (Sokal and Rohlf 1995). Because it is two-tailed, input <em>Z-</em>scores of 1.96 and -1.96 would both produce a probability of 0.05.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>One-tailed Probability → Z-score</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Probability: \(p\)</li>
+	</ul>
+    <p>This function will calculate the standard normal deviate associated with a one-tailed probability (Sokal and Rohlf 1995). This conversion assumes the one-tailed direction of interest is positive, thus a <em>p</em> of 0.025 would yield a <em>Z</em> of 1.96, while a <em>p</em> of 0.975 would yield a <em>Z</em> of -1.96. If one is interested in the negative tail, simply reverse the sign of the resulting <em>Z</em>.
+    </div>
+
+    <div class="function_div">
+    <h3>Two-tailed Probability → Z-score</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Probability: \(p\)</li>
+	</ul>
+    <p>This function will calculate the standard normal deviate associated with a two-tailed probability (Sokal and Rohlf 1995). Strictly speaking there are two deviates with identical probabilities (one positive and one negative), but this function will always return the positive value.
+    </div>
+
+    <div class="function_div">
+    <h3>χ2 → Correlation (Equal Expectation)</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Chi-square with one degree of freedom: \(\chi^2_{[1]}\)</li>
+	    <li>Sample Size: \(n\)</li>
+	</ul>
+    <p>This function will calculate a correlation coefficient from a chi-square value with one degree of freedom (Rosenthal 1994). One degree of freedom is required because, technically, the contrast that generated the \(\chi^2\) should be focused between two alternatives rather than a more omnibus comparison of three or more groups. Furthermore, this conversion implicitly assumes that the expected counts of the two alternatives are equal (Rosenberg 2010); for unequal expectations, see the next conversion function.</p>
+	<p>$$r = \sqrt{\frac{\chi^2}{n}}$$</p>
+    <p>The result of this conversion will always be a positive (or zero) correlation coefficient. The user needs to decide if the sign should be negative based on the specific details of the study being converted.</p>
+    <p>For \(\chi^2\) values with more than one degree of freedom, the calculations and procedures are much more complicated. See Rosenthal and Rosnow (1985, 1991) for more details.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>χ2 → Correlation  (Unequal Expectation)</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Chi-square with one degree of freedom: \(\chi^2_{[1]}\)</li>
+	    <li>Sample Size: \(n\)</li>
+	    <li>Ratio of Expectations: \(k\)</li>
+	</ul>
+    <p>This function will calculate a correlation coefficient from a chi-square value with one degree of freedom where the expected counts among the two contrast groups are not equal (Rosenberg 2010).</p>
+	<p>$$r = \sqrt{\frac{\chi^2}{kn}}$$</p>
+    <p>\(k\) is the ratio of the expectations for the two groups, specifically measured as the expecation of the larger group over the smaller group (<em>i.e.,</em> \(k\) should be greater or equal to one). If \(k=1\) then the groups have the same expectation and this conversion is equivalent to the previously described function.</p>
+    <p>The result of this conversion will always be a positive (or zero) correlation coefficient. The user needs to decide if the sign should be negative based on the specific details of the study being converted.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>χ2 → Probability</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Chi-square: \(\chi^2_{[DF]}\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	</ul>
+    <p>This function will calculate the probability associated with a \(\chi^2\)  with DF degrees of freedom (Sokal and Rohlf 1995).</p>
+    </div>
+
+    <div class="function_div">
+    <h3>F Statistic → Correlation</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>F Statistic: \(F_{[1, DF_2]}\)</li>
+	    <li>Residual Degrees of Freedom: \(DF_2\)</li>
+	</ul>
+    <p>This function will calculate a correlation coefficient from an F Statistic with one primary degree of freedom and \(DF_2\) residual degrees of freedom, \(F_{[1, DF_2]}\) (Rosenthal 1994). One primary degree of freedom is required because, technically, the contrast that generated the F Statistic should be focused between two alternatives rather than a more omnibus comparison of three or more groups. Generally \(DF_2\) will equal \(n-1\), where <em>n</em> is the sample size.</p>
+	<p>$$r = \sqrt{\frac{F}{F+DF_2}}$$</p>
+    <p>For F Statistics with more than one primary degree of freedom, the calculations and procedures are much more complicated.  See Rosenthal and Rosnow (1985, 1991) for more details.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>F Statistic → Probability</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>F Statistic: \(F_{[DF_1, DF_2]}\)</li>
+	    <li>Degrees of Freedom: \(DF_1\)</li>
+	    <li>Residual Degrees of Freedom: \(DF_2\)</li>
+	</ul>
+    <p>This function will calculate the probability associated with an F Statistic with \(DF_1\) primary degrees of freedom and \(DF_2\) residual degrees of freedom (Sokal and Rohlf 1995).</p>
+    </div>
+
+    <div class="function_div">
+    <h3>t-Statistic → Correlation</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>t-Statistic: \(t_{[DF]}\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	</ul>
+    <p>This function will calculate a correlation coefficient from a <em>t-</em>Statistic with \(DF\) degrees of freedom (Rosenthal 1994).</p>
+    <p>$$r = \sqrt{\frac{t^2}{t^2+DF}}$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>t-Statistic → One-tailed Probability</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>t-Statistic: \(t_{[DF]}\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	</ul>
+    <p>This function will calculate the one-tailed probability associated with a <em>t-</em>Statistic with DF degrees of freedom (Sokal and Rohlf 1995). This conversion assumes the one-tailed direction of interest is positive, thus a <em>t</em> of 2 with 10 degrees of freedom would yield a probability of 0.037, while a <em>t</em> of -2 with 10 degrees of freedom would yield a probability of 0.963. If one is interested in the negative tail, simply subtract the resulting probability from 1.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>t-Statistic → Two-tailed Probability</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>t-Statistic: \(t_{[DF]}\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	</ul>
+    <p>This function will calculate the two-tailed probability associated with a <em>t-</em>Statistic with DF degrees of freedom (Sokal and Rohlf 1995). Because it is two-tailed, input <em>t-</em>scores of 2 and -2 (with 10 degrees of freedom) would both produce a probability of 0.073.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Z-transform → Correlation</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Z-transform: \(Z_r\)</li>
+	</ul>
+    <p>This function will convert Fisher&rsquo;s z-transformation back to a correlation coefficient (Sokal and Rohlf 1995).</p>
+    <p>$$r = \tanh\left(Z_r\right)$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Correlation → Z-transform</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Correlation: \(r\)</li>
+	</ul>
+    <p>This function will perform Fisher&rsquo;s z-transformation of a correlation coefficient (Sokal and Rohlf 1995).</p>
+    <p>$$Z_r = \tanh^{-1}\left(r\right) = \frac{1}{2}\ln\left(\frac{1+r}{1-r}\right)$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Hedges&rsquo; g → Correlation</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Hedges&rsquo; g: \(g\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will convert Hedges&rsquo; <em>g,</em> a standardized mean difference, into a correlation coefficient (Rosenthal 1994).</p>
+    <p>$$r = \sqrt{\frac{g^2 n_e n_c}{g^2 n_e n_c + \left(n_e + n_c\right)DF}}$$</p>
+    <p>It requires samples sizes of the two groups (often an experimental vs. control contrast), which may or may not be different, as well as the degrees of freedom.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Correlation → Hedges&rsquo; g</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Correlation: \(r\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will convert a correlation coefficient into Hedges&rsquo; <em>g,</em> a standardized mean difference (Rosenthal 1994).</p>
+    <p>$$g = \frac{r}{\sqrt{1-r^2}}\sqrt{\frac{\left(n_e + n_c\right)DF}{n_e n_c}}$$</p>
+    </div>
+
+    <div class="function_div">
+	<h3>Hedges&rsquo; g → Hedges&rsquo; d</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Hedges&rsquo; g: \(g\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will convert Hedges&rsquo; <em>g</em> to Hedges&rsquo; <em>d.</em>  They are both measures of standardized mean difference. Hedges&rsquo; <em>d</em> is an unbiased estimator of Hedges&rsquo; <em>g.</em></p>
+    <p>$$d = g\left(1-\frac{3}{4\left(n_e + n_c - 2\right)-1}\right)$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>t-Statistic → Hedges&rsquo; g</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>t-Statistic: \(t\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will convert a <em>t-</em>Statistic into Hedges&rsquo; <em>g,</em> a standardized mean difference (Rosenthal 1994).</p>
+    <p>$$g = \frac{t\sqrt{n_e+n_c}}{\sqrt{n_e n_c}}$$</p>
+    <p>If the sample sizes are equal (or if they are missing and we assume they are equal) the above equation simplifies to</p>
+	<p>$$g = \frac{2t}{\sqrt{n}}$$</p>
+    <p>where \(n\) is the total sample size (\(n_c + n_e\)). MetaCalc uses the general form for unequal sample sizes.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Hedges&rsquo; g → Cohen&rsquo;s d</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Hedges&rsquo; g: \(g\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will convert Hedges&rsquo; <em>g</em> into Cohen&rsquo;s <em>d</em> (Rosenthal 1994). They are different estimators of the standardized mean difference between two groups.</p>
+    <p>$$d = g\sqrt{\frac{n_e + n_c}{DF}}$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>t-Statistic → Cohen&rsquo;s d</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>t-Statistic: \(t_{[DF]}\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will calculate Cohen&rsquo;s <em>d,</em> a standardized mean difference, from a <em>t-</em>Statistic with DF degrees of freedom (Rosenthal 1994).</p>
+    <p>$$d = \frac{t\left(n_e + n_c\right)}{\sqrt{DF}\sqrt{n_e n_c}}$$</p>
+    <p>If the sample sizes are equal (or if they are missing and we assume they are equal) the above equation simplifies to</p>
+    <p>$$d = \frac{2t}{\sqrt{DF}}$$</p>
+    <p>MetaCalc uses the general form for unequal sample sizes.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Correlation → Cohen&rsquo;s d</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Correlation: \(r\)</li>
+	</ul>
+    <p>This function will convert a correlation coefficient into a standardized mean difference estimated as Cohen&rsquo;s d (Cohen 1969; Rosenthal 1994).</p>
+    <p>$$d = \frac{2r}{\sqrt{1-r^2}}$$</p>
+    </div>
+
+    <div class="function_div">
+    <h3>F Statistic → Cohen&rsquo;s d</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>F Statistic: \(F_{[1, DF_2]}\)</li>
+	    <li>Residual Degrees of Freedom: \(DF_2\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will calculate Cohen&rsquo;s <em>d,</em> a standardized mean difference, from an F Statistic with one primary degree of freedom and \(DF_2\) residual degrees of freedom (Rosenthal 1994). One primary degree of freedom is required because, technically, the contrast that generated the F Statistic should be focused between two alternatives rather than a more omnibus comparison of three or more groups. The residual degrees of freedom should equal \(n – 1\), where \(n\) is the total sample size (\(n_e + n_c\)).</p>
+    <p>$$d = \frac{\sqrt{F}\left(n_e + n_c\right)}{\sqrt{DF}\sqrt{n_e n_c}}$$</p>
+    <p>If the sample sizes are equal (or if they are missing and we assume they are equal) the abov equation simplifies to</p>
+    <p>$$d = \frac{2\sqrt{F}}{\sqrt{DF}}.$$</p>
+    <p>MetaCalc uses the general form for unequal sample sizes. For F Statistics with more than one primary degree of freedom, the calculations and procedures are much more complicated. See Rosenthal and Rosnow (1985, 1991) for more details.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Cohen&rsquo;s d → Correlation</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Cohen&rsquo;s d: \(d\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will convert Cohen&rsquo;s <em>d,</em> a standardized mean difference, into a correlation coefficient (Cohen 1969; Rosenthal 1994).</p>
+    <p>$$r = \frac{d}{\sqrt{d^2 + \frac{\left(n_e + n_c\right)^2}{n_e n_c}}}$$</p>
+    <p>If the sample sizes are equal (or if they are missing and we assume they are equal) the above equation simplifies to</p>
+    <p>$$r = \frac{d}{\sqrt{d^2 + 4}}$$</p>
+    <p>MetaCalc uses the general form for unequal sample sizes.</p>
+    </div>
+
+    <div class="function_div">
+    <h3>Cohen&rsquo;s d → Hedges&rsquo; g</h3>
+    <h4>Required Parameters</h4>
+    <ul>
+	    <li>Cohen&rsquo;s d: \(d\)</li>
+	    <li>Degrees of Freedom: \(DF\)</li>
+	    <li>Experimental Sample Size: \(n_e\)</li>
+	    <li>Control Sample Size: \(n_c\)</li>
+	</ul>
+    <p>This function will convert Cohen&rsquo;s <em>d</em> into Hedges&rsquo; <em>g</em> (Rosenthal 1994). They are different measures of standardized mean difference.</p>
+    <p>$$g = \frac{d}{\sqrt{\frac{n_e + n_c}{DF}}}$$</p>
+    </div>
+	</section>
+
+
+	<section>
+      <h2>References</h2>
+      <ul>
+		<li>Rosenberg, M.S. (2010) A generalized formula for converting chi-square tests to effect sizes for meta-analysis. <em>PLoS ONE</em> 5(4):e10059.</li>
+   	    <li>Rosenthal, R. (1994) Parametric measures of effect size. Pp. 231&ndash;244 in <em>The Handbook of Research Synthesis,</em> H. Cooper and L.V. Hedges, <em>eds.</em> New York: Russell Sage Foundation.</li>
+		<li>Rosenthal, R., and R.L. Rosnow (1985) <em>Contrast Analysis: Focused Comparisons in the Analysis of Variance.</em> New York: Cambridge University Press.</li>
+		<li>Rosenthal, R., and R.L. Rosnow (1991) <em>Essentials of Behavioral Research: Methods and Data Analysis</em> (Second edition). New York: McGraw-Hill.</li>
+	    <li>Sokal, R.R., and F.J. Rohlf (1995) <em>Biometry</em> (Third edition). New York: W.H. Freeman and Company.</li>
+	  </ul>
+	</section>
+  </div>
+
+        <!╌end of help contents╌>
+        </div>
+
+        <footer>
+           &copy; Michael S. Rosenberg
+        </footer>
+    </body>
+</html>

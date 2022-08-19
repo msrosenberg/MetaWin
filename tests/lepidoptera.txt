@@ -1,0 +1,26 @@
+Species	Suborder	Family	%Polyandry	Hedges' d	Var (d)
+Acrolepia assectella	Heterocera	Yponomeutidae	38	0.5385	0.0441
+Agrotis segetum	Heterocera	Noctuidae	27.5	0.3762	0.0213
+Busseola fusca	Heterocera	Noctuidae		0.4688	0.0819
+Colias eurytheme	Rhopalocera	Pieridae	47	1.0125	0.2051
+Chilo partellus	Heterocera	Pyralidae	5.5	-0.0411	0.0522
+Choristoneura fumiferana	Heterocera	Tortricidae	27.5	0.1371	0.0479
+Choristoneura rosaceana	Heterocera	Tortricidae	45	1.0281	0.0372
+Diatraea considerate	Heterocera	Pyralidae	7.5	0.4577	0.1325
+Epiphyas postvittana	Heterocera	Tortricidae	12.25	-0.1176	0.0895
+Eurema hecabe	Rhopalocera	Pieridae		0.1105	0.2003
+Helicoverpa armigera	Heterocera	Noctuidae	68	0.3043	0.1283
+Jalmenus evagoras	Rhopalocera	Lycaenidae	0	0.3656	0.0714
+Lobesia botrana	Heterocera	Tortricidae	22.5	0.0655	0.0463
+Ostrinia nubilalis	Heterocera	Pyralidae	27.5	0.3585	0.0171
+Papilio glaucus	Rhopalocera	Papilionidae	65	0.2317	0.0435
+Papilio machaon	Rhopalocera	Papilionidae		0.2506	0.1551
+Pectinophora gossypiella	Heterocera	Gelechiidae	81	0.809	0.0237
+Pieris napi	Rhopalocera	Pieridae	70	1.169	0.255
+Plodia interpunctella	Heterocera	Pyralidae	37.5	0.114	0.0458
+Pseudaletia unipuncta	Heterocera	Noctuidae	55	-0.1524	0.0482
+Sitotroga cerealella	Heterocera	Gelechiidae	68.5	0.5072	0.0217
+Spodoptera littoralis	Heterocera	Noctuidae	61.5	0.1	0.1073
+Thymelicus lineola	Rhopalocera	Hesperiidae	22	0.107	0.0781
+Trichoplusia ni	Heterocera	Noctuidae	81	0.2631	0.075
+Zeiraphera canadensis	Heterocera	Tortricidae	8	0.0155	0.0667
