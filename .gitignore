@@ -152,4 +152,4 @@ cython_debug/
 .idea/
 private/
 metawin.config
-.DS_Store/
+.DS_Store
