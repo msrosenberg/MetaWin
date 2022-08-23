@@ -137,3 +137,8 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
 )
+
+app = BUNDLE(exe,
+         name='MetaWin.app',
+         icon='resources/images/metawin3icon_mac.icns',
+         bundle_identifier=None)
