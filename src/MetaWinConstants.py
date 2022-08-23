@@ -26,7 +26,7 @@ SAVE_HTML = 1
 SAVE_MD = 2
 
 
-def resource_path(relative_path: str) -> str:
+def resource_path(relative_path: str, inc_file: bool = False) -> str:
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS,
@@ -35,7 +35,8 @@ def resource_path(relative_path: str) -> str:
         base_path = sys._MEIPASS
     except AttributeError:
         base_path = os.path.join(os.path.dirname(__file__), "..")
-
+    if inc_file:
+        return "file://" + os.path.join(base_path, relative_path)
     return os.path.join(base_path, relative_path)
 
 
@@ -88,34 +89,35 @@ metawin_splash = resource_path(icon_path + "metawin3splash_square.png")
 
 # documentation
 # doc_path = os.path.join("..", "resources", "")
+
 doc_path = os.path.join("resources", "")
 
 help_index = {
-    "analyses": resource_path(doc_path + "metawin_help.html#analyses"),
-    "basic_analysis": resource_path(doc_path + "metawin_help.html#basic_analysis"),
-    "cumulative_analysis": resource_path(doc_path + "metawin_help.html#cumulative_analysis"),
-    "effect_sizes": resource_path(doc_path + "metawin_help.html#effect_sizes"),
-    "filtering_data": resource_path(doc_path + "metawin_help.html#filtering_data"),
-    "forest_plot": resource_path(doc_path + "metawin_help.html#forest_plot"),
-    "galbraith_plot": resource_path(doc_path + "metawin_help.html#galbraith_plot"),
-    "glm_analysis": resource_path(doc_path + "metawin_help.html#glm_analysis"),
-    "graph_edit": resource_path(doc_path + "metawin_help.html#graph_edit"),
-    "grouped_analysis": resource_path(doc_path + "metawin_help.html#grouped_analysis"),
-    "importing_data": resource_path(doc_path + "metawin_help.html#importing_data"),
-    "jackknife_analysis": resource_path(doc_path + "metawin_help.html#jackknife_analysis"),
-    "linear_analysis": resource_path(doc_path + "metawin_help.html#linear_analysis"),
-    "localization": resource_path(doc_path + "metawin_help.html#localization"),
-    "metacalc": resource_path(doc_path + "metacalc_help.html"),
-    "metawin": resource_path(doc_path + "metawin_help.html"),
-    "nested_analysis": resource_path(doc_path + "metawin_help.html#nested_analysis"),
-    "normal_quantile_plot": resource_path(doc_path + "metawin_help.html#normal_quantile_plot"),
-    "phylogenetic_glm": resource_path(doc_path + "metawin_help.html#phylogenetic_glm"),
-    "rank_correlation": resource_path(doc_path + "metawin_help.html#rank_correlation"),
-    "saving_data": resource_path(doc_path + "metawin_help.html#saving_data"),
-    "saving_output": resource_path(doc_path + "metawin_help.html#saving_output"),
-    "scatter_plot": resource_path(doc_path + "metawin_help.html#scatter_plot"),
-    "trim_fill": resource_path(doc_path + "metawin_help.html#trim_fill"),
-    "weighted_histogram": resource_path(doc_path + "metawin_help.html#weighted_histogram")
+    "analyses": resource_path(doc_path + "metawin_help.html#analyses", True),
+    "basic_analysis": resource_path(doc_path + "metawin_help.html#basic_analysis", True),
+    "cumulative_analysis": resource_path(doc_path + "metawin_help.html#cumulative_analysis", True),
+    "effect_sizes": resource_path(doc_path + "metawin_help.html#effect_sizes", True),
+    "filtering_data": resource_path(doc_path + "metawin_help.html#filtering_data", True),
+    "forest_plot": resource_path(doc_path + "metawin_help.html#forest_plot", True),
+    "galbraith_plot": resource_path(doc_path + "metawin_help.html#galbraith_plot", True),
+    "glm_analysis": resource_path(doc_path + "metawin_help.html#glm_analysis", True),
+    "graph_edit": resource_path(doc_path + "metawin_help.html#graph_edit", True),
+    "grouped_analysis": resource_path(doc_path + "metawin_help.html#grouped_analysis", True),
+    "importing_data": resource_path(doc_path + "metawin_help.html#importing_data", True),
+    "jackknife_analysis": resource_path(doc_path + "metawin_help.html#jackknife_analysis", True),
+    "linear_analysis": resource_path(doc_path + "metawin_help.html#linear_analysis", True),
+    "localization": resource_path(doc_path + "metawin_help.html#localization", True),
+    "metacalc": resource_path(doc_path + "metacalc_help.html", True),
+    "metawin": resource_path(doc_path + "metawin_help.html", True),
+    "nested_analysis": resource_path(doc_path + "metawin_help.html#nested_analysis", True),
+    "normal_quantile_plot": resource_path(doc_path + "metawin_help.html#normal_quantile_plot", True),
+    "phylogenetic_glm": resource_path(doc_path + "metawin_help.html#phylogenetic_glm", True),
+    "rank_correlation": resource_path(doc_path + "metawin_help.html#rank_correlation", True),
+    "saving_data": resource_path(doc_path + "metawin_help.html#saving_data", True),
+    "saving_output": resource_path(doc_path + "metawin_help.html#saving_output", True),
+    "scatter_plot": resource_path(doc_path + "metawin_help.html#scatter_plot", True),
+    "trim_fill": resource_path(doc_path + "metawin_help.html#trim_fill", True),
+    "weighted_histogram": resource_path(doc_path + "metawin_help.html#weighted_histogram", True)
 }
 
 # output styles
