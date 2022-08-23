@@ -118,8 +118,6 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 exe = EXE(
     pyz,
     a.scripts,
-	splash,
-	splash.binaries,
     a.binaries,
     a.zipfiles,
     a.datas,
