@@ -1,10 +1,14 @@
 # MetaWin
-MetaWin is free, open source, multi-platform software for conducting the quantitative meta-analysis portion of research synthesis. It has been rewritten from scratch relative to earlier versions. The new version is written entirely in Python. Single file executable versions of the software for Windows and Mac operating systems can be downloaded from https://www.metawinsoft.com, which also contains the manual/help file.
+*MetaWin* is free, open source, multi-platform software for conducting the quantitative 
+meta-analysis portion of research synthesis. It has been rewritten from scratch relative 
+to earlier versions. The new version is written entirely in Python. Single file executable 
+versions of the software for Windows and Mac operating systems can be downloaded from 
+https://www.metawinsoft.com, which also contains a copy of the manual/help file.
 
 ## Primary Features
 * Calculating Effect Sizes
   * Pairs of Means
-    * Hedges' d
+    * Hedges' *d*
     * ln Response Ratio
   * Two × Two Contingency Table
     * ln Odds Ratio
@@ -32,3 +36,11 @@ MetaWin is free, open source, multi-platform software for conducting the quantit
   * Normal Quantile Plot
   * Galbraith (Radial) Plot
  
+### Dependencies
+The *MetaWin* code has dependencies on only a few key packages:
+* *PyQt6* is used for construction of the GUI
+* *NumPy* and *SciPy* are used for efficient numerical and statistical computation
+* *Matplotlib* is used for creation of graphs and figures
+
+In addition, the downloadable executables at https://www.metawinsoft.com are built using 
+PyInstaller.
