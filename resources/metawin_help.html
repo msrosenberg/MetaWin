@@ -126,7 +126,7 @@
                 meta-analysis portion of research synthesis. It has been rewritten from scratch relative
                 to earlier versions (see <a href="#history">history</a>). The new version is written entirely
                 in Python, and the code is available on Github at
-                <span style="color: red; font-weight: bold">put link here when release is official</span>. Single
+                <a href="https://github.com/msrosenberg/MetaWin">https://github.com/msrosenberg/MetaWin</a>. Single
                 file executable versions of the software for Windows and Mac operating systems can be downloaded from
                 <a href="https://www.metawinsoft.com">https://www.metawinsoft.com</a>.
             </p>
@@ -184,8 +184,8 @@
           <h2 id="suggestions">Suggestions and Bugs</h2>
           <p>
             Suggestions and bug reports can be submitted either through the Github site
-              (<span style="color: red; font-weight: bold">NOT YET PUBLIC</span>), which allows public and formal
-              tracking of feedback, or via email to <a href="mailto:msrosenberg@vcu.edu">msrosenberg@vcu.edu</a>.
+              (<a href="https://github.com/msrosenberg/MetaWin/issues">https://github.com/msrosenberg/MetaWin/issues</a>),
+              which allows public and formal tracking of feedback.
           </p>
           <p>
               For bug reports, please be specific about details including (1) what release of <em>MetaWin</em>
@@ -204,6 +204,9 @@
             only two tabs will be visible, but a few others may appear as needed.</p>
 
             <figure><img src="images/main_window.png"></figure>
+            <p style="text-align: center; font-style: italic">Primary interface in Windows. The layout in macOS is mildly
+            different due to differences in the native OS.</p>
+
 
           <h2 id="data_tab">Data Tab</h2>
             <p>The Data Tab contains a spreadsheet like view of data imported or created within
@@ -2311,41 +2314,10 @@ ratio = 2.8047
                 <a href="#lajeunesse_2009">Lajeunesse (2009)</a> and
                 <a href="#lajeunesse_et_2013">Lajeunesse <em>et al.</em> (2013)</a>.
             </p>
-            <p>
-                Fundamentally, this method is almost mathematically identical to the
-                <a href="#glm_analysis">Complex/GLM Meta-Analysis</a>. The only difference is in the specification of
-                the weight matrix  \(\boldsymbol{W}\). In the standard GLM analysis, this is an
-                <em>n</em>&times;<em>n</em> matrix with the individual study weights on the diagonal and zeros
-                throughout the rest of the matrix. To adjust an analysis for phylogenetic autocorrelation, the
-                off-diagonal elements are replaced with estimates of phylogenetic covariance, a value which
-                represents the shared history of the two taxa represented in a given pair of contrasting studies.
-                These covariances are estimated from a phylogeny which must be loaded into
-                <span class="metawin">MetaWin</span>.
+            <p style="color: red; font-size: 1.25em">Warning: The phylogenetic glm meta-analysis is still experimental
+                and has some kinks that have not definitively been worked out yet. The help section will be written
+                out when we are more confident of the results.
             </p>
-
-           <h3>Running a Phylogenetic GLM Meta-Analysis</h3>
-            <p>
-                To run a phylogenetic meta-analysis, one must first <a href="#phylogeny_tab">activate the phylogeny
-                tab and load a phylogeny into memory</a>. Until this step is completed, the Phylogenetic GLM
-                Meta-Analysis option will remain disabled.
-            </p>
-            <p>The options for a Phylogenetic GLM Meta-Analysis are almost identical to those of the
-                <a href="#glm_analysis">Complex/GLM Meta-Analysis</a>, except for the addition of a box where
-                the user must specify which data column contains the taxon names. In order for a study to be
-                included in an analysis, it's taxon must be represented on the pre-loaded phylogeny. If the name
-                cannot be matched, the study will be excluded. (Note: the reverse is not true; the phylogeny can
-                contain additional taxonomic names not represented within the studies). Additionally, there is
-                checkbox to activate including additional variables, but otherwise this works identically as to the
-                GLM dialog.
-            </p>
-            <figure><img src="images/analysis_phylogenetic1.png"></figure>
-            <p>
-                The additional options include bootstrapping confidence intervals around the mean, as well as a
-                randomization test for model structure. Graphical output is not an option for the complex/glm
-                analysis.
-            </p>
-            <figure><img src="images/analysis_phylogenetic2.png"></figure>
-
 
 
 

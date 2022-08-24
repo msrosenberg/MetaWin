@@ -2004,6 +2004,14 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
         print(missing_from_tree)
     output_blocks = output_filtered_bad(filtered, bad_data)
 
+
+    output_blocks.append(["<h2>Warning: The phylogenetic glm meta-analysis is still experimental and has some kinks "
+                          "that have not definitively been worked out yet.<p>Not all of the intended output from this "
+                          "analysis is included at this time and the randomization tests have not been "
+                          "activated.</h2>"])
+
+
+
     model_het = None
     error_het = None
     predictor_table_data = None
