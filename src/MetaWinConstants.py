@@ -210,7 +210,7 @@ references = {
                                  "from retrospective studies of disease. <em>Journal of the National Cancer "
                                  "Institute</em> 22:719&ndash;748.", "Mantel and Haenszel (1959)"],
 
-    "Mengerson_Gurevitch_2013": ["Mengersen, K., and J. Gurevitch (2013) Using other Metricsmof effect size in "
+    "Mengerson_Gurevitch_2013": ["Mengersen, K., and J. Gurevitch (2013) Using other metrics of effect size in "
                                  "meta-analysis. Pp. 72&ndash;85 in <em>Handbook of Meta-analysis in Ecology and "
                                  "Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds. "
                                  "Princeton University Press: Princeton, NJ.", "Mengersen and Gurevitch (2013)"],
