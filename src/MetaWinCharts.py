@@ -664,7 +664,6 @@ def add_quantile_axes_to_chart(x_data, y_data, slope: float, intercept: float, c
     mse = numpy.sum(numpy.square(y_data - y_pred))/(n - 2)  # mean square error
     ss_x = numpy.sum(numpy.square(x_data - x_mean))  # sum of squares of x
 
-    # t_score = -scipy.stats.t.ppf(0.025, n-2)
     t_score = -scipy.stats.t.ppf(alpha/2, n-2)
     nsteps = 100
     p = [(i + 0.5)/nsteps for i in range(nsteps)]
