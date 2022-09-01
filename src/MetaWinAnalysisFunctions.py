@@ -1446,7 +1446,8 @@ class NestedGroup:
                 sn += cn
             return sq, sn
 
-    def group_calculations(self, e, w, chart_order: int, boot_data, bootstrap_mean, alpha: float = 0.05):
+    def group_calculations(self, e, w, chart_order: int, boot_data, bootstrap_mean, alpha: float = 0.05,
+                           norm_ci: bool = True):
         chart_order += 1
         mean_output = []
         het_output = []
@@ -1460,10 +1461,12 @@ class NestedGroup:
         group_median = median_effect(group_e, group_w)
         group_p = 1 - scipy.stats.chi2.cdf(self.qw, df=group_df)
 
-        # group_lower, group_upper = scipy.stats.t.interval(alpha=1 - alpha, df=group_df, loc=self.mean,
-        #                                                   scale=math.sqrt(group_var))
-        group_lower, group_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=self.mean,
-                                                             scale=math.sqrt(group_var))
+        if norm_ci:
+            group_lower, group_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=self.mean,
+                                                                 scale=math.sqrt(group_var))
+        else:
+            group_lower, group_upper = scipy.stats.t.interval(alpha=1 - alpha, df=group_df, loc=self.mean,
+                                                              scale=math.sqrt(group_var))
         (group_lower_bs, group_upper_bs,
          group_lower_bias, group_upper_bias) = bootstrap_means(bootstrap_mean, group_boot, self.mean,
                                                                0, False, alpha)
