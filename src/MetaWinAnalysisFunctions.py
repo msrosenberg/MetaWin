@@ -2349,7 +2349,7 @@ def kendalls_tau(e_ranks, x_ranks):
     return tau
 
 
-def rank_correlation_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def rank_correlation_analysis(data, options, decimal_places: int = 4):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars

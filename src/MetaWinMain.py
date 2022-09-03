@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         self.filtered_col_color = config["filtered col color"]
         self.auto_update_check = config["auto update check"]
         self.alpha = config["alpha"]
+        self.confidence_interval_dist = config["confidence interval distribution"]
         self.help = MetaWinConstants.help_index["metawin"]
         self.localization_help = MetaWinConstants.help_index["localization"]
         self.main_area = None
@@ -68,6 +69,7 @@ class MainWindow(QMainWindow):
         self.tree_area_action = None
         self.tree_toolbar = None
         self.auto_update_check_action = None
+        self.conf_int_action = None
         # self.language_actions = None
         self.language_box = None
         self.output_saved = True
@@ -167,15 +169,23 @@ class MainWindow(QMainWindow):
         self.data_toolbar_action.triggered.connect(self.show_data_toolbar_click)
         data_options_menu.addAction(self.data_toolbar_action)
         options_menu.addMenu(data_options_menu)
+        # analysis options submenu
+        analysis_options_menu = QMenu(get_text("Analysis Options"), self)
+        # analysis_options_menu.setIcon(QIcon(MetaWinConstants.output_icon))
+        output_alpha_action = QAction(QIcon(MetaWinConstants.alpha_icon), get_text("Significance Level"), self)
+        output_alpha_action.triggered.connect(self.set_alpha_significance)
+        analysis_options_menu.addAction(output_alpha_action)
+        self.conf_int_action = QAction("tmp", self)
+        self.update_conf_int_action()
+        self.conf_int_action.triggered.connect(self.change_conf_int_distribution)
+        analysis_options_menu.addAction(self.conf_int_action)
+        options_menu.addMenu(analysis_options_menu)
         # output options submenu
         output_options_menu = QMenu(get_text("Output Options"), self)
         output_options_menu.setIcon(QIcon(MetaWinConstants.output_icon))
         output_decimal_action = QAction(QIcon(MetaWinConstants.decimal_icon), get_text("Decimal Places"), self)
         output_decimal_action.triggered.connect(self.set_output_decimal_places)
         output_options_menu.addAction(output_decimal_action)
-        output_alpha_action = QAction(QIcon(MetaWinConstants.alpha_icon), get_text("Significance Level"), self)
-        output_alpha_action.triggered.connect(self.set_alpha_significance)
-        output_options_menu.addAction(output_alpha_action)
         output_font_action = QAction(QIcon(MetaWinConstants.font_icon), get_text("Font"), self)
         output_font_action.triggered.connect(self.set_output_font)
         output_options_menu.addAction(output_font_action)
@@ -682,9 +692,13 @@ class MainWindow(QMainWindow):
 
     def meta_analysis(self) -> None:
         if self.data is not None:
+            if self.confidence_interval_dist == "Students t":
+                norm_ci = False
+            else:
+                norm_ci = True
             output, figure, fig_caption, chart_data = MetaWinAnalysis.meta_analysis(self, self.data, self.last_effect,
                                                                                     self.last_var, self.output_decimals,
-                                                                                    self.alpha, self.phylogeny)
+                                                                                    self.alpha, self.phylogeny, norm_ci)
             if output is not None:
                 self.write_multi_output_blocks(output)
                 self.main_area.setCurrentIndex(1)
@@ -839,3 +853,18 @@ class MainWindow(QMainWindow):
             if figure is not None:
                 caption = self.chart_caption
                 self.show_figure(figure, caption, self.chart_data)
+
+    def change_conf_int_distribution(self):
+        if self.confidence_interval_dist == "Normal":
+            self.confidence_interval_dist = "Students t"
+        else:
+            self.confidence_interval_dist = "Normal"
+        self.update_conf_int_action()
+
+    def update_conf_int_action(self):
+        if self.confidence_interval_dist == "Normal":
+            self.conf_int_action.setText(get_text("normal to t"))
+            self.conf_int_action.setIcon(QIcon(MetaWinConstants.norm_dist_icon))
+        else:
+            self.conf_int_action.setText(get_text("t to normal"))
+            self.conf_int_action.setIcon(QIcon(MetaWinConstants.t_dist_icon))
