@@ -225,7 +225,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Normal Quantile": "Normal Quantile",
                       "Normal Quantile Plot": "Normal Quantile Plot",
                       "normal_quantile_caption": "Normal Quantile plot following {}. The "
-                                                 "standardized effect size is the efffect size divided by the "
+                                                 "standardized effect size is the effect size divided by the "
                                                  "square-root of its variance. The solid line represents the "
                                                  "regression and the dashed lines the 95% prediction envelope.",
                       "note_funnel_plot": "Note: A funnel plot is just a scatter plot of a metric (such as a<br/>"
