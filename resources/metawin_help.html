@@ -58,6 +58,7 @@
                     </ul>
                   </li>
                   <li><a href="#phylogeny_tab">Phylogeny Tab</a></li>
+                  <li><a href="#analysis_options">Analysis Options</a></li>
                   <li><a href="#additional_options">Additional Options</a></li>
                 </ul>
               </li>
@@ -353,21 +354,6 @@
               places used to display these values is automatically determined by the software based on the number of desired
               replicates.</p>
 
-            <h4 id="alpha_level">Significance Level</h4>
-            <p>By default, significance levels for generating confidence intervals and certain types of tests are
-                based on a standard value of 5% (&alpha; = 0.05). This value can be changed by
-                choosing <span class="menu">Significance Level</span> from the
-              <span class="menu">Options&rarr;Output Options</span> menu or
-              <img class="toolbar-button" src="images/letter-alpha@256px.png"/> from the toolbar on the
-              left side of the Output Tab. Valid options are numbers between 0.01 and 1.0).
-                Note that changing this value will
-              only affect future output; vales already computed will not be changed. If you change the significance
-                level to use in the output, <span class="metawin">MetaWin</span> will attempt to remember this
-              choice the next time you run the program.</p>
-              <p>This choice also effects a few of the direct figures you can draw, such as
-                  <a href="#forest_plot">Forest Plots</a>
-                  and <a href="#normal_quantile_plot">Normal Quantile Plots</a>.</p>
-
             <h4>Font</h4>
             <p>You can change the font and it's properties used in the Output Tab by choosing
               <span class="menu">Font</span> from the
@@ -469,6 +455,40 @@
                 Once a phylogeny has been loaded into memory, the <a href="#phylogenetic_glm">Phylogenetic GLM
                 Meta-Analysis</a> option becomes available.
             </p>
+
+          <h2 id="analysis_options">Analysis Options</h2>
+            <h4 id="alpha_level">Significance Level</h4>
+            <p>By default, significance levels for generating confidence intervals and certain types of tests are
+                based on a standard value of 5% (&alpha; = 0.05). This value can be changed by
+                choosing <span class="menu">Significance Level</span> from the
+              <span class="menu">Options&rarr;Analysis Options</span> menu or
+              <img class="toolbar-button" src="images/letter-alpha@256px.png"/> from the toolbar on the
+              left side of the Output Tab. Valid options are numbers between 0.01 and 1.0).
+                Note that changing this value will
+              only affect future output; vales already computed will not be changed. If you change the significance
+                level to use in the output, <span class="metawin">MetaWin</span> will attempt to remember this
+              choice the next time you run the program.</p>
+              <p>This choice also effects a few of the direct figures you can draw, such as
+                  <a href="#forest_plot">Forest Plots</a>
+                  and <a href="#normal_quantile_plot">Normal Quantile Plots</a>.</p>
+
+            <h4 id="ci_distribution">Confidence Interval Distribution</h4>
+            <p>When determining confidence intervals around means using standard distributions (rather than a
+                boostrap procedure), the traditional approach in meta-analysis has generally been to use a Normal
+                distribution. In earlier versions of <span class="metawin">MetaWin</span>, we used Student's <em>t</em>
+                distribution instead, because we thought it useful to account for the uncertainty in estimation due
+                to the small number of studies often found in meta-analyses. With this new version, the user can
+                specify which distribution they wish to use, with the Normal distribution set as default.
+            </p>
+            <p>To change the distribution, choose the item under the
+                <span class="menu">Options&rarr;Analysis Options</span> menu, which will toggle between the two
+                distributions. The current distribution is indicated by the icon to the left of the menu option
+                (either a <em><strong>Z</strong></em> or a <em><strong>t</strong></em>), as well as by the text
+                of the menu item which specifies the distributions being changed both "from" and "to".
+                <span class="metawin">MetaWin</span> will attempt to remember this choice the next time you run the
+                program.</p>
+            <p>The specified distribution is also listed as one of the user-specified parameters at the beginning of
+                analysis output.</p>
 
           <h2 id="additional_options">Additional Options</h2>
 
@@ -889,6 +909,7 @@ Structure: None
 → Fixed Effects Model
 </p>
 <p>
+→ Standard confidence intervals around means based on Normal distribution<br />
 → Use bootstrap for confidence intervals around means: 999 iterations<br />
 → Citations: Adams <em>et al.</em> (1997), Dixon (1993)
 </p>
@@ -1119,6 +1140,9 @@ Trim and Fill Analysis<br/>
 → Fixed Effects Model
 </p>
 <p>
+→ Standard confidence intervals around means based on Normal distribution
+</p>
+<p>
 85 studies will be included in this analysis
 </p>
 <p>
@@ -1194,6 +1218,7 @@ Jackknife Meta-Analysis
 → Fixed Effects Model
 </p>
 <p>
+→ Standard confidence intervals around means based on Normal distribution<br />
 → Use bootstrap for confidence intervals around means: 999 iterations<br/>
 → Citations: Adams <em>et al.</em> (1997), Dixon (1993)
 </p>
@@ -1371,6 +1396,7 @@ Cumulative Meta-Analysis<br/>
 → Fixed Effects Model
 </p>
 <p>
+→ Standard confidence intervals around means based on Normal distribution<br />
 → Use bootstrap for confidence intervals around means: 999 iterations<br/>
 → Citations: Adams <em>et al.</em> (1997), Dixon (1993)
 </p>
@@ -1577,6 +1603,7 @@ Structure: Grouped<br/>
 → Fixed Effects Model
 </p>
 <p>
+→ Standard confidence intervals around means based on Normal distribution<br />
 → Use bootstrap for confidence intervals around means: 999 iterations<br/>
 → Citations: Adams <em>et al.</em> (1997), Dixon (1993)
 </p>
@@ -1768,6 +1795,7 @@ Structure: Nested Groups<br/>
 → Citations: Adams <em>et al.</em> (1997), Dixon (1993)
 </p>
 <p>
+→ Standard confidence intervals around means based on Normal distribution<br />
 → Use randomization to test model structure: 999 iterations<br/>
 → Citation: Adams <em>et al.</em> (1997)
 </p>
@@ -1987,6 +2015,7 @@ Structure: Linear Regression<br/>
 → Fixed Effects Model
 </p>
 <p>
+→ Standard confidence intervals around means based on Normal distribution<br />
 → Use bootstrap for confidence intervals around means: 999 iterations<br/>
 → Citations: Adams <em>et al.</em> (1997), Dixon (1993)
 </p>
@@ -2216,6 +2245,7 @@ Structure: Complex/GLM<br/>
 → Fixed Effects Model
 </p>
 <p>
+→ Standard confidence intervals around means based on Normal distribution<br />
 → Use bootstrap for confidence intervals around means: 999 iterations<br/>
 → Citations: Adams <em>et al.</em> (1997), Dixon (1993)
 </p>
@@ -2559,7 +2589,7 @@ ratio = 2.8047
                     analysis of data from retrospective studies of disease. <em>Journal of the National Cancer
                         Institute</em> 22:719&ndash;748.</span></li>
                 <li><span id="mengersen_gurevitch_2013">Mengersen, K., and J. Gurevitch (2013)
-                    Using other Metricsmof effect size in meta-analysis. Pp. 72&ndash;85 in <em>Handbook of
+                    Using other metrics of effect size in meta-analysis. Pp. 72&ndash;85 in <em>Handbook of
                         Meta-analysis in Ecology and Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds.
                     Princeton University Press: Princeton, NJ.</span></li>
                 <li><span id="normand_1999">Normand, S.-L.T. (1999) Meta-analysis: Formulating, evaluating, combining,

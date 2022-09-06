@@ -68,6 +68,8 @@ histogram_icon = resource_path(icon_path + "charts-filled@256px.png")
 radial_plot_icon = resource_path(icon_path + "draw-radial-plot@256px.png")
 forest_plot_icon = resource_path(icon_path + "chart-forest-plot@256px.png")
 normal_quantile_icon = resource_path(icon_path + "letter-z-2@256px.png")
+norm_dist_icon = resource_path(icon_path + "letter-z-2@256px.png")
+t_dist_icon = resource_path(icon_path + "letter-t@256px.png")
 gear_icon = resource_path(icon_path + "gear-filled@256px.png")
 clear_filter_icon = resource_path(icon_path + "filter-filled-eraser@256px.png")
 font_icon = resource_path(icon_path + "text-fonts@256px.png")
@@ -210,7 +212,7 @@ references = {
                                  "from retrospective studies of disease. <em>Journal of the National Cancer "
                                  "Institute</em> 22:719&ndash;748.", "Mantel and Haenszel (1959)"],
 
-    "Mengerson_Gurevitch_2013": ["Mengersen, K., and J. Gurevitch (2013) Using other Metricsmof effect size in "
+    "Mengerson_Gurevitch_2013": ["Mengersen, K., and J. Gurevitch (2013) Using other metrics of effect size in "
                                  "meta-analysis. Pp. 72&ndash;85 in <em>Handbook of Meta-analysis in Ecology and "
                                  "Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds. "
                                  "Princeton University Press: Princeton, NJ.", "Mengersen and Gurevitch (2013)"],

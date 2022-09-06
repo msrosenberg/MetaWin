@@ -544,7 +544,7 @@ def caption_bootstrap_text(bs_n: int):
 
 
 # ---------- basic meta-analysis ----------
-def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -598,8 +598,10 @@ def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
 
         p = 1 - scipy.stats.chi2.cdf(qt, df=df)
 
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-        lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+        if norm_ci:
+            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+        else:
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
 
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
@@ -617,6 +619,7 @@ def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         # create chart data
         forest_data = [mean_data]
         for i in range(n):
+            # individual study data has to use normal dist
             tmp_lower, tmp_upper = scipy.stats.norm.interval(alpha=1-alpha, loc=e_data[i], scale=math.sqrt(v_data[i]))
             study_data = mean_data_tuple(study_names[i], plot_order, 0, e_data[i], None, 0, 0, tmp_lower, tmp_upper,
                                          None, None, None, None)
@@ -675,7 +678,7 @@ def check_data_for_group(output_blocks, n, group_cnts, group_label) -> bool:
     # return True
 
 
-def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -720,7 +723,7 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
     citations = []
     if check_data_for_group(output_blocks, n, group_cnts, options.groups.label):
         output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
-        # do enough to calculated the pooled variance
+        # do enough to calculate the pooled variance
         group_w_sums = []
         qe = 0
         for group in group_names:
@@ -760,10 +763,12 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             group_median = median_effect(group_e, group_w)
             qe += group_qw
             group_p = 1 - scipy.stats.chi2.cdf(group_qw, df=group_df)
-            # group_lower, group_upper = scipy.stats.t.interval(alpha=1 - alpha, df=group_df, loc=group_mean,
-            #                                                   scale=math.sqrt(group_var))
-            group_lower, group_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=group_mean,
-                                                                 scale=math.sqrt(group_var))
+            if norm_ci:
+                group_lower, group_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=group_mean,
+                                                                     scale=math.sqrt(group_var))
+            else:
+                group_lower, group_upper = scipy.stats.t.interval(alpha=1 - alpha, df=group_df, loc=group_mean,
+                                                                  scale=math.sqrt(group_var))
             (group_lower_bs, group_upper_bs,
              group_lower_bias, group_upper_bias) = bootstrap_means(options.bootstrap_mean, group_boot,
                                                                    group_mean, pooled_var, options.random_effects,
@@ -779,8 +784,10 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             chart_order += 1
 
         mean_v = numpy.sum(v_data) / n
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
-        lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+        if norm_ci:
+            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+        else:
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
                                                                                  options.random_effects, alpha)
@@ -877,7 +884,7 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
 
 
 # ---------- cumulative meta-analysis ----------
-def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -939,8 +946,10 @@ def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
                 ws_data = numpy.reciprocal(tmp_v + pooled_var)
                 mean_e, var_e, qt, *_ = mean_effect_var_and_q(tmp_e, ws_data)
             p = 1 - scipy.stats.chi2.cdf(qt, df=df)
-            # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+            if norm_ci:
+                lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+            else:
+                lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
             lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, tmp_boot,
                                                                                      mean_e, pooled_var,
                                                                                      options.random_effects, alpha)
@@ -988,7 +997,7 @@ def calculate_regression_ma_values(e_data, w_data, x_data, sum_w, sum_we, qt):
     return qm, qe, b1_slope, b0_intercept, var_b1, var_b0, sum_wx, sum_wx2
 
 
-def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -1054,8 +1063,10 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
 
         median_e = median_effect(e_data, ws_data)
         mean_v = numpy.sum(v_data) / n
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
-        lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+        if norm_ci:
+            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+        else:
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
                                                                                  options.random_effects, alpha)
@@ -1182,7 +1193,7 @@ def calculate_glm(e: numpy.array, x: numpy.array, w: numpy.array):
     return qm, qe, beta, xtwxinv
 
 
-def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -1306,8 +1317,10 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
         # basic global calcs
         mean_e, var_e, _, _, _, _ = mean_effect_var_and_q(e_data, ws_data)
         mean_v = numpy.sum(v_data) / n
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-        lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+        if norm_ci:
+            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+        else:
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
                                                                                  options.random_effects, alpha)
@@ -1433,7 +1446,8 @@ class NestedGroup:
                 sn += cn
             return sq, sn
 
-    def group_calculations(self, e, w, chart_order: int, boot_data, bootstrap_mean, alpha: float = 0.05):
+    def group_calculations(self, e, w, chart_order: int, boot_data, bootstrap_mean, alpha: float = 0.05,
+                           norm_ci: bool = True):
         chart_order += 1
         mean_output = []
         het_output = []
@@ -1447,10 +1461,12 @@ class NestedGroup:
         group_median = median_effect(group_e, group_w)
         group_p = 1 - scipy.stats.chi2.cdf(self.qw, df=group_df)
 
-        # group_lower, group_upper = scipy.stats.t.interval(alpha=1 - alpha, df=group_df, loc=self.mean,
-        #                                                   scale=math.sqrt(group_var))
-        group_lower, group_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=self.mean,
-                                                             scale=math.sqrt(group_var))
+        if norm_ci:
+            group_lower, group_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=self.mean,
+                                                                 scale=math.sqrt(group_var))
+        else:
+            group_lower, group_upper = scipy.stats.t.interval(alpha=1 - alpha, df=group_df, loc=self.mean,
+                                                              scale=math.sqrt(group_var))
         (group_lower_bs, group_upper_bs,
          group_lower_bias, group_upper_bias) = bootstrap_means(bootstrap_mean, group_boot, self.mean,
                                                                0, False, alpha)
@@ -1518,7 +1534,7 @@ def find_next_nested_level(index, group_data, parent) -> list:
     return group_list
 
 
-def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -1578,8 +1594,10 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         mean_e, var_e, qt, sum_w, sum_w2, sum_ew = mean_effect_var_and_q(e_data, w_data)
         median_e = median_effect(e_data, w_data)
         mean_v = numpy.sum(v_data) / n
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
-        lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+        if norm_ci:
+            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+        else:
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, 0, False, alpha)
         global_mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, median_e, var_e, mean_v, lower_ci,
@@ -1697,7 +1715,7 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
 
 
 # ---------- trim-and-fill analysis ----------
-def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -1747,8 +1765,10 @@ def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float 
             output_blocks.append([get_text("Estimate of pooled variance") + ": " +
                                   format(pooled_var, inline_float(decimal_places))])
 
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-        lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+        if norm_ci:
+            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+        else:
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
         original_mean_data = mean_data_tuple(get_text("Original Mean"), 0, n, mean_e, median_e, var_e, mean_v,
                                              lower_ci, upper_ci, 0, 0, 0, 0)
         original_mean = mean_e
@@ -1832,8 +1852,10 @@ def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float 
             ws = numpy.reciprocal(tmp_data[:, 2] + pooled_var)
             mean_e, var_e, *_ = mean_effect_var_and_q(tmp_data[:, 0], ws)
 
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-        lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+        if norm_ci:
+            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+        else:
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
         trim_mean_data = mean_data_tuple(get_text("Trim and Fill Mean"), 0, n+trim_n, mean_e, median_e, var_e, mean_v,
                                          lower_ci, upper_ci, 0, 0, 0, 0)
 
@@ -1882,7 +1904,7 @@ def phylogenetic_correlation(tip_names, root):
     return p
 
 
-def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alpha: float = 0.05):
+def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -2136,7 +2158,7 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
 
 
 # ---------- jackknife meta-analysis ----------
-def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -2190,8 +2212,10 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
                                   format(pooled_var, inline_float(decimal_places))])
 
         p = 1 - scipy.stats.chi2.cdf(qt, df=df)
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-        lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+        if norm_ci:
+            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+        else:
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
 
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
@@ -2231,8 +2255,10 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
                 mean_e, var_e, qt, *_ = mean_effect_var_and_q(tmp_e, ws_data)
                 median_e = median_effect(tmp_e, ws_data)
             p = 1 - scipy.stats.chi2.cdf(qt, df=df)
-            # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+            if norm_ci:
+                lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+            else:
+                lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
             lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, tmp_boot,
                                                                                      mean_e, pooled_var,
                                                                                      options.random_effects, alpha)
@@ -2323,7 +2349,7 @@ def kendalls_tau(e_ranks, x_ranks):
     return tau
 
 
-def rank_correlation_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05):
+def rank_correlation_analysis(data, options, decimal_places: int = 4):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars

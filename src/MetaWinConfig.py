@@ -46,7 +46,8 @@ def default_config() -> dict:
         "filtered row color": "lightpink",
         "filtered col color": "red",
         "auto update check": True,
-        "alpha": 0.05
+        "alpha": 0.05,
+        "confidence interval distribution": "Normal"
     }
 
 
@@ -86,6 +87,10 @@ def validate_config(key, value):
             return value
         except ValueError:
             return None
+    elif key == "confidence interval distribution":
+        if value == "Students t":
+            return value
+        return "Normal"
     return value
 
 
@@ -103,5 +108,6 @@ def export_config(main_window) -> None:
             outfile.write("filtered col color={}\n".format(main_window.filtered_col_color))
             outfile.write("auto update check={}\n".format(main_window.auto_update_check))
             outfile.write("alpha={}\n".format(main_window.alpha))
+            outfile.write("confidence interval distribution={}".format(main_window.confidence_interval_dist))
     except IOError:
         pass
