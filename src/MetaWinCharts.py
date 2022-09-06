@@ -499,10 +499,6 @@ class ChartData:
         return outlist
 
 
-def show_color_dialog():
-    pass
-
-
 def base_figure():
     """
     create the baseline figure used for all plots
