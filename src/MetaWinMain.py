@@ -171,7 +171,7 @@ class MainWindow(QMainWindow):
         options_menu.addMenu(data_options_menu)
         # analysis options submenu
         analysis_options_menu = QMenu(get_text("Analysis Options"), self)
-        # analysis_options_menu.setIcon(QIcon(MetaWinConstants.output_icon))
+        analysis_options_menu.setIcon(QIcon(MetaWinConstants.analysis_options_icon))
         output_alpha_action = QAction(QIcon(MetaWinConstants.alpha_icon), get_text("Significance Level"), self)
         output_alpha_action.triggered.connect(self.set_alpha_significance)
         analysis_options_menu.addAction(output_alpha_action)
