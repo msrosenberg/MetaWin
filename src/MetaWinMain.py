@@ -77,7 +77,6 @@ class MainWindow(QMainWindow):
         self.empty_col_num = 10
         self.empty_row_num = 15
         self.chart_data = None
-        self.chart_caption = ""
         self.init_ui()
 
     def init_ui(self):
@@ -696,18 +695,18 @@ class MainWindow(QMainWindow):
                 norm_ci = False
             else:
                 norm_ci = True
-            output, figure, fig_caption, chart_data = MetaWinAnalysis.meta_analysis(self, self.data, self.last_effect,
-                                                                                    self.last_var, self.output_decimals,
-                                                                                    self.alpha, self.phylogeny, norm_ci)
+            output, figure, chart_data = MetaWinAnalysis.meta_analysis(self, self.data, self.last_effect,
+                                                                       self.last_var, self.output_decimals,
+                                                                       self.alpha, self.phylogeny, norm_ci)
             if output is not None:
                 self.write_multi_output_blocks(output)
                 self.main_area.setCurrentIndex(1)
                 if figure is not None:
-                    self.show_figure(figure, fig_caption, chart_data)
+                    self.show_figure(figure, chart_data)
         else:
             MetaWinMessages.report_warning(self, get_text("Warning"), get_text("No data has been loaded."))
 
-    def show_figure(self, figure, fig_caption: str, chart_data) -> None:
+    def show_figure(self, figure, chart_data) -> None:
         """
         Replace the current figure in the graphics tab with a new figure, toolbar, and caption
         """
@@ -720,8 +719,7 @@ class MainWindow(QMainWindow):
         toolbar = NavigationToolbar2QT(figure, None)
         self.save_graph_action.triggered.connect(toolbar.save_figure)
         caption_box = QTextEdit()
-        caption_box.setText(fig_caption)
-        self.chart_caption = fig_caption
+        caption_box.setText(chart_data.caption_text())
         self.graph_layout.addWidget(figure, stretch=8)
         self.graph_layout.addWidget(caption_box, stretch=1)
         self.chart_data = chart_data
@@ -744,41 +742,39 @@ class MainWindow(QMainWindow):
 
     def draw_scatter_plot(self) -> None:
         if self.data is not None:
-            figure, fig_caption, chart_data = MetaWinDraw.draw_scatter_dialog(self, self.data)
+            figure, chart_data = MetaWinDraw.draw_scatter_dialog(self, self.data)
             if figure is not None:
-                self.show_figure(figure, fig_caption, chart_data)
+                self.show_figure(figure, chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def draw_histogram(self) -> None:
         if self.data is not None:
-            figure, fig_caption, chart_data = MetaWinDraw.draw_histogram_dialog(self, self.data, self.last_effect,
-                                                                                self.last_var)
+            figure, chart_data = MetaWinDraw.draw_histogram_dialog(self, self.data, self.last_effect, self.last_var)
             if figure is not None:
-                self.show_figure(figure, fig_caption, chart_data)
+                self.show_figure(figure, chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def draw_normal_quantile_plot(self) -> None:
         if self.data is not None:
-            figure, fig_caption, chart_data = MetaWinDraw.draw_normal_quantile_dialog(self, self.data, self.last_effect,
-                                                                                      self.last_var)
+            figure, chart_data = MetaWinDraw.draw_normal_quantile_dialog(self, self.data, self.last_effect,
+                                                                         self.last_var)
             if figure is not None:
-                self.show_figure(figure, fig_caption, chart_data)
+                self.show_figure(figure, chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def draw_radial_plot(self) -> None:
         if self.data is not None:
-            figure, fig_caption, chart_data = MetaWinDraw.draw_radial_dialog(self, self.data, self.last_effect,
-                                                                             self.last_var)
+            figure, chart_data = MetaWinDraw.draw_radial_dialog(self, self.data, self.last_effect, self.last_var)
             if figure is not None:
-                self.show_figure(figure, fig_caption, chart_data)
+                self.show_figure(figure, chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def draw_forest_plot(self) -> None:
         if self.data is not None:
-            figure, fig_caption, chart_data = MetaWinDraw.draw_forest_dialog(self, self.data, self.last_effect,
-                                                                             self.last_var, self.alpha)
+            figure, chart_data = MetaWinDraw.draw_forest_dialog(self, self.data, self.last_effect, self.last_var,
+                                                                self.alpha)
             if figure is not None:
-                self.show_figure(figure, fig_caption, chart_data)
+                self.show_figure(figure, chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def clear_filters(self) -> None:
@@ -851,8 +847,7 @@ class MainWindow(QMainWindow):
         if self.chart_data is not None:
             figure = MetaWinDraw.edit_figure(self, self.chart_data)
             if figure is not None:
-                caption = self.chart_caption
-                self.show_figure(figure, caption, self.chart_data)
+                self.show_figure(figure, self.chart_data)
 
     def change_conf_int_distribution(self):
         if self.confidence_interval_dist == "Normal":

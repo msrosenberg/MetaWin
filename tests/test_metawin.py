@@ -28,7 +28,7 @@ import MetaWinTree
 import MetaWinDraw
 
 
-TEST_FIGURES = False
+TEST_FIGURES = True
 
 
 class TestFigureDialog(QDialog):
@@ -291,11 +291,11 @@ def test_simple_meta_analysis():
     options.rosenberg_failsafe = 0.05
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     mean_values = analysis_values.mean_data
@@ -328,11 +328,11 @@ def test_simple_meta_analysis_lep():
     options.effect_vars = data.cols[5]
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     mean_values = analysis_values.mean_data
@@ -365,11 +365,11 @@ def test_simple_meta_analysis_lep_randeff():
     options.effect_vars = data.cols[5]
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     mean_values = analysis_values.mean_data
@@ -405,7 +405,7 @@ def test_simple_meta_analysis_random_effects():
     options.rosenthal_failsafe = 0.05
     options.rosenberg_failsafe = 0.05
 
-    output, _, _, _, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, _, _, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     mean_values = analysis_values.mean_data
 
@@ -443,10 +443,10 @@ def test_simple_meta_analysis_bootstrap():
     options.bootstrap_mean = 9999
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -483,11 +483,11 @@ def test_group_meta_analysis_lep_suborders():
     options.groups = data.cols[1]
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     global_values = analysis_values.global_values
@@ -537,11 +537,11 @@ def test_group_meta_analysis_lep_suborders_rand_eff():
     options.random_effects = True
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     global_values = analysis_values.global_values
@@ -618,11 +618,11 @@ def test_group_meta_analysis_lep_families():
     options.create_graph = True
     data.cols[2].group_filter = ["Yponomeutidae", "Lycaenidae", "Hesperiidae"]
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     global_values = analysis_values.global_values
@@ -661,10 +661,10 @@ def test_group_meta_analysis_bootstrap():
     options.bootstrap_mean = 9999
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -681,10 +681,10 @@ def test_group_meta_analysis_lrr():
 
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -713,10 +713,10 @@ def test_cumulative_meta_analysis():
 
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -732,10 +732,10 @@ def test_cumulative_meta_analysis_bootstrap():
 
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, _ = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -761,11 +761,11 @@ def test_regression_meta_analysis_lep():
     options.independent_variable = data.cols[3]
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     global_values = analysis_values.global_values
@@ -807,11 +807,11 @@ def test_regression_meta_analysis_lep_randeff():
     options.random_effects = True
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     global_values = analysis_values.global_values
@@ -872,7 +872,7 @@ def test_complex_meta_analysis_lep_simple_regression():
     options.continuous_vars = [data.cols[3]]
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, _, _, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     global_values = analysis_values.global_values
@@ -918,7 +918,7 @@ def test_complex_meta_analysis_lep_group():
     options.continuous_vars = []
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, _, _, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     global_values = analysis_values.global_values
@@ -966,7 +966,7 @@ def test_complex_meta_analysis_lep():
     options.continuous_vars = [data.cols[3]]
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, _, _, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     global_values = analysis_values.global_values
@@ -1025,7 +1025,7 @@ def test_complex_meta_analysis_lep_randomeff():
     options.random_effects = True
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, _, _, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     global_values = analysis_values.global_values
@@ -1088,11 +1088,11 @@ def test_nested_meta_analysis_lep():
     options.create_graph = True
     data.cols[2].group_filter = ["Yponomeutidae", "Lycaenidae", "Hesperiidae"]
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
     global_values = analysis_values.global_values
@@ -1200,8 +1200,8 @@ def test_scatter_plot():
     x_col = data.cols[11]
     y_col = data.cols[10]
     if TEST_FIGURES:
-        figure, fig_caption, _ = MetaWinDraw.draw_scatter_plot(data, x_col, y_col)
-        test_win = TestFigureDialog(figure, fig_caption)
+        figure, chart_data = MetaWinDraw.draw_scatter_plot(data, x_col, y_col)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1210,8 +1210,8 @@ def test_normal_quantile_plot():
     e_col = data.cols[10]
     v_col = data.cols[11]
     if TEST_FIGURES:
-        figure, fig_caption, _ = MetaWinDraw.draw_normal_quantile_plot(data, e_col, v_col)
-        test_win = TestFigureDialog(figure, fig_caption)
+        figure, chart_data = MetaWinDraw.draw_normal_quantile_plot(data, e_col, v_col)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1220,8 +1220,8 @@ def test_radial_plot_d():
     e_col = data.cols[10]
     v_col = data.cols[11]
     if TEST_FIGURES:
-        figure, fig_caption, _ = MetaWinDraw.draw_radial_plot(data, e_col, v_col, False)
-        test_win = TestFigureDialog(figure, fig_caption)
+        figure, chart_data = MetaWinDraw.draw_radial_plot(data, e_col, v_col, False)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1230,8 +1230,8 @@ def test_radial_plot_lnrr():
     e_col = data.cols[10]
     v_col = data.cols[11]
     if TEST_FIGURES:
-        figure, fig_caption, _ = MetaWinDraw.draw_radial_plot(data, e_col, v_col, True)
-        test_win = TestFigureDialog(figure, fig_caption)
+        figure, chart_data = MetaWinDraw.draw_radial_plot(data, e_col, v_col, True)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1240,8 +1240,8 @@ def test_histogram_d_unweighted():
     e_col = data.cols[10]
     v_col = data.cols[11]
     if TEST_FIGURES:
-        figure, fig_caption, _ = MetaWinDraw.draw_histogram_plot(data, e_col, v_col, 0, 10)
-        test_win = TestFigureDialog(figure, fig_caption)
+        figure, chart_data = MetaWinDraw.draw_histogram_plot(data, e_col, v_col, 0, 10)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1250,8 +1250,8 @@ def test_histogram_d_weighted_invvar():
     e_col = data.cols[10]
     v_col = data.cols[11]
     if TEST_FIGURES:
-        figure, fig_caption, _ = MetaWinDraw.draw_histogram_plot(data, e_col, v_col, 1, 10)
-        test_win = TestFigureDialog(figure, fig_caption)
+        figure, chart_data = MetaWinDraw.draw_histogram_plot(data, e_col, v_col, 1, 10)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1260,8 +1260,8 @@ def test_histogram_d_weighted_sample_size():
     e_col = data.cols[10]
     v_col = data.cols[2]
     if TEST_FIGURES:
-        figure, fig_caption, _ = MetaWinDraw.draw_histogram_plot(data, e_col, v_col, 2, 15)
-        test_win = TestFigureDialog(figure, fig_caption)
+        figure, chart_data = MetaWinDraw.draw_histogram_plot(data, e_col, v_col, 2, 15)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1270,8 +1270,8 @@ def test_forest_plot():
     e_col = data.cols[10]
     v_col = data.cols[11]
     if TEST_FIGURES:
-        figure, fig_caption, _ = MetaWinDraw.draw_forest_plot(data, e_col, v_col)
-        test_win = TestFigureDialog(figure, fig_caption)
+        figure, chart_data = MetaWinDraw.draw_forest_plot(data, e_col, v_col)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1296,11 +1296,11 @@ def test_trim_and_fill_analysis():
     options.create_graph = True
     options.k_estimator = "L"
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1325,11 +1325,11 @@ def test_trim_and_fill_analysis_negative_mean():
     options.create_graph = True
     options.k_estimator = "R"
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1354,11 +1354,11 @@ def test_jackknife():
     options.effect_vars = data.cols[5]
     options.create_graph = True
 
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
-        test_win = TestFigureDialog(figure, fig_caption)
+        test_win = TestFigureDialog(figure, chart_data.caption_text())
         test_win.exec()
 
 
@@ -1377,22 +1377,21 @@ def test_phylogenetic_simple_test():
     options.tip_names = data.cols[0]
     print("UNWEIGHTED")
     options.structure = MetaWinAnalysis.SIMPLE_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     print()
     print()
     print("WEIGHTED")
     options.effect_vars = data.cols[2]
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
 
     print()
     print()
     print("PHYLOGENETIC")
     options.structure = MetaWinAnalysis.PHYLOGENETIC_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4,
-                                                                                                tree=tree)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4, tree=tree)
     print_test_output(output)
 
 
@@ -1409,12 +1408,11 @@ def test_phylogenetic_glm_simple():
     options.random_effects = True
 
     options.structure = MetaWinAnalysis.SIMPLE_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     options.structure = MetaWinAnalysis.PHYLOGENETIC_MA
     print(data.column_labels()[1])
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4,
-                                                                                                tree=tree)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4, tree=tree)
     print_test_output(output)
 
     print()
@@ -1426,11 +1424,10 @@ def test_phylogenetic_glm_simple():
     options.effect_vars = data.cols[4]
 
     options.structure = MetaWinAnalysis.SIMPLE_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     options.structure = MetaWinAnalysis.PHYLOGENETIC_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4,
-                                                                                                tree=tree)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4, tree=tree)
     print_test_output(output)
 
     print()
@@ -1441,11 +1438,10 @@ def test_phylogenetic_glm_simple():
     options.effect_data = data.cols[5]
     options.effect_vars = data.cols[6]
     options.structure = MetaWinAnalysis.SIMPLE_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     options.structure = MetaWinAnalysis.PHYLOGENETIC_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4,
-                                                                                                tree=tree)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4, tree=tree)
     print_test_output(output)
 
     print()
@@ -1456,11 +1452,10 @@ def test_phylogenetic_glm_simple():
     options.effect_data = data.cols[7]
     options.effect_vars = data.cols[8]
     options.structure = MetaWinAnalysis.SIMPLE_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     options.structure = MetaWinAnalysis.PHYLOGENETIC_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4,
-                                                                                                tree=tree)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4, tree=tree)
     print_test_output(output)
 
     print()
@@ -1471,11 +1466,10 @@ def test_phylogenetic_glm_simple():
     options.effect_data = data.cols[9]
     options.effect_vars = data.cols[10]
     options.structure = MetaWinAnalysis.SIMPLE_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     options.structure = MetaWinAnalysis.PHYLOGENETIC_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4,
-                                                                                                tree=tree)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4, tree=tree)
     print_test_output(output)
 
     print()
@@ -1486,9 +1480,8 @@ def test_phylogenetic_glm_simple():
     options.effect_data = data.cols[11]
     options.effect_vars = data.cols[12]
     options.structure = MetaWinAnalysis.SIMPLE_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
     print_test_output(output)
     options.structure = MetaWinAnalysis.PHYLOGENETIC_MA
-    output, figure, fig_caption, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4,
-                                                                                                tree=tree)
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4, tree=tree)
     print_test_output(output)

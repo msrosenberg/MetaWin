@@ -11,10 +11,15 @@ from matplotlib.figure import Figure
 import numpy
 import scipy.stats
 
-from MetaWinUtils import exponential_label
+from MetaWinUtils import exponential_label, get_citation, create_reference_list
 from MetaWinLanguage import get_text
 import MetaWinWidgets
 
+
+# weighting options for the histograms
+WEIGHT_NONE = 0
+WEIGHT_INVVAR = 1
+WEIGHT_N = 2
 
 LINE_STYLES = ("solid", "dashed", "dotted", "dashdot")
 # MARKER_STYLES = {"point": ".", "circle": "o", "downward triangle": "v", "upward triangle": "^",
@@ -35,6 +40,7 @@ MARKER_STYLES = {"point": ".", "circle": "o", "downward triangle": "v", "upward 
                  "centered right caret": 9}
 
 
+# ---------- Chart Data Classes ---------- #
 class BaseChartData:
     def __init__(self):
         self.name = ""
@@ -383,19 +389,200 @@ class AnnotationData(BaseChartData):
         return self.edit_panel
 
 
+# ---------- Chart Caption Classes ---------- #
+class NormalQuantileCaption:
+    def __init__(self):
+        self.upper_limit = None
+        self.lower_limit = None
+        self.horizontal_mean = None
+        self.vertical_mean = None
+        self.regression = None
+        self.regression_scatter = None
+
+    def __str__(self):
+        "Normal Quantile plot following {}. The "
+        "standardized effect size is the effect size divided by the "
+        "square-root of its variance. The solid line represents the "
+        "regression and the dashed lines the 95% prediction envelope."
+
+        return get_text("normal_quantile_caption").format(get_citation("Wang_and_Bushman_1998")) + \
+               create_reference_list(["Wang_and_Bushman_1998"], True)
+
+
+class ScatterCaption:
+    def __init__(self):
+        self.x_label = ""
+        self.y_label = ""
+
+    def __str__(self):
+        return get_text("Scatter plot of {} vs. {}.").format(self.y_label, self.x_label)
+
+
+class HistogramCaption:
+    def __init__(self):
+        self.e_label = ""
+        self.weight_type = WEIGHT_NONE
+
+    def __str__(self):
+        caption = get_text("Histogram of {} from individual studies.").format(self.e_label)
+        if self.weight_type == WEIGHT_INVVAR:
+            caption += get_text(" Counts were weighted by the inverse of the variance of each effect size.")
+        elif self.weight_type == WEIGHT_N:
+            caption += get_text(" Counts were weighted by a sample size associated with each effect size.")
+        return caption
+
+
+class RadialCaption:
+    def __init__(self):
+        self.e_label = ""
+
+    def __str__(self):
+        return get_text("Radial_chart_caption").format(self.e_label)
+
+
+class ForestPlotBaseCaption:
+    def __init__(self):
+        self.e_label = ""
+        self.alpha = 0.05
+        self.bootstrap_n = None
+
+
+class ForestPlotCaption(ForestPlotBaseCaption):
+    def __str__(self):
+        return get_text("Forest plot of individual effect sizes for each study.") + \
+               common_forest_plot_caption(self.e_label, self.alpha, inc_median=False)
+
+
+class RegressionCaption:
+    def __init__(self):
+        self.e_label = ""
+        self.i_label = ""
+        self.model = ""
+        self.ref_list = ""
+        self.citations = []
+
+    def __str__(self):
+        return get_text("regression_caption").format(self.e_label, self.i_label, self.model, self.ref_list) + \
+                create_reference_list(self.citations, True)
+
+
+class TrimAndFillCaption:
+    def __init__(self):
+        self.e_label = ""
+        self.original_scatter = None
+        self.inferred_scatter = None
+        self.original_mean = None
+        self.inferred_mean = None
+
+    def __str__(self):
+        "Funnel plot of {} vs. precision, showing the results of a Trim and "
+        "Fill Analysis ({}). Solid black circles represent the original data; "
+        "open red circles represent inferred \"missing\" data. The dashed line "
+        "represents the mean effect size of the original data, the dotted line "
+        "the mean effect size including the inferred data."
+        new_cites = ["Duval_Tweedie_2000a", "Duval_Tweedie_2000b"]
+        return get_text("trim_fill_caption").format(self.e_label, "Duval and Tweedie 2000a, b") + \
+               create_reference_list(new_cites, True)
+
+
+class BasicAnalysisCaption(ForestPlotBaseCaption):
+    def __str__(self):
+        return get_text("Forest plot of individual effect sizes for each study, as well as the overall mean.") + \
+               common_forest_plot_caption(self.e_label, self.alpha, self.bootstrap_n)
+
+
+class GroupedAnalysisCaption(ForestPlotBaseCaption):
+    def __init__(self):
+        super().__init__()
+        self.group_label = ""
+
+    def __str__(self):
+        return get_text("group_forest_plot").format(self.group_label) + \
+               common_forest_plot_caption(self.e_label, self.alpha, self.bootstrap_n)
+
+
+class NestedAnalysisCaption(ForestPlotBaseCaption):
+    def __str__(self):
+        return get_text("nest_caption") + common_forest_plot_caption(self.e_label, self.alpha, self.bootstrap_n)
+
+
+class CumulativeAnalysisCaption(ForestPlotBaseCaption):
+    def __init__(self):
+        super().__init__()
+        self.order_label = ""
+
+    def __str__(self):
+        return get_text("cumulative_forest_plot").format(self.order_label) + \
+               common_forest_plot_caption(self.e_label, self.alpha, self.bootstrap_n)
+
+
+class JackknifeAnalysisCaption(ForestPlotBaseCaption):
+    def __str__(self):
+        return get_text("jackknife_forest_plot") + common_forest_plot_caption(self.e_label, self.alpha,
+                                                                              self.bootstrap_n)
+
+
+def common_forest_plot_caption(effect_name: str, alpha: float = 0.05, bootstrap_n: Optional[int] = None,
+                               inc_median: bool = True) -> str:
+    # " Effect size measured as {}. The dotted vertical line "
+    # "represents no effect, or a mean of zero. Circles represent "
+    # "mean effect size, with the corresponding line "
+    # "the {:0.0%} confidence interval."
+    #
+    text = get_text("forest_plot_common_caption").format(effect_name, 1 - alpha)
+    if inc_median:
+        text += get_text("forest_plot_median_caption")
+    if bootstrap_n is not None:
+        citation = "Adams_et_1997"
+        text += get_text("bootstrap_caption").format(bootstrap_n, get_citation(citation)) + \
+                create_reference_list([citation], True)
+    return text
+
+
+# ---------- Main Chart Data Class ---------- #
 class ChartData:
     """
     an object to contain all data that appears on charts
 
     this will allow chart data exporting, as well as open up the possibility of figure editing
     """
-    def __init__(self):
+    def __init__(self, caption_type):
         self.x_label = ""
         self.y_label = ""
         self.data = []
         # special adjustments
         self.suppress_y = False
         self.rescale_x = None
+        # caption
+        if caption_type == "normal quantile":
+            self.caption = NormalQuantileCaption()
+        elif caption_type == "scatter plot":
+            self.caption = ScatterCaption()
+        elif caption_type == "histogram":
+            self.caption = HistogramCaption()
+        elif caption_type == "radial":
+            self.caption = RadialCaption()
+        elif caption_type == "regression":
+            self.caption = RegressionCaption()
+        elif caption_type == "trim and fill":
+            self.caption = TrimAndFillCaption()
+        elif caption_type == "basic analysis":
+            self.caption = BasicAnalysisCaption()
+        elif caption_type == "grouped analysis":
+            self.caption = GroupedAnalysisCaption()
+        elif caption_type == "nested analysis":
+            self.caption = NestedAnalysisCaption()
+        elif caption_type == "cumulative analysis":
+            self.caption = CumulativeAnalysisCaption()
+        elif caption_type == "jackknife analysis":
+            self.caption = JackknifeAnalysisCaption()
+        elif caption_type == "forest plot":
+            self.caption = ForestPlotCaption()
+        else:
+            self.caption = ""
+
+    def caption_text(self):
+        return str(self.caption)
 
     def add_scatter(self, name: str, x_data, y_data, marker: Union[str, int] = "o", label="", zorder=0, color="#1f77b4",
                     edgecolors="#1f77b4", size=36, linewidths=1.5, linestyle="solid"):
@@ -412,6 +599,7 @@ class ChartData:
         new_scatter.linewidths = linewidths
         new_scatter.linestyle = linestyle
         self.data.append(new_scatter)
+        return new_scatter
 
     def add_line(self, name: str, x_min, y_min, x_max, y_max, linestyle="solid", color="silver", zorder=0,
                  linewidth=1.5):
@@ -424,6 +612,7 @@ class ChartData:
         new_line.zorder = zorder
         new_line.linewidth = linewidth
         self.data.append(new_line)
+        return new_line
 
     def add_histogram(self, name, cnts, bins, linewidth=1, edgecolor="black", color="#1f77b4", linestyle="solid"):
         new_hist = HistogramData()
@@ -435,6 +624,7 @@ class ChartData:
         new_hist.edgecolor = edgecolor
         new_hist.color = color
         self.data.append(new_hist)
+        return new_hist
 
     def add_arc(self, name, xc, yc, height, width, start_angle, end_angle, zorder=0, edgecolor="silver",
                 linestyle="solid", linewidth=1.5):
@@ -451,6 +641,7 @@ class ChartData:
         new_arc.linestyle = linestyle
         new_arc.linewidth = linewidth
         self.data.append(new_arc)
+        return new_arc
 
     def add_multi_line(self, name, x_values, y_values, linestyle="solid", color="silver", zorder=0, linewidth=1.5):
         new_ml = LineData()
@@ -462,6 +653,7 @@ class ChartData:
         new_ml.zorder = zorder
         new_ml.linewidth = linewidth
         self.data.append(new_ml)
+        return new_ml
 
     def add_ci(self, name, min_x, max_x, y, zorder=0, color="#1f77b4", linestyle="solid", linewidth=1.5):
         new_ci = ForestCIData()
@@ -474,6 +666,7 @@ class ChartData:
         new_ci.linestyle = linestyle
         new_ci.linewidth = linewidth
         self.data.append(new_ci)
+        return new_ci
 
     def add_labels(self, name, labels, y_data):
         new_labels = LabelData()
@@ -481,6 +674,7 @@ class ChartData:
         new_labels.labels = labels
         new_labels.y_pos = y_data
         self.data.append(new_labels)
+        return new_labels
 
     def add_annotations(self, name, annotations, x_data, y_data):
         new_annotation = AnnotationData()
@@ -489,6 +683,7 @@ class ChartData:
         new_annotation.y = y_data
         new_annotation.annotations = annotations
         self.data.append(new_annotation)
+        return new_annotation
 
     def export_to_list(self):
         outlist = ["X-axis label\t{}\n".format(self.x_label),
@@ -557,9 +752,18 @@ def create_figure(chart_data):
     return figure_canvas
 
 
-def chart_forest_plot(effect_name, forest_data, alpha: float = 0.05,
-                      bootstrap_n: Optional[int] = None) -> Tuple[FigureCanvasQTAgg, ChartData]:
-    chart_data = ChartData()
+def chart_forest_plot(analysis_type: str, effect_name, forest_data, alpha: float = 0.05,
+                      bootstrap_n: Optional[int] = None,
+                      extra_name: Optional[str] = None) -> Tuple[FigureCanvasQTAgg, ChartData]:
+    chart_data = ChartData(analysis_type)
+    chart_data.caption.e_label = effect_name
+    chart_data.caption.alpha = alpha
+    chart_data.caption.bootstrap_n = bootstrap_n
+    if analysis_type == "grouped analysis":
+        chart_data.caption.group_label = extra_name
+    elif analysis_type == "cumulative analysis":
+        chart_data.caption.order_label = extra_name
+
     chart_data.x_label = effect_name
     chart_data.suppress_y = True
 
@@ -619,13 +823,6 @@ def chart_forest_plot(effect_name, forest_data, alpha: float = 0.05,
     return figure_canvas, chart_data
 
 
-def caption_forest_plot_text(effect_name: str, alpha: float = 0.05, inc_median: bool = True) -> str:
-    text = get_text("forest_plot_common_caption").format(effect_name, 1 - alpha)
-    if inc_median:
-        text += get_text("forest_plot_median_caption")
-    return text
-
-
 def add_regression_to_chart(x_name: str, y_name: str, x_data, y_data, slope: float, intercept: float,
                             x_min: float, x_max: float, chart_data) -> None:
     y_at_min = slope*x_min + intercept
@@ -633,14 +830,22 @@ def add_regression_to_chart(x_name: str, y_name: str, x_data, y_data, slope: flo
 
     chart_data.x_label = x_name
     chart_data.y_label = y_name
-    chart_data.add_scatter(get_text("Point Data"), x_data, y_data, zorder=10)
-    chart_data.add_line(get_text("Regression Line"), x_min, y_at_min, x_max, y_at_max, zorder=8, color="silver")
+    chart_data.caption.regression_scatter = chart_data.add_scatter(get_text("Point Data"), x_data, y_data, zorder=10)
+    chart_data.caption.regression = chart_data.add_line(get_text("Regression Line"), x_min, y_at_min, x_max, y_at_max,
+                                                        zorder=8, color="silver")
 
 
-def chart_regression(x_name, y_name, x_data, y_data, slope, intercept) -> Tuple[FigureCanvasQTAgg, ChartData]:
+def chart_regression(x_name, y_name, x_data, y_data, slope, intercept, model, ref_list,
+                     citations) -> Tuple[FigureCanvasQTAgg, ChartData]:
     x_min = numpy.min(x_data)
     x_max = numpy.max(x_data)
-    chart_data = ChartData()
+    chart_data = ChartData("regression")
+    chart_data.caption.e_label = y_name
+    chart_data.caption.i_label = x_name
+    chart_data.caption.model = model
+    chart_data.caption.ref_list = ref_list
+    chart_data.caption.citations = citations
+
     add_regression_to_chart(x_name, y_name, x_data, y_data, slope, intercept, x_min, x_max, chart_data)
 
     figure_canvas = create_figure(chart_data)
@@ -668,21 +873,22 @@ def add_quantile_axes_to_chart(x_data, y_data, slope: float, intercept: float, c
     y_lower = [y_pos[i] - t_score*math.sqrt(mse*(1 + 1/n + ((x_pos[i] - x_mean)**2)/ss_x)) for i in range(nsteps)]
     y_upper = [y_pos[i] + t_score*math.sqrt(mse*(1 + 1/n + ((x_pos[i] - x_mean)**2)/ss_x)) for i in range(nsteps)]
 
-    chart_data.add_multi_line(get_text("Lower Prediction Limit"), x_pos, y_lower, linestyle="dashed", color="silver",
-                              zorder=3)
-    chart_data.add_multi_line(get_text("Upper Prediction Limit"), x_pos, y_upper, linestyle="dashed", color="silver",
-                              zorder=3)
+    chart_data.caption.lower_limit = chart_data.add_multi_line(get_text("Lower Prediction Limit"), x_pos, y_lower,
+                                                               linestyle="dashed", color="silver", zorder=3)
+    chart_data.caption.upper_limit = chart_data.add_multi_line(get_text("Upper Prediction Limit"), x_pos, y_upper,
+                                                               linestyle="dashed", color="silver", zorder=3)
 
     # draw center lines
-    chart_data.add_line(get_text("Horizontal Axis Mean Line"), 0, min(y_min, min(y_lower)), 0, max(y_max, max(y_upper)),
-                        linestyle="dotted", color="silver")
-    chart_data.add_line(get_text("Vertical Axis Mean Line"), x_min, y_mean, x_max, y_mean, linestyle="dotted",
-                        color="silver")
+    chart_data.caption.horizontal_mean = chart_data.add_line(get_text("Horizontal Axis Mean Line"), 0,
+                                                             min(y_min, min(y_lower)), 0, max(y_max, max(y_upper)),
+                                                             linestyle="dotted", color="silver")
+    chart_data.caption.vertical_mean = chart_data.add_line(get_text("Vertical Axis Mean Line"), x_min, y_mean, x_max,
+                                                           y_mean, linestyle="dotted", color="silver")
 
 
 def chart_normal_quantile(x_name, y_name, x_data, y_data, slope, intercept,
                           alpha: float = 0.05) -> Tuple[FigureCanvasQTAgg, ChartData]:
-    chart_data = ChartData()
+    chart_data = ChartData("normal quantile")
     add_quantile_axes_to_chart(x_data, y_data, slope, intercept, chart_data, alpha)
     x_min = numpy.min(x_data)
     x_max = numpy.max(x_data)
@@ -769,7 +975,8 @@ def add_radial_curve_to_chart(effect_label: str, r: float, min_e: float, max_e: 
 
 def chart_radial(e_name, x_data, y_data, slope, min_e, max_e, is_log: bool = False) -> Tuple[FigureCanvasQTAgg,
                                                                                              ChartData]:
-    chart_data = ChartData()
+    chart_data = ChartData("radial")
+    chart_data.caption.e_label = e_name
     max_d = numpy.max(numpy.sqrt(numpy.square(x_data) + numpy.square(y_data)))+1
     x_min = 0
     x_max = (max_d + 1)*math.cos(math.atan(slope))
@@ -782,15 +989,25 @@ def chart_radial(e_name, x_data, y_data, slope, min_e, max_e, is_log: bool = Fal
     return figure_canvas, chart_data
 
 
-def chart_histogram(e_data, w_data, n_bins, e_label, weighted: bool = False) -> Tuple[FigureCanvasQTAgg, ChartData]:
-    if weighted:
-        cnts, bins = numpy.histogram(e_data, n_bins, weights=w_data)
-        y_label = get_text("Weighted Count")
-    else:
+def chart_histogram(e_data, w_data, n_bins, e_label,
+                    weighted: int = WEIGHT_NONE) -> Tuple[FigureCanvasQTAgg, ChartData]:
+    if weighted == WEIGHT_NONE:
         cnts, bins = numpy.histogram(e_data, n_bins)
         y_label = get_text("Count")
+    else:
+        cnts, bins = numpy.histogram(e_data, n_bins, weights=w_data)
+        y_label = get_text("Weighted Count")
+    # if weighted:
+    #     cnts, bins = numpy.histogram(e_data, n_bins, weights=w_data)
+    #     y_label = get_text("Weighted Count")
+    # else:
+    #     cnts, bins = numpy.histogram(e_data, n_bins)
+    #     y_label = get_text("Count")
 
-    chart_data = ChartData()
+    chart_data = ChartData("histogram")
+    chart_data.caption.e_label = e_label
+    chart_data.caption.weight_type = weighted
+
     chart_data.x_label = e_label
     chart_data.y_label = y_label
     chart_data.add_histogram("Bin Counts", cnts, bins, edgecolor="black", linewidth=1)
@@ -893,7 +1110,9 @@ def chart_phylogeny(root) -> FigureCanvasQTAgg:
 
 
 def chart_scatter(x_data, y_data, x_label: str = "x", y_label: str = "y") -> Tuple[FigureCanvasQTAgg, ChartData]:
-    chart_data = ChartData()
+    chart_data = ChartData("scatter plot")
+    chart_data.caption.x_label = x_label
+    chart_data.caption.y_label = y_label
     chart_data.x_label = x_label
     chart_data.y_label = y_label
     chart_data.add_scatter(get_text("Point Data"), x_data, y_data)
@@ -903,27 +1122,31 @@ def chart_scatter(x_data, y_data, x_label: str = "x", y_label: str = "y") -> Tup
 
 
 def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> Tuple[FigureCanvasQTAgg, ChartData]:
-    chart_data = ChartData()
+    chart_data = ChartData("trim and fill")
+    chart_data.caption.e_label = effect_label
     chart_data.x_label = effect_label
     chart_data.y_label = "{} (1/SE)".format(get_text("Precision"))
 
     # plot original points
     x_data = data[:n, 0]
     y_data = numpy.reciprocal(numpy.sqrt(data[:n, 2]))
-    chart_data.add_scatter(get_text("Original Data"), x_data, y_data, color="black", edgecolors="black")
+    chart_data.caption.original_scatter = chart_data.add_scatter(get_text("Original Data"), x_data, y_data,
+                                                                 color="black", edgecolors="black")
     y_min = numpy.min(y_data)
     y_max = numpy.max(y_data)
 
     # plot inferred points
     x_data = data[n:, 0]
     y_data = numpy.reciprocal(numpy.sqrt(data[n:, 2]))
-    chart_data.add_scatter(get_text("Inferred Data"), x_data, y_data, edgecolors="red", color="none")
+    chart_data.caption.inferred_scatter = chart_data.add_scatter(get_text("Inferred Data"), x_data, y_data,
+                                                                 edgecolors="red", color="none")
 
     # draw original and new mean
-    chart_data.add_line(get_text("Original Mean"), original_mean, y_min, original_mean, y_max, color="silver",
-                        linestyle="dashed", zorder=1)
-    chart_data.add_line(get_text("Inferred Mean"), new_mean, y_min, new_mean, y_max, color="red", linestyle="dashed",
-                        zorder=1)
+    chart_data.caption.original_mean = chart_data.add_line(get_text("Original Mean"), original_mean, y_min,
+                                                           original_mean, y_max, color="silver", linestyle="dashed",
+                                                           zorder=1)
+    chart_data.caption.inferred_mean = chart_data.add_line(get_text("Inferred Mean"), new_mean, y_min, new_mean, y_max,
+                                                           color="red", linestyle="dashed", zorder=1)
 
     figure_canvas = create_figure(chart_data)
     return figure_canvas, chart_data
