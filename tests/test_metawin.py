@@ -15,6 +15,7 @@ import math
 from typing import Tuple
 
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QFrame, QPushButton, QTextEdit
+import matplotlib.colors as mcolors
 
 # note these may be marked by the IDE as unknown modules, but pytest.ini will resolve the errors when tests
 # are actually executed
@@ -1485,3 +1486,41 @@ def test_phylogenetic_glm_simple():
     options.structure = MetaWinAnalysis.PHYLOGENETIC_MA
     output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4, tree=tree)
     print_test_output(output)
+
+
+def test_colors():
+    colors = mcolors.CSS4_COLORS
+    names = list(colors)
+    for n in names:
+        print(n, colors[n])
+
+
+def test_match_color_to_name():
+    colors = mcolors.CSS4_COLORS
+    xcolors = mcolors.XKCD_COLORS
+    c = "#ff7f0e"
+    r, g, b = mcolors.hex2color(c)
+    print(r, g, b)
+    cnames = list(colors)
+    cdist = 10000
+    cmatch = "None"
+    for n in cnames:
+        rc, gc, bc = mcolors.hex2color(colors[n])
+        d = (rc-r)**2 + (gc-g)**2 + (bc-b)**2
+        if d < cdist:
+            cmatch = n
+            cdist = d
+    xnames = list(xcolors)
+    xdist = 10000
+    xmatch = "None"
+    for n in xnames:
+        print(n)
+        rx, gx, bx = mcolors.hex2color(xcolors[n])
+        d = (rx-r)**2 + (gx-g)**2 + (bx-b)**2
+        if d < xdist:
+            xmatch = n
+            xdist = d
+    print(cmatch, math.sqrt(cdist))
+    print(xmatch, math.sqrt(xdist))
+    print(len(cnames), len(xnames))
+

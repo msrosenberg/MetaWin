@@ -8,6 +8,7 @@ from typing import Optional, Tuple, Union
 from matplotlib import patches
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+from matplotlib.colors import XKCD_COLORS, hex2color
 import numpy
 import scipy.stats
 
@@ -38,6 +39,10 @@ MARKER_STYLES = {"point": ".", "circle": "o", "downward triangle": "v", "upward 
                  "upward caret": 6, "downward caret": 7, "left caret": 4, "right caret": 5,
                  "centered upward caret": 10, "centered downward caret": 11, "centered left caret": 8,
                  "centered right caret": 9}
+
+UNFILLED_MARKERS = {"point", "plus", "X", "vertical line", "horizontal line", "tick left", "tick right", "tick up",
+                    "tick down", "upward caret", "downward caret", "left caret", "right caret",
+                    "centered upward caret", "centered downward caret", "centered left caret", "centered right caret"}
 
 
 # ---------- Chart Data Classes ---------- #
@@ -132,6 +137,27 @@ class ScatterData(BaseChartData):
             self.color = self.color_button.color
         self.size = float(self.size_box.text())
         self.marker = MARKER_STYLES[self.marker_box.currentText()]
+
+    def style_text(self) -> str:
+        marker_name = list(MARKER_STYLES.keys())[list(MARKER_STYLES.values()).index(self.marker)]
+        if marker_name.endswith("s"):
+            s = "ses"
+        else:
+            s = "s"
+        if marker_name in UNFILLED_MARKERS:
+            if self.color == "none":
+                return get_text("nothing (marker is invisible)")
+            else:
+                return find_color_name(self.color) + " " + marker_name + s
+        else:
+            if self.color == self.edgecolors:
+                return find_color_name(self.color) + " " + marker_name + s
+            else:
+                if self.color == "none":
+                    return get_text("marker_style_open_text").format(marker_name, s, find_color_name(self.edgecolors))
+                else:
+                    return get_text("marker_style_text").format(find_color_name(self.color), marker_name, s,
+                                                                find_color_name(self.edgecolors))
 
 
 class HistogramData(BaseChartData):
@@ -312,6 +338,9 @@ class LineData(BaseChartData):
         self.linewidth = float(self.linewidth_box.text())
         self.color = self.color_button.color
 
+    def style_text(self) -> str:
+        return self.linestyle + " " + find_color_name(self.color) + " line"
+
 
 class ArcData(BaseChartData):
     """
@@ -400,12 +429,14 @@ class NormalQuantileCaption:
         self.regression_scatter = None
 
     def __str__(self):
-        "Normal Quantile plot following {}. The "
-        "standardized effect size is the effect size divided by the "
-        "square-root of its variance. The solid line represents the "
-        "regression and the dashed lines the 95% prediction envelope."
-
-        return get_text("normal_quantile_caption").format(get_citation("Wang_and_Bushman_1998")) + \
+        regression_text = self.regression.style_text()
+        upper_text = self.upper_limit.style_text()
+        lower_text = self.lower_limit.style_text()
+        if upper_text == lower_text:
+            style_text = get_text("normal_quantile_style1").format(regression_text, upper_text)
+        else:
+            style_text = get_text("normal_quantile_style2").format(regression_text, upper_text, lower_text)
+        return get_text("normal_quantile_caption").format(get_citation("Wang_and_Bushman_1998")) + style_text + \
                create_reference_list(["Wang_and_Bushman_1998"], True)
 
 
@@ -440,19 +471,6 @@ class RadialCaption:
         return get_text("Radial_chart_caption").format(self.e_label)
 
 
-class ForestPlotBaseCaption:
-    def __init__(self):
-        self.e_label = ""
-        self.alpha = 0.05
-        self.bootstrap_n = None
-
-
-class ForestPlotCaption(ForestPlotBaseCaption):
-    def __str__(self):
-        return get_text("Forest plot of individual effect sizes for each study.") + \
-               common_forest_plot_caption(self.e_label, self.alpha, inc_median=False)
-
-
 class RegressionCaption:
     def __init__(self):
         self.e_label = ""
@@ -475,20 +493,76 @@ class TrimAndFillCaption:
         self.inferred_mean = None
 
     def __str__(self):
-        "Funnel plot of {} vs. precision, showing the results of a Trim and "
-        "Fill Analysis ({}). Solid black circles represent the original data; "
-        "open red circles represent inferred \"missing\" data. The dashed line "
-        "represents the mean effect size of the original data, the dotted line "
-        "the mean effect size including the inferred data."
+        original_mean_text = self.original_mean.style_text()
+        inferred_mean_text = self.inferred_mean.style_text()
+        original_marker_text = self.original_scatter.style_text()
+        inferred_marker_text = self.inferred_scatter.style_text()
         new_cites = ["Duval_Tweedie_2000a", "Duval_Tweedie_2000b"]
-        return get_text("trim_fill_caption").format(self.e_label, "Duval and Tweedie 2000a, b") + \
-               create_reference_list(new_cites, True)
+        return get_text("trim_fill_caption").format(self.e_label, "Duval and Tweedie 2000a, b", original_marker_text,
+                                                    inferred_marker_text, original_mean_text,
+                                                    inferred_mean_text) + create_reference_list(new_cites, True)
+
+
+class ForestPlotBaseCaption:
+    def __init__(self):
+        self.e_label = ""
+        self.alpha = 0.05
+        self.bootstrap_n = None
+        self.normal_ci = True
+        self.no_effect = None
+        self.means = None
+        self.medians = None
+        self.boot = None
+        self.bias = None
+
+    def base_forest_plot_caption(self) -> str:
+        """
+        Basic forest plot description
+        """
+        return get_text("forest_plot_common_caption1").format(self.e_label, self.no_effect.style_text())
+
+    def mid_forest_plot_caption(self) -> str:
+        """
+        Middle part of forest plot captions, when no study specific intervals are included
+        """
+        if self.normal_ci:
+            dist_text = get_text("normal_ci_dist")
+        else:
+            dist_text = get_text("t_ci_dist")
+        return get_text("mid_forest_plot_caption").format(self.means.style_text(), 1-self.alpha, dist_text)
+
+    def extra_forest_plot_caption(self, inc_median: bool = True) -> str:
+        """
+        Final part of forest plot captions, to indicate median and bootstrap style markers
+        """
+        text = ""
+        if inc_median:
+            text += get_text("forest_plot_median_caption").format(self.medians.style_text())
+        if self.bootstrap_n is not None:
+            citation = "Adams_et_1997"
+            text += get_text("bootstrap_caption").format(self.bootstrap_n, get_citation(citation),
+                                                         self.boot.style_text(), self.bias.style_text()) + \
+                    create_reference_list([citation], True)
+        return text
+
+
+class ForestPlotCaption(ForestPlotBaseCaption):
+    def __str__(self):
+        return get_text("Forest plot of individual effect sizes for each study.") + \
+               self.base_forest_plot_caption() + \
+               get_text("study_forest_plot_extra").format(self.means.style_text(), 1-self.alpha)
 
 
 class BasicAnalysisCaption(ForestPlotBaseCaption):
     def __str__(self):
+        if self.normal_ci:
+            dist_text = get_text("normal_ci_dist")
+        else:
+            dist_text = get_text("mixed_ci_dist")
         return get_text("Forest plot of individual effect sizes for each study, as well as the overall mean.") + \
-               common_forest_plot_caption(self.e_label, self.alpha, self.bootstrap_n)
+               self.base_forest_plot_caption() + \
+               get_text("basic_analysis_forest_plot_extra").format(self.means.style_text(), 1-self.alpha, dist_text) + \
+               self.extra_forest_plot_caption()
 
 
 class GroupedAnalysisCaption(ForestPlotBaseCaption):
@@ -498,12 +572,13 @@ class GroupedAnalysisCaption(ForestPlotBaseCaption):
 
     def __str__(self):
         return get_text("group_forest_plot").format(self.group_label) + \
-               common_forest_plot_caption(self.e_label, self.alpha, self.bootstrap_n)
+               self.base_forest_plot_caption() + self.mid_forest_plot_caption() + self.extra_forest_plot_caption()
 
 
 class NestedAnalysisCaption(ForestPlotBaseCaption):
     def __str__(self):
-        return get_text("nest_caption") + common_forest_plot_caption(self.e_label, self.alpha, self.bootstrap_n)
+        return get_text("nest_caption") + self.base_forest_plot_caption() + self.mid_forest_plot_caption() + \
+               self.extra_forest_plot_caption()
 
 
 class CumulativeAnalysisCaption(ForestPlotBaseCaption):
@@ -513,30 +588,13 @@ class CumulativeAnalysisCaption(ForestPlotBaseCaption):
 
     def __str__(self):
         return get_text("cumulative_forest_plot").format(self.order_label) + \
-               common_forest_plot_caption(self.e_label, self.alpha, self.bootstrap_n)
+               self.base_forest_plot_caption() + self.mid_forest_plot_caption() + self.extra_forest_plot_caption()
 
 
 class JackknifeAnalysisCaption(ForestPlotBaseCaption):
     def __str__(self):
-        return get_text("jackknife_forest_plot") + common_forest_plot_caption(self.e_label, self.alpha,
-                                                                              self.bootstrap_n)
-
-
-def common_forest_plot_caption(effect_name: str, alpha: float = 0.05, bootstrap_n: Optional[int] = None,
-                               inc_median: bool = True) -> str:
-    # " Effect size measured as {}. The dotted vertical line "
-    # "represents no effect, or a mean of zero. Circles represent "
-    # "mean effect size, with the corresponding line "
-    # "the {:0.0%} confidence interval."
-    #
-    text = get_text("forest_plot_common_caption").format(effect_name, 1 - alpha)
-    if inc_median:
-        text += get_text("forest_plot_median_caption")
-    if bootstrap_n is not None:
-        citation = "Adams_et_1997"
-        text += get_text("bootstrap_caption").format(bootstrap_n, get_citation(citation)) + \
-                create_reference_list([citation], True)
-    return text
+        return get_text("jackknife_forest_plot") + self.base_forest_plot_caption() + self.mid_forest_plot_caption() + \
+               self.extra_forest_plot_caption()
 
 
 # ---------- Main Chart Data Class ---------- #
@@ -753,12 +811,13 @@ def create_figure(chart_data):
 
 
 def chart_forest_plot(analysis_type: str, effect_name, forest_data, alpha: float = 0.05,
-                      bootstrap_n: Optional[int] = None,
-                      extra_name: Optional[str] = None) -> Tuple[FigureCanvasQTAgg, ChartData]:
+                      bootstrap_n: Optional[int] = None, extra_name: Optional[str] = None,
+                      normal_ci: bool = True) -> Tuple[FigureCanvasQTAgg, ChartData]:
     chart_data = ChartData(analysis_type)
     chart_data.caption.e_label = effect_name
     chart_data.caption.alpha = alpha
     chart_data.caption.bootstrap_n = bootstrap_n
+    chart_data.caption.normal_ci = normal_ci
     if analysis_type == "grouped analysis":
         chart_data.caption.group_label = extra_name
     elif analysis_type == "cumulative analysis":
@@ -802,22 +861,24 @@ def chart_forest_plot(analysis_type: str, effect_name, forest_data, alpha: float
             bs_cis.extend([d.lower_bs_ci, d.upper_bs_ci])
             bias_cis.extend([d.lower_bias_ci, d.upper_bias_ci])
 
-    chart_data.add_line(get_text("Line of No Effect"), 0, 0, 0, -(n_effects+1), color="silver", linestyle="dotted",
-                        zorder=1)
+    chart_data.caption.no_effect = chart_data.add_line(get_text("Line of No Effect"), 0, 0, 0, -(n_effects+1),
+                                                       color="silver", linestyle="dotted", zorder=1)
     chart_data.add_ci(get_text("Confidence Intervals"), min_cis, max_cis, y_data, zorder=3)
-    chart_data.add_scatter(get_text("Means"), mean_data, y_data, marker="o", zorder=5,
-                           label="mean and {:0.0%} CI (t-dist)".format(1-alpha))
+    chart_data.caption.means = chart_data.add_scatter(get_text("Means"), mean_data, y_data, marker="o", zorder=5,
+                                                      label="mean and {:0.0%} CI (t-dist)".format(1-alpha))
     if median_data is not None:
-        chart_data.add_scatter(get_text("Medians"), median_data, y_data, marker="x", label="median", zorder=5,
-                               color="#ff7f0e")
+        chart_data.caption.medians = chart_data.add_scatter(get_text("Medians"), median_data, y_data, marker="x",
+                                                            label="median", zorder=5, color="#ff7f0e")
     chart_data.add_labels(get_text("Vertical Axis Tick Labels"), labels, y_data)
 
     if bootstrap:
-        chart_data.add_scatter(get_text("Bootstrap Confidence Limits"), bs_cis, ci_y_data, marker=6, zorder=4,
-                               color="#2ca02c", label="{:0.0%} CI (bootstrap)".format(1-alpha))
+        chart_data.caption.boot = chart_data.add_scatter(get_text("Bootstrap Confidence Limits"), bs_cis, ci_y_data,
+                                                         marker=6, zorder=4, color="#2ca02c",
+                                                         label="{:0.0%} CI (bootstrap)".format(1-alpha))
 
-        chart_data.add_scatter(get_text("Bias-corrected Bootstrap Confidence Limits"), bias_cis, ci_y_data, marker=7,
-                               zorder=4, color="#d62728", label="{:0.0%} CI (bias-corrected bootstrap)".format(1-alpha))
+        chart_data.caption.bias = chart_data.add_scatter(get_text("Bias-corrected Bootstrap Confidence Limits"),
+                                                         bias_cis, ci_y_data, marker=7, zorder=4, color="#d62728",
+                                                         label="{:0.0%} CI (bias-corrected bootstrap)".format(1-alpha))
 
     figure_canvas = create_figure(chart_data)
     return figure_canvas, chart_data
@@ -997,12 +1058,6 @@ def chart_histogram(e_data, w_data, n_bins, e_label,
     else:
         cnts, bins = numpy.histogram(e_data, n_bins, weights=w_data)
         y_label = get_text("Weighted Count")
-    # if weighted:
-    #     cnts, bins = numpy.histogram(e_data, n_bins, weights=w_data)
-    #     y_label = get_text("Weighted Count")
-    # else:
-    #     cnts, bins = numpy.histogram(e_data, n_bins)
-    #     y_label = get_text("Count")
 
     chart_data = ChartData("histogram")
     chart_data.caption.e_label = e_label
@@ -1150,3 +1205,23 @@ def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> Tupl
 
     figure_canvas = create_figure(chart_data)
     return figure_canvas, chart_data
+
+
+def find_color_name(color: str) -> str:
+    """
+    Given a color as a hex string, e.g., #0123A5, find the closest named color from the CSS 4 color name list
+    and return that name
+    """
+    names = list(XKCD_COLORS)
+    dist = 10000
+    match = "None"
+    r, g, b = hex2color(color)
+    for n in names:
+        rx, gx, bx = hex2color(XKCD_COLORS[n])
+        # Squared Euclidean distance in RGB space should be good enough
+        #  Squared is more computationally efficient than non-squared, as we skip calculating the square-root
+        d = (rx-r)**2 + (gx-g)**2 + (bx-b)**2
+        if d < dist:
+            match = n
+            dist = d
+    return match[5:]
