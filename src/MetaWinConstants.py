@@ -13,7 +13,7 @@ mean_data_tuple = namedtuple("mean_data_tuple", ["name", "order", "n", "mean", "
 
 MAJOR_VERSION = 3
 MINOR_VERSION = 0
-PATCH_VERSION = 6
+PATCH_VERSION = 7
 
 # validity check when fetching value from data matrix
 VALUE_NUMBER = 0
@@ -79,6 +79,7 @@ update_icon = resource_path(icon_path + "cloud-filled-download-filled@256px.png"
 save_graph_icon = resource_path(icon_path + "save-filled-picture-filled@256px.png")
 edit_graph_icon = resource_path(icon_path + "picture-edit-filled@256px.png")
 export_graph_data_icon = resource_path(icon_path + "data-export@256px.png")
+analysis_options_icon = resource_path(icon_path + "sum-gear-filled@256px.png")
 language_icon = resource_path(icon_path + "translation@256px.png")
 alpha_icon = resource_path(icon_path + "letter-alpha@256px.png")
 show_toolbar_icon = resource_path(icon_path + "toolbar-position-left-add-filled@256px.png")

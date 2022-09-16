@@ -22,9 +22,9 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Basic Meta-Analysis": "Basic Meta-Analysis",
                       "Between": "Between",
                       "Bootstrap Mean Effect Size(s)": "Bootstrap Mean Effect Size(s)",
-                      "bootstrap_caption": " Upward-pointing triangles mark the confidence interval from a "
-                                           "bootstrap ({:,} iterations) procedure, following {}; downward-pointing "
-                                           "triangles mark the bias-corrected bootstrap interval.",
+                      "bootstrap_caption": " Confidence intervals from a boostrap ({:,} iterations) procedure, "
+                                           "following {}, are indicated by {}; the bias-corrected bootstrap interval "
+                                           "is indicated by {}.",
                       "Bootstrap Confidence Limits": "Bootstrap Confidence Limits",
                       "Bias-corrected Bootstrap Confidence Limits": "Bias-corrected Bootstrap Confidence Limits",
                       "Calculate Effect Sizes": "Calculate Effect Sizes",
@@ -132,11 +132,24 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                           "Forest plot of individual effect sizes for each study.",
                       "Forest plot of individual effect sizes for each study, as well as the overall mean.":
                           "Forest plot of individual effect sizes for each study, as well as the overall mean.",
-                      "forest_plot_common_caption": " Effect size measured as {}. The dotted vertical line "
-                                                    "represents no effect, or a mean of zero. Circles represent "
-                                                    "mean effect size, with the corresponding line "
-                                                    "the {:0.0%} confidence interval.",
-                      "forest_plot_median_caption": " X's represent the median.",
+                      "study_forest_plot_extra": " Study effect sizes are indicated by {}, with the corresponding line "
+                                                 "the {:0.0%} confidence interval based on a Normal distribution.",
+                      "basic_analysis_forest_plot_extra": " Study and mean effect sizes are indicated by {}, with the "
+                                                          "corresponding line the {:0.0%} confidence interval based on "
+                                                          "{}.",
+                      "mid_forest_plot_caption": " Mean effect sizes are indicated by {}, with the corresponding "
+                                                 "line the {:0.0%} confidence interval based on {}.",
+                      "normal_ci_dist": "the Normal distribution",
+                      "t_ci_dist": "Student's t distribution",
+                      "mixed_ci_dist": "Student's t distribution for the mean and the Normal distribution for the "
+                                       "individual studies",
+                      "forest_plot_common_caption1": " Effect size measured as {}. The vertical {} represents no "
+                                                     "effect.",
+                      "forest_plot_common_caption2": " Effect size measured as {}. The vertical {} "
+                                                     "represents no effect. The mean effect size is "
+                                                     "indicated by {}, with the corresponding line the {:0.0%} "
+                                                     "confidence interval.",
+                      "forest_plot_median_caption": " Medians are represented by {}.",
                       "group_forest_plot":
                           "Forest plot of effect sizes for the mean of all studies, as well as subgroups of studies "
                           "designated by {}.",
@@ -196,6 +209,8 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Log Transformed Measure": "Log Transformed Measure",
                       "Lower Prediction Limit": "Lower Prediction Limit",
                       "Markdown": "Markdown",
+                      "marker_style_text": "{} {}{} with a {} border",
+                      "marker_style_open_text": "open {}{} with a {} border",
                       "Mean": "Mean",
                       "Means": "Means",
                       "Means and Standard Deviations": "Means and Standard Deviations",
@@ -225,11 +240,15 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Normal Quantile": "Normal Quantile",
                       "Normal Quantile Plot": "Normal Quantile Plot",
                       "normal_quantile_caption": "Normal Quantile plot following {}. The "
-                                                 "standardized effect size is the efffect size divided by the "
-                                                 "square-root of its variance. The solid line represents the "
-                                                 "regression and the dashed lines the 95% prediction envelope.",
+                                                 "standardized effect size is the effect size divided by the "
+                                                 "square-root of its variance. ",
+                      "normal_quantile_style1": "The {} represents the regression and the {}s the 95% prediction "
+                                                "envelope.",
+                      "normal_quantile_style2": "The {} represents the regression and the {} and {} the upper and "
+                                                "lower limits of the 95% prediction envelope, respectively.",
                       "note_funnel_plot": "Note: A funnel plot is just a scatter plot of a metric (such as a<br/>"
                                           "mean or effect size) vs. it\'s variance or sample size.",
+                      "nothing (marker is invisible)": "nothing (marker is invisible)",
                       "Number of Bins": "Number of Bins",
                       "Number of decimal places": "Number of decimal places",
                       "Number of Decimal Places to Display": "Number of Decimal Places to Display",
@@ -338,9 +357,9 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Trim and Fill Analysis estimated {} missing studies.":
                           "Trim and Fill Analysis estimated {} missing studies.",
                       "trim_fill_caption": "Funnel plot of {} vs. precision, showing the results of a Trim and "
-                                           "Fill Analysis ({}). Solid black circles represent the original data; "
-                                           "open red circles represent inferred \"missing\" data. The dashed line "
-                                           "represents the mean effect size of the original data, the dotted line "
+                                           "Fill Analysis ({}). Original data are represented by {}, inferred "
+                                           "\"missing\" data by {}. The {} "
+                                           "represents the mean effect size of the original data, the {} "
                                            "the mean effect size including the inferred data.",
                       "Two x Two Contingency Table": "Two x Two Contingency Table",
                       "Unable to write to ": "Unable to write to ",

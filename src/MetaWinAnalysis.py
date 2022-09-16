@@ -1798,62 +1798,56 @@ def do_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05
     output, all_citations = options.report_choices()
     output_blocks.extend(output)
     if options.structure == SIMPLE_MA:
-        (output, figure, fig_caption, chart_data, analysis_values,
+        (output, figure, chart_data, analysis_values,
          citations) = MetaWinAnalysisFunctions.simple_meta_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.structure == GROUPED_MA:
-        (output, figure, fig_caption, chart_data, analysis_values,
+        (output, figure, chart_data, analysis_values,
          citations) = MetaWinAnalysisFunctions.grouped_meta_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.structure == CUMULATIVE_MA:
-        output, figure, fig_caption, chart_data = MetaWinAnalysisFunctions.cumulative_meta_analysis(data, options,
-                                                                                                    decimal_places,
-                                                                                                    alpha, norm_ci)
+        output, figure, chart_data = MetaWinAnalysisFunctions.cumulative_meta_analysis(data, options,
+                                                                                       decimal_places, alpha, norm_ci)
         analysis_values = None
         citations = []
     elif options.structure == REGRESSION_MA:
-        (output, figure, fig_caption, chart_data, analysis_values,
+        (output, figure, chart_data, analysis_values,
          citations) = MetaWinAnalysisFunctions.regression_meta_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.structure == COMPLEX_MA:
         output, analysis_values, citations = MetaWinAnalysisFunctions.complex_meta_analysis(data, options,
                                                                                             decimal_places, alpha,
                                                                                             norm_ci)
         figure = None
-        fig_caption = None
         chart_data = None
     elif options.structure == NESTED_MA:
-        (output, figure, fig_caption, chart_data, analysis_values,
+        (output, figure, chart_data, analysis_values,
          citations) = MetaWinAnalysisFunctions.nested_meta_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.structure == TRIM_FILL:
-        (output, figure, fig_caption, chart_data, analysis_values,
+        (output, figure, chart_data, analysis_values,
          citations) = MetaWinAnalysisFunctions.trim_and_fill_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.structure == JACKKNIFE:
-        (output, figure, fig_caption,
-         chart_data, citations) = MetaWinAnalysisFunctions.jackknife_meta_analysis(data, options, decimal_places,
-                                                                                   alpha, norm_ci)
+        (output, figure,  chart_data,
+         citations) = MetaWinAnalysisFunctions.jackknife_meta_analysis(data, options, decimal_places, alpha, norm_ci)
         analysis_values = None
     elif options.structure == PHYLOGENETIC_MA:
         output, citations = MetaWinAnalysisFunctions.phylogenetic_meta_analysis(data, options, tree, decimal_places,
                                                                                 alpha, norm_ci)
         analysis_values = None
         figure = None
-        fig_caption = None
         chart_data = None
     elif options.structure == RANKCOR:
         output, citations = MetaWinAnalysisFunctions.rank_correlation_analysis(data, options, decimal_places)
         figure = None
-        fig_caption = None
         chart_data = None
         analysis_values = None
     else:
         output = []
         analysis_values = None
         figure = None
-        fig_caption = None
         chart_data = None
         citations = []
     all_citations.extend(citations)
     output_blocks.extend(output)
     output_blocks.extend(create_reference_list(all_citations))
-    return output_blocks, figure, fig_caption, chart_data, analysis_values
+    return output_blocks, figure, chart_data, analysis_values
 
 
 def meta_analysis(sender, data, last_effect, last_var, decimal_places: int = 4, alpha: float = 0.05,
@@ -1909,12 +1903,9 @@ def meta_analysis(sender, data, last_effect, last_var, decimal_places: int = 4, 
                 meta_analysis_options.structure = None
 
         if meta_analysis_options.structure is not None:
-            output, figure, fig_caption, chart_data, _ = do_meta_analysis(data, meta_analysis_options, decimal_places,
-                                                                          alpha, tree, norm_ci)
+            output, figure, chart_data, _ = do_meta_analysis(data, meta_analysis_options, decimal_places, alpha, tree,
+                                                             norm_ci)
             sender.last_effect = meta_analysis_options.effect_data
             sender.last_var = meta_analysis_options.effect_vars
-            return output, figure, fig_caption, chart_data
-        else:
-            return None, None, None, None
-    else:
-        return None, None, None, None
+            return output, figure, chart_data
+    return None, None, None

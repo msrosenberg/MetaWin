@@ -13,8 +13,8 @@ import scipy.stats
 
 import MetaWinConstants
 from MetaWinConstants import mean_data_tuple
-from MetaWinUtils import create_output_table, inline_float, interval_to_str, create_reference_list, get_citation, \
-    exponential_label, prob_z_score
+from MetaWinUtils import create_output_table, inline_float, interval_to_str, get_citation, exponential_label, \
+    prob_z_score
 import MetaWinCharts
 from MetaWinLanguage import get_text
 
@@ -525,13 +525,6 @@ def output_filtered_bad(filtered: list, bad_data: list) -> list:
     return output_blocks
 
 
-def caption_bootstrap_text(bs_n: int):
-    """
-    extra figure caption info for forest plots with bootstrap confidence intervals
-    """
-    citation = "Adams_et_1997"
-    return get_text("bootstrap_caption").format(bs_n, get_citation(citation)), [citation]
-
 # ---- I'm not convinced this is correct, which is why I'm removing it for now ---
 # def calc_aic(q: float, n: int, p: int) -> float:
 #     """
@@ -577,7 +570,6 @@ def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     figure = None
-    fig_caption = None
     chart_data = None
     n = len(e_data)
     citations = []
@@ -639,21 +631,15 @@ def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         citations.extend(new_cites)
 
         if options.create_graph:
-            figure, chart_data = MetaWinCharts.chart_forest_plot(effect_sizes.label, forest_data, alpha,
-                                                                 options.bootstrap_mean)
-            fig_caption = get_text("Forest plot of individual effect sizes for each study, as well as the overall "
-                                   "mean.") + MetaWinCharts.caption_forest_plot_text(effect_sizes.label, alpha)
-            if options.bootstrap_mean is not None:
-                new_text, new_cites = caption_bootstrap_text(options.bootstrap_mean)
-                fig_caption += new_text + create_reference_list(new_cites, True)
+            figure, chart_data = MetaWinCharts.chart_forest_plot("basic analysis", effect_sizes.label, forest_data,
+                                                                 alpha, options.bootstrap_mean, normal_ci=norm_ci)
 
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
         qt, df, p, pooled_var, i2 = None, None, None, None, None
         mean_data = None
 
-    return (output_blocks, figure, fig_caption, chart_data, simple_ma_values(mean_data, pooled_var, qt, df, p, i2),
-            citations)
+    return output_blocks, figure, chart_data, simple_ma_values(mean_data, pooled_var, qt, df, p, i2), citations
 
 
 # ---------- grouped meta-analysis ----------
@@ -675,7 +661,6 @@ def check_data_for_group(output_blocks, n, group_cnts, group_label) -> bool:
         output.append(get_text("Please filter problematic data to continue"))
         output_blocks.append(output)
     return all_good
-    # return True
 
 
 def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
@@ -716,7 +701,6 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     figure = None
-    fig_caption = None
     chart_data = None
     n = len(e_data)
     g_cnt = len(group_names)
@@ -863,13 +847,9 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
         citations.extend(new_cites)
 
         if options.create_graph:
-            figure, chart_data = MetaWinCharts.chart_forest_plot(effect_sizes.label, forest_data, alpha,
-                                                                 options.bootstrap_mean)
-            fig_caption = get_text("group_forest_plot").format(groups.label) + \
-                MetaWinCharts.caption_forest_plot_text(effect_sizes.label, alpha)
-            if options.bootstrap_mean is not None:
-                new_text, new_cites = caption_bootstrap_text(options.bootstrap_mean)
-                fig_caption += new_text + create_reference_list(new_cites, True)
+            figure, chart_data = MetaWinCharts.chart_forest_plot("grouped analysis", effect_sizes.label, forest_data,
+                                                                 alpha, options.bootstrap_mean, groups.label,
+                                                                 normal_ci=norm_ci)
 
         global_values = simple_ma_values(global_mean_data, pooled_var, qt, df, pqt, i2)
     else:
@@ -879,7 +859,7 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
         model_het = None
         error_het = None
 
-    return (output_blocks, figure, fig_caption, chart_data,
+    return (output_blocks, figure, chart_data,
             group_ma_values(global_values, group_mean_values, group_het_values, model_het, error_het), citations)
 
 
@@ -907,7 +887,6 @@ def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     figure = None
-    fig_caption = None
     chart_data = None
     n = len(tmp_data)
     if n > 1:
@@ -970,17 +949,14 @@ def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
                              decimal_places, alpha, options.log_transformed))
 
         if options.create_graph:
-            figure, chart_data = MetaWinCharts.chart_forest_plot(effect_sizes.label, cumulative_means, alpha,
-                                                     options.bootstrap_mean)
-            fig_caption = get_text("cumulative_forest_plot").format(order.label) + \
-                MetaWinCharts.caption_forest_plot_text(effect_sizes.label, alpha)
-            if options.bootstrap_mean is not None:
-                new_text, new_cites = caption_bootstrap_text(options.bootstrap_mean)
-                fig_caption += new_text + create_reference_list(new_cites, True)
+            figure, chart_data = MetaWinCharts.chart_forest_plot("cumulative analysis", effect_sizes.label,
+                                                                 cumulative_means, alpha, options.bootstrap_mean,
+                                                                 order.label, normal_ci=norm_ci)
+
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
 
-    return output_blocks, figure, fig_caption, chart_data
+    return output_blocks, figure, chart_data
 
 
 # ---------- simple regression meta-analysis ----------
@@ -1033,7 +1009,6 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     figure = None
-    fig_caption = None
     chart_data = None
     model_het = None
     error_het = None
@@ -1132,8 +1107,6 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
         citations.extend(new_cites)
 
         if options.create_graph:
-            figure, chart_data = MetaWinCharts.chart_regression(options.independent_variable.label, effect_sizes.label,
-                                                                x_data, e_data, b1_slope, b0_intercept)
             if options.random_effects:
                 ref_list = "{}, {}, and {}".format(get_citation("Hedges_Olkin_1985"),
                                                    get_citation("Greenland_1987"),
@@ -1146,16 +1119,14 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
                                               get_citation("Greenland_1987"))
                 model = get_text("fixed effects")
                 fig_citations = ["Hedges_Olkin_1985", "Greenland_1987"]
-
-            fig_caption = get_text("regression_caption").format(effect_sizes.label, options.independent_variable.label,
-                                                                model, ref_list) + \
-                create_reference_list(fig_citations, True)
+            figure, chart_data = MetaWinCharts.chart_regression(options.independent_variable.label, effect_sizes.label,
+                                                                x_data, e_data, b1_slope, b0_intercept, model,
+                                                                ref_list, fig_citations)
 
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
 
-    return (output_blocks, figure, fig_caption, chart_data,
-            reg_ma_values(global_values, model_het, error_het, predictors), citations)
+    return output_blocks, figure, chart_data, reg_ma_values(global_values, model_het, error_het, predictors), citations
 
 
 # ---------- complex (glm) meta-analysis ----------
@@ -1580,7 +1551,6 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
     n = len(e_data)
 
     figure = None
-    fig_caption = None
     chart_data = None
     group_het_values = None
     group_mean_values = None
@@ -1702,16 +1672,11 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         citations.extend(new_cites)
 
         if options.create_graph:
-            figure, chart_data = MetaWinCharts.chart_forest_plot(effect_sizes.label, forest_data, alpha,
-                                                     options.bootstrap_mean)
-            fig_caption = get_text("nest_caption") + MetaWinCharts.caption_forest_plot_text(effect_sizes.label, alpha)
-            if options.bootstrap_mean is not None:
-                new_text, new_cites = caption_bootstrap_text(options.bootstrap_mean)
-                fig_caption += new_text + create_reference_list(new_cites, True)
+            figure, chart_data = MetaWinCharts.chart_forest_plot("nested analysis", effect_sizes.label, forest_data,
+                                                                 alpha, options.bootstrap_mean, normal_ci=norm_ci)
 
-    return (output_blocks, figure, fig_caption, chart_data,
-            group_ma_values(global_values, group_mean_values, group_het_values, model_het_values, error_het_values),
-            citations)
+    return (output_blocks, figure, chart_data, group_ma_values(global_values, group_mean_values, group_het_values,
+                                                               model_het_values, error_het_values), citations)
 
 
 # ---------- trim-and-fill analysis ----------
@@ -1745,7 +1710,6 @@ def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float 
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     figure = None
-    fig_caption = None
     chart_data = None
     n = len(e_data)
     citations = []
@@ -1867,16 +1831,13 @@ def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float 
                              decimal_places, alpha, options.log_transformed))
 
         if options.create_graph:
-            figure, chart_data = MetaWinCharts.chart_trim_fill_plot(effect_sizes.label, tmp_data, n, original_mean,
+            figure, chart_data = MetaWinCharts.chart_trim_fill_plot(effect_sizes.label, tmp_data, n,  original_mean,
                                                                     mean_e)
-            fig_caption = get_text("trim_fill_caption").format(effect_sizes.label, "Duval and Tweedie 2000a, b")
-            new_cites = ["Duval_Tweedie_2000a", "Duval_Tweedie_2000b"]
-            fig_caption += create_reference_list(new_cites, True)
 
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
 
-    return output_blocks, figure, fig_caption, chart_data, None, citations
+    return output_blocks, figure, chart_data, None, citations
 
 
 # ---------- phylogenetic meta-analysis ----------
@@ -2191,7 +2152,6 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     figure = None
-    fig_caption = None
     chart_data = None
     n = len(e_data)
     citations = []
@@ -2286,17 +2246,12 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
         citations.extend(new_cites)
 
         if options.create_graph:
-            figure, chart_data = MetaWinCharts.chart_forest_plot(effect_sizes.label, forest_data, alpha,
-                                                                 options.bootstrap_mean)
-            fig_caption = get_text("jackknife_forest_plot") + \
-                MetaWinCharts.caption_forest_plot_text(effect_sizes.label, alpha)
-            if options.bootstrap_mean is not None:
-                new_text, new_cites = caption_bootstrap_text(options.bootstrap_mean)
-                fig_caption += new_text + create_reference_list(new_cites, True)
+            figure, chart_data = MetaWinCharts.chart_forest_plot("jackknife analysis", effect_sizes.label, forest_data,
+                                                                 alpha, options.bootstrap_mean, normal_ci=norm_ci)
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
 
-    return output_blocks, figure, fig_caption, chart_data, citations
+    return output_blocks, figure, chart_data, citations
 
 
 # ---------- rank correlation analysis ----------

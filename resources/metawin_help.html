@@ -55,6 +55,7 @@
                   <li><a href="#graph_tab">Graph Tab</a>
                     <ul>
                       <li><a href="#graph_edit">Editing Figures</a></li>
+                      <li><a href="#captions_note">A Note on Captions</a></li>
                     </ul>
                   </li>
                   <li><a href="#phylogeny_tab">Phylogeny Tab</a></li>
@@ -423,6 +424,25 @@
                 Checking this box will eliminate the primary color of the marker and only use the edge color, assuming
                 the chosen marker is a filled marker. Unfilled markers will turn invisible if the no fill option is
                 checked.
+            </p>
+            <h3 id="captions_note">A Note on Captions</h3>
+            <p>
+                <span class="metawin">MetaWin</span> will autogenerate captions for each figure it creates, including
+                references in some cases. As style elements of figures can be user edited, this creates a bit of a
+                challenge for captioning, particularly as it relates to specifying color. Computers can
+                generate over 16.7 million unique colors, most of which obviously do not have unique names.
+                Although exact, specifying colors by RGB or hex number in captions would not be particularly
+                useful. Therefore, whenever a caption includes a reference to a color, a color name is chosen by
+                matching the specific color to the closest named color from a set of approximately 1,000
+                named colors based on a <a href="https://blog.xkcd.com/2010/05/03/color-survey-results/">survey done at
+                XKCD</a>. This set was chosen primarily because of it's size; other standard color names,
+                <em>e.g.,</em> CSS4, only include names for fewer than 150 colors. With that many crowd-coursed color
+                names, many me be a bit odd, so simply be warned if strange color labels appear.
+            </p>
+            <p>
+                Currently only line and markers description appear in captions. Line descriptions include only color
+                and style (solid, dahsed, etc.), while markers include color and shape (two colors if the primary
+                and border colors are different). Properties such as size and thickness are not included in captions.
             </p>
 
           <h2 id="phylogeny_tab">Phylogeny Tab</h2>
@@ -2487,7 +2507,7 @@ ratio = 2.8047
             <blockquote class="output-example">
                 <p>
                     Normal Quantile plot following Wang and Bushman (1998). The standardized effect size is the
-                    efffect size divided by the square-root of its variance. The solid line represents the regression
+                    effect size divided by the square-root of its variance. The solid line represents the regression
                     and the dashed lines the 95% prediction envelope.
             </p>
                 <p>
