@@ -95,7 +95,8 @@ def create_output_table(output_text: list, table_data: list, col_headers: list, 
     cols = [format(h, "^{}".format(max_width[i])) for i, h in enumerate(col_headers)]
     header = col_spacer.join(cols)
     output_text.append(header)
-    output_text.append("-"*(sum(max_width) + (len(cols)-1)*sbc))
+    header_line_width = sum(max_width) + (len(cols)-1)*sbc
+    output_text.append("-"*header_line_width)
 
     # create table data template
     cols = []
@@ -126,7 +127,7 @@ def create_output_table(output_text: list, table_data: list, col_headers: list, 
             output_text.append(template.format(*row))
         if line_after is not None:
             if r in line_after:
-                output_text.append("-"*len(header))
+                output_text.append("-"*header_line_width)
 
     # add format strings
     output_text[0] = "<code><pre>" + output_text[0]
