@@ -375,15 +375,24 @@ def calc_i2(qt, n, alpha: float = 0.05):
 
 # --- common output ---
 def mean_effects_table(effect_label, mean_effect_data, bootstrap_mean, decimal_places: int = 4, alpha: float = 0.05,
-                       log_transformed: bool = False) -> list:
+                       log_transformed: bool = False, inc_median: bool = True) -> list:
     """
     create a table of mean effect sizes and their confidence intervals
 
     if log transformed, add rows with the exponentiated (unlogged) results as well
     """
     output = []
-    col_headers = ["", "n", get_text("Mean"), get_text("Median"), "{:0.0%} CI".format(1 - alpha)]
-    col_formats = ["", "d", "f", "f", ""]
+    # col_headers = ["", "n", get_text("Mean"), get_text("Median"), "{:0.0%} CI".format(1 - alpha)]
+    # col_formats = ["", "d", "f", "f", ""]
+
+    col_headers = ["", "n", get_text("Mean")]
+    col_formats = ["", "d", "f"]
+    if inc_median:
+        col_headers.append(get_text("Median"))
+        col_formats.append("f")
+    col_headers.append("{:0.0%} CI".format(1 - alpha))
+    col_formats.append("")
+
     if bootstrap_mean is not None:
         col_headers.extend(["Bootstrap CI", "Bias-corrected CI"])
         col_formats.extend(["", ""])
@@ -394,7 +403,11 @@ def mean_effects_table(effect_label, mean_effect_data, bootstrap_mean, decimal_p
             row_name = data.name + " " + effect_label
         else:
             row_name = data.name
-        row_data = [row_name, data.n, data.mean, data.median, interval_str]
+        # row_data = [row_name, data.n, data.mean, data.median, interval_str]
+        row_data = [row_name, data.n, data.mean]
+        if inc_median:
+            row_data.append(data.median)
+        row_data.append(interval_str)
         if bootstrap_mean is not None:
             row_data.append(interval_to_str(data.lower_bs_ci, data.upper_bs_ci, decimal_places))
             row_data.append(interval_to_str(data.lower_bias_ci, data.upper_bias_ci, decimal_places))
@@ -403,12 +416,19 @@ def mean_effects_table(effect_label, mean_effect_data, bootstrap_mean, decimal_p
         line_after = [len(mean_effect_data)-1]
         for data in mean_effect_data:
             tmp_mean = math.exp(data.mean)
-            tmp_median = math.exp(data.median)
+            if inc_median:
+                tmp_median = math.exp(data.median)
+            else:
+                tmp_median = None
             tmp_lower = math.exp(data.lower_ci)
             tmp_upper = math.exp(data.upper_ci)
             tmp_interval = interval_to_str(tmp_lower, tmp_upper, decimal_places)
-            row_data = [str(data.name + " " + format(exponential_label(effect_label))).strip(), data.n, tmp_mean,
-                        tmp_median, tmp_interval]
+            # row_data = [str(data.name + " " + format(exponential_label(effect_label))).strip(), data.n, tmp_mean,
+            #             tmp_median, tmp_interval]
+            row_data = [str(data.name + " " + format(exponential_label(effect_label))).strip(), data.n, tmp_mean]
+            if inc_median:
+                row_data.append(tmp_median)
+            row_data.append(tmp_interval)
             if bootstrap_mean is not None:
                 tmp_bs_lower = math.exp(data.lower_bs_ci)
                 tmp_bs_upper = math.exp(data.upper_bs_ci)
@@ -485,7 +505,8 @@ def i2_table(i2_data, decimal_places: int = 4, alpha: float = 0.05) -> list:
 
 
 def create_global_output(output_blocks: list, effect_label: str, mean_data, het_data, pooled_var, i2_data,
-                         bootstrap_mean, decimal_places: int = 4,  alpha: float = 0.05, log_transformed: bool = False):
+                         bootstrap_mean, decimal_places: int = 4,  alpha: float = 0.05, log_transformed: bool = False,
+                         inc_median: bool = True):
     """
     create output for general global calculations (e.g., grand mean, Qtotal)
     """
@@ -496,7 +517,7 @@ def create_global_output(output_blocks: list, effect_label: str, mean_data, het_
 
     output_blocks.append(["<h4>Mean Effect Size</h4>"])
     output_blocks.append(mean_effects_table(effect_label, [mean_data], bootstrap_mean, decimal_places, alpha,
-                                            log_transformed))
+                                            log_transformed, inc_median=inc_median))
 
     sqrt_pooled = math.sqrt(pooled_var)
     ratio = sqrt_pooled / mean_data.avg_var
@@ -1972,16 +1993,6 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
             v_matrix[i, j] = p_matrix[i, j]*math.sqrt(v_data[i])*math.sqrt(v_data[j])
             v_matrix[j, i] = v_matrix[i, j]
     w_matrix = numpy.linalg.inv(v_matrix)
-    # w_matrix = numpy.diag(w_data)  # convert w to n x n matrix with w on the diagonal
-    # # add phylogenetic covariances to w_matrix
-    # for i in range(n):
-    #     for j in range(i):
-    #         if p_matrix[i, j] == 0:
-    #             w_matrix[i, j] = 0
-    #         else:
-    #             # w_matrix[i, j] = 1/(p_matrix[i, j]*math.sqrt(v_data[i])*math.sqrt(v_data[j]))
-    #             w_matrix[i, j] = p_matrix[i, j]*math.sqrt(w_data[i])*math.sqrt(w_data[j])
-    #         w_matrix[j, i] = w_matrix[i, j]
 
     if len(missing_from_tree) > 0:
         print(missing_from_tree)
@@ -2008,13 +2019,7 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
             output_blocks.append([get_text("Estimate of pooled variance") + ": " +
                                   format(pooled_var, inline_float(decimal_places))])
             vs_data = v_data + pooled_var
-            ws_data = numpy.reciprocal(v_data + pooled_var)
-            # w_matrix = numpy.diag(ws_data)
-            # # add phylogenetic covariances to w_matrix
-            # for i in range(n):
-            #     for j in range(i):
-            #         w_matrix[i, j] = 1 / (p_matrix[i, j] * math.sqrt(v_data[i]) * math.sqrt(v_data[j]))
-            #         w_matrix[j, i] = w_matrix[i, j]
+            # ws_data = numpy.reciprocal(v_data + pooled_var)
             v_matrix = numpy.diag(vs_data)  # convert w to n x n matrix with w on the diagonal
             # add phylogenetic covariances to v_matrix
             for i in range(n):
@@ -2024,9 +2029,9 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
             w_matrix = numpy.linalg.inv(v_matrix)
 
             qm, qe, beta, sigma_b = calculate_glm(e_data, x_data, w_matrix)
-        else:
-            ws_data = w_data
-        median_e = median_effect(e_data, ws_data)
+        # else:
+        #     ws_data = w_data
+        # median_e = median_effect(e_data, ws_data)
 
         qt = qm + qe
         df = n-1
@@ -2090,30 +2095,30 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
         output_blocks.append(predictor_table(predictor_table_data, decimal_places))
 
         global_het_data = heterogeneity_test_tuple(get_text("Total"), qt, df, pqt, "")
-        # if has_model:
-        #     output_blocks.append(["<h4>{}</h4>".format(get_text("Heterogeneity"))])
-        #     model_het = heterogeneity_test_tuple(get_text("Model"), qm, dfm, pqm, p_random_str)
-        #     error_het = heterogeneity_test_tuple(get_text("Error"), qe, dfe, pqe, "")
-        #     model_table = [model_het, error_het, global_het_data]
-        #     output_blocks.append(heterogeneity_table(model_table, decimal_places, total_line=True,
-        #                                              randomization=options.randomize_model))
-        # else:
-        #     """ need to pull the values from already calculated model """
-        #     mean_e = beta[0]
-        #     var_e = sigma_b[0, 0]
-        #     mean_v = numpy.sum(v_data) / n
-        #     lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-        #     mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, None, var_e, mean_v, lower_ci, upper_ci,
-        #                                 0, 0, 0, 0)
-        #
-        #     i2, i2_lower, i2_upper = calc_i2(qt, n, alpha)
-        #     i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
-        #
-        #     output_blocks.append(["<h3>{}</h3>".format(get_text("Global Results"))])
-        #     new_cites = create_global_output(output_blocks, effect_sizes.label, mean_data, global_het_data, pooled_var,
-        #                                      i2_data, options.bootstrap_mean, decimal_places, alpha,
-        #                                      options.log_transformed)
-        #     citations.extend(new_cites)
+        if has_model:
+            output_blocks.append(["<h4>{}</h4>".format(get_text("Heterogeneity"))])
+            model_het = heterogeneity_test_tuple(get_text("Model"), qm, dfm, pqm, p_random_str)
+            error_het = heterogeneity_test_tuple(get_text("Error"), qe, dfe, pqe, "")
+            model_table = [model_het, error_het, global_het_data]
+            output_blocks.append(heterogeneity_table(model_table, decimal_places, total_line=True,
+                                                     randomization=options.randomize_model))
+        else:
+            """ need to pull the values from already calculated model """
+            mean_e = beta[0]
+            var_e = sigma_b[0, 0]
+            mean_v = numpy.sum(v_data) / n
+            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, None, var_e, mean_v, lower_ci, upper_ci,
+                                        0, 0, 0, 0)
+
+            i2, i2_lower, i2_upper = calc_i2(qt, n, alpha)
+            i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
+
+            output_blocks.append(["<h3>{}</h3>".format(get_text("Global Results"))])
+            new_cites = create_global_output(output_blocks, effect_sizes.label, mean_data, global_het_data, pooled_var,
+                                             i2_data, options.bootstrap_mean, decimal_places, alpha,
+                                             options.log_transformed, inc_median=False)
+            citations.extend(new_cites)
 
     return output_blocks, citations
 
