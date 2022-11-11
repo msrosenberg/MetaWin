@@ -897,7 +897,7 @@ def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
         if row.not_filtered():
             e = data.check_value(r, effect_sizes.position(), value_type=MetaWinConstants.VALUE_NUMBER)
             v = data.check_value(r, variances.position(), value_type=MetaWinConstants.VALUE_NUMBER)
-            g = data.check_value(r, effect_sizes.position(), value_type=MetaWinConstants.VALUE_ANY)
+            g = data.check_value(r, order.position(), value_type=MetaWinConstants.VALUE_ANY)
             if (e is not None) and (v is not None) and (v > 0) and (g is not None):
                 tmp_data.append([g, e, v])
             else:
@@ -1978,11 +1978,11 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
                     row.append(col[r])
 
     e_data = numpy.array(e_data)
-    w_data = numpy.array(w_data)
+    # w_data = numpy.array(w_data)
     n = len(e_data)
     v_data = numpy.array(v_data)
     x_data = numpy.array(x_data)
-    boot_data = numpy.array(boot_data)
+    # boot_data = numpy.array(boot_data)
 
     p_matrix = phylogenetic_correlation(tip_names, tree)
 
@@ -2006,10 +2006,10 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
 
 
 
-    model_het = None
-    error_het = None
-    predictor_table_data = None
-    global_values = None
+    # model_het = None
+    # error_het = None
+    # predictor_table_data = None
+    # global_values = None
     citations = []
     if check_data_for_glm(output_blocks, n, tmp_x_data, [c.label for c in categorical_vars]):
         output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])

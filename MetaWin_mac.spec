@@ -136,7 +136,7 @@ exe = EXE(
 	icon="resources/images/metawin3icon_mac.icns",
     disable_windowed_traceback=False,
     argv_emulation=False,
-    target_arch=None,
+    target_arch=universal2,
     codesign_identity=None,
     entitlements_file=None,
 )
