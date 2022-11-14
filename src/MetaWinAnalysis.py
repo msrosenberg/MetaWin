@@ -1786,7 +1786,7 @@ def add_resampling_options_to_dialog(sender, test_model: bool = False):
 
 
 def do_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, tree: Optional = None,
-                     norm_ci: bool = True):
+                     norm_ci: bool = True, sender=None):
     """
     primary function controlling the execution of an analysis
 
@@ -1799,42 +1799,48 @@ def do_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05
     output_blocks.extend(output)
     if options.structure == SIMPLE_MA:
         (output, figure, chart_data, analysis_values,
-         citations) = MetaWinAnalysisFunctions.simple_meta_analysis(data, options, decimal_places, alpha, norm_ci)
+         citations) = MetaWinAnalysisFunctions.simple_meta_analysis(data, options, decimal_places, alpha, norm_ci,
+                                                                    sender=sender)
     elif options.structure == GROUPED_MA:
         (output, figure, chart_data, analysis_values,
-         citations) = MetaWinAnalysisFunctions.grouped_meta_analysis(data, options, decimal_places, alpha, norm_ci)
+         citations) = MetaWinAnalysisFunctions.grouped_meta_analysis(data, options, decimal_places, alpha, norm_ci,
+                                                                     sender=sender)
     elif options.structure == CUMULATIVE_MA:
-        output, figure, chart_data = MetaWinAnalysisFunctions.cumulative_meta_analysis(data, options,
-                                                                                       decimal_places, alpha, norm_ci)
+        output, figure, chart_data = MetaWinAnalysisFunctions.cumulative_meta_analysis(data, options, decimal_places,
+                                                                                       alpha, norm_ci, sender=sender)
         analysis_values = None
         citations = []
     elif options.structure == REGRESSION_MA:
         (output, figure, chart_data, analysis_values,
-         citations) = MetaWinAnalysisFunctions.regression_meta_analysis(data, options, decimal_places, alpha, norm_ci)
+         citations) = MetaWinAnalysisFunctions.regression_meta_analysis(data, options, decimal_places, alpha, norm_ci,
+                                                                        sender=sender)
     elif options.structure == COMPLEX_MA:
         output, analysis_values, citations = MetaWinAnalysisFunctions.complex_meta_analysis(data, options,
                                                                                             decimal_places, alpha,
-                                                                                            norm_ci)
+                                                                                            norm_ci, sender=sender)
         figure = None
         chart_data = None
     elif options.structure == NESTED_MA:
         (output, figure, chart_data, analysis_values,
-         citations) = MetaWinAnalysisFunctions.nested_meta_analysis(data, options, decimal_places, alpha, norm_ci)
+         citations) = MetaWinAnalysisFunctions.nested_meta_analysis(data, options, decimal_places, alpha, norm_ci,
+                                                                    sender=sender)
     elif options.structure == TRIM_FILL:
         (output, figure, chart_data, analysis_values,
          citations) = MetaWinAnalysisFunctions.trim_and_fill_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.structure == JACKKNIFE:
         (output, figure,  chart_data,
-         citations) = MetaWinAnalysisFunctions.jackknife_meta_analysis(data, options, decimal_places, alpha, norm_ci)
+         citations) = MetaWinAnalysisFunctions.jackknife_meta_analysis(data, options, decimal_places, alpha, norm_ci,
+                                                                       sender=sender)
         analysis_values = None
     elif options.structure == PHYLOGENETIC_MA:
         output, citations = MetaWinAnalysisFunctions.phylogenetic_meta_analysis(data, options, tree, decimal_places,
-                                                                                alpha, norm_ci)
+                                                                                alpha, norm_ci, sender=sender)
         analysis_values = None
         figure = None
         chart_data = None
     elif options.structure == RANKCOR:
-        output, citations = MetaWinAnalysisFunctions.rank_correlation_analysis(data, options, decimal_places)
+        output, citations = MetaWinAnalysisFunctions.rank_correlation_analysis(data, options, decimal_places,
+                                                                               sender=sender)
         figure = None
         chart_data = None
         analysis_values = None
@@ -1904,7 +1910,7 @@ def meta_analysis(sender, data, last_effect, last_var, decimal_places: int = 4, 
 
         if meta_analysis_options.structure is not None:
             output, figure, chart_data, _ = do_meta_analysis(data, meta_analysis_options, decimal_places, alpha, tree,
-                                                             norm_ci)
+                                                             norm_ci, sender=sender)
             sender.last_effect = meta_analysis_options.effect_data
             sender.last_var = meta_analysis_options.effect_vars
             return output, figure, chart_data

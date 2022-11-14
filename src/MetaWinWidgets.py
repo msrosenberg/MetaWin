@@ -5,7 +5,7 @@ Module containing visual widgets which may be used across multiple dialogs
 from typing import Optional
 
 from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QHBoxLayout, QListWidget, QAbstractItemView, QListWidgetItem, \
-    QLabel, QComboBox, QCheckBox, QGroupBox, QGridLayout, QLineEdit, QColorDialog
+    QLabel, QComboBox, QCheckBox, QGroupBox, QGridLayout, QLineEdit, QColorDialog, QProgressDialog
 from PyQt6.QtGui import QIcon, QColor, QDoubleValidator
 from PyQt6 import QtCore
 
@@ -250,3 +250,15 @@ def add_chart_line_edits(color_text, color, width_text, width, style_text, style
     width_label, width_box = add_chart_line_width(width_text, width)
     style_label, style_box = add_chart_line_style(style_text, style, line_styles)
     return color_label, color_button, width_label, width_box, style_label, style_box
+
+
+def progress_bar(sender, title: str, text: str, max_val: int):
+    pb = QProgressDialog(sender)
+    pb.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
+    pb.setWindowTitle(title)
+    pb.setLabelText(text)
+    pb.setMinimum(0)
+    pb.setMaximum(max_val)
+    pb.setCancelButton(None)
+    pb.setValue(0)
+    return pb
