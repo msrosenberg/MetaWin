@@ -16,6 +16,7 @@ from MetaWinConstants import mean_data_tuple
 from MetaWinUtils import create_output_table, inline_float, interval_to_str, get_citation, exponential_label, \
     prob_z_score
 import MetaWinCharts
+import MetaWinWidgets
 from MetaWinLanguage import get_text
 
 
@@ -299,13 +300,20 @@ def median_effect(e: numpy.array, w: numpy.array):
         return tmp_data[i, 0]
 
 
-def bootstrap_means(bootstrap_n, boot_data, obs_mean, pooled_var, random_effects: bool = False, alpha: float = 0.05):
+def bootstrap_means(bootstrap_n, boot_data, obs_mean, pooled_var, random_effects: bool = False, alpha: float = 0.05,
+                    progress_bar=None):
     """
     conduct a bootstrap test to create confidence intervals around mean effect size
     """
     if bootstrap_n is not None:
         rng = numpy.random.default_rng()
         all_means = [obs_mean]
+
+        # if sender is not None:
+        #     progress = MetaWinWidgets.progress_bar(sender, "Resampling Analysis", "Bootstrap Progress", bootstrap_n)
+        # else:
+        #     progress = None
+
         # f = 0.5  # count the observation as half less than itself
         f = 0
         for i in range(bootstrap_n):
@@ -332,6 +340,8 @@ def bootstrap_means(bootstrap_n, boot_data, obs_mean, pooled_var, random_effects
             # elif tmp_mean_e == mean_e:
             #     f += 0.5
             all_means.append(tmp_mean)
+            if progress_bar is not None:
+                progress_bar.setValue(progress_bar.value() + 1)
         all_means.sort()
         lower_index = round((bootstrap_n + 1) * alpha / 2)
         upper_index = round(bootstrap_n - (bootstrap_n + 1) * alpha / 2)
@@ -558,7 +568,8 @@ def output_filtered_bad(filtered: list, bad_data: list) -> list:
 
 
 # ---------- basic meta-analysis ----------
-def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True,
+                         sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -616,9 +627,16 @@ def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         else:
             lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
 
+        if (options.bootstrap_mean is not None) and (sender is not None):
+            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                       get_text("Conducting Bootstrap Analysis"),
+                                                       options.bootstrap_mean)
+        else:
+            progress_bar = None
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
-                                                                                 options.random_effects, alpha)
+                                                                                 options.random_effects, alpha,
+                                                                                 progress_bar=progress_bar)
 
         plot_order = 0
         mean_data = mean_data_tuple(get_text("Mean"), plot_order, n, mean_e, median_e, var_e, mean_v,
@@ -684,7 +702,8 @@ def check_data_for_group(output_blocks, n, group_cnts, group_label) -> bool:
     return all_good
 
 
-def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True,
+                          sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -757,6 +776,19 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
         qe = 0
         chart_order = 2
         group_i2_values = []
+
+        if ((options.bootstrap_mean is not None) or (options.randomize_model is not None)) and (sender is not None):
+            if options.randomize_model is not None:
+                total_steps = options.randomize_model
+            else:
+                total_steps = 0
+            if options.bootstrap_mean is not None:
+                total_steps += (g_cnt + 1)*options.bootstrap_mean
+            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                       get_text("Conducting Bootstrap Analysis"), total_steps)
+        else:
+            progress_bar = None
+
         for group in group_names:
             group_mask = [g == group for g in group_data]
             group_e = e_data[group_mask]
@@ -777,7 +809,7 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             (group_lower_bs, group_upper_bs,
              group_lower_bias, group_upper_bias) = bootstrap_means(options.bootstrap_mean, group_boot,
                                                                    group_mean, pooled_var, options.random_effects,
-                                                                   alpha)
+                                                                   alpha, progress_bar=progress_bar)
             group_het_values.append(heterogeneity_test_tuple(group + " (within)", group_qw, group_df, group_p, ""))
             group_i2, group_i2_lower, group_i2_upper = calc_i2(group_qw, group_n, alpha)
 
@@ -795,7 +827,8 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
-                                                                                 options.random_effects, alpha)
+                                                                                 options.random_effects, alpha,
+                                                                                 progress_bar=progress_bar)
 
         global_mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, median_e, var_e, mean_v, lower_ci,
                                            upper_ci, lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
@@ -823,6 +856,8 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
             cnt = 1
             rng = numpy.random.default_rng()
+            if progress_bar is not None:
+                progress_bar.setLabelText(get_text("Conducting Randomization Analysis"))
             for rep in range(nreps):
                 tmp_qe = 0
                 # rand_group_data = rng.permutation(group_data)
@@ -836,6 +871,8 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
                 tmp_qmodel = qt - tmp_qe
                 if tmp_qmodel >= qm:
                     cnt += 1
+                if progress_bar is not None:
+                    progress_bar.setValue(progress_bar.value() + 1)
             p_random = cnt / (nreps + 1)
             p_random_str = format(p_random, inline_float(rand_p_dec))
         else:
@@ -885,7 +922,8 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
 
 
 # ---------- cumulative meta-analysis ----------
-def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True,
+                             sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -930,6 +968,13 @@ def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
         cumulative_means = []
         cumulative_het = []
 
+        if (options.bootstrap_mean is not None) and (sender is not None):
+            total_steps = (n - 1)*options.bootstrap_mean
+            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                       get_text("Conducting Bootstrap Analysis"), total_steps)
+        else:
+            progress_bar = None
+
         chart_order = 0
         for ns in range(2, n+1):
             ns_label = get_text("{} studies").format(ns)
@@ -952,7 +997,8 @@ def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
                 lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
             lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, tmp_boot,
                                                                                      mean_e, pooled_var,
-                                                                                     options.random_effects, alpha)
+                                                                                     options.random_effects, alpha,
+                                                                                     progress_bar=progress_bar)
             mean_data = mean_data_tuple(ns_label, chart_order, ns, mean_e, median_e, var_e, mean_v, lower_ci, upper_ci,
                                         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
             cumulative_means.append(mean_data)
@@ -994,7 +1040,8 @@ def calculate_regression_ma_values(e_data, w_data, x_data, sum_w, sum_we, qt):
     return qm, qe, b1_slope, b0_intercept, var_b1, var_b0, sum_wx, sum_wx2
 
 
-def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True,
+                             sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -1057,6 +1104,19 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
             sum_ws = sum_w
             sum_wse = sum_we
 
+        if ((options.bootstrap_mean is not None) or (options.randomize_model is not None)) and (sender is not None):
+            if options.randomize_model is not None:
+                total_steps = options.randomize_model
+            else:
+                total_steps = 0
+            if options.bootstrap_mean is not None:
+                total_steps += options.bootstrap_mean
+            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                       get_text("Conducting Bootstrap Analysis"),
+                                                       total_steps)
+        else:
+            progress_bar = None
+
         median_e = median_effect(e_data, ws_data)
         mean_v = numpy.sum(v_data) / n
         if norm_ci:
@@ -1065,7 +1125,8 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
             lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
-                                                                                 options.random_effects, alpha)
+                                                                                 options.random_effects, alpha,
+                                                                                 progress_bar=progress_bar)
 
         mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, median_e, var_e, mean_v, lower_ci, upper_ci,
                                     lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
@@ -1085,6 +1146,8 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
 
         # randomization test
         if options.randomize_model:
+            if progress_bar is not None:
+                progress_bar.setLabelText(get_text("Conducting Randomization Analysis"))
             nreps = options.randomize_model
             # decimal places to use for randomization-based p-value
             rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
@@ -1096,6 +1159,8 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
                  _, _, _, _) = calculate_regression_ma_values(rand_e_data, ws_data, x_data, sum_ws, sum_wse, qt)
                 if rand_qm >= qm:
                     cnt_q += 1
+                if progress_bar is not None:
+                    progress_bar.setValue(progress_bar.value() + 1)
             p_random = cnt_q / (nreps + 1)
             p_random_str = format(p_random, inline_float(rand_p_dec))
         else:
@@ -1185,7 +1250,8 @@ def calculate_glm(e: numpy.array, x: numpy.array, w: numpy.array):
     return qm, qe, beta, xtwxinv
 
 
-def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True,
+                          sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -1306,6 +1372,19 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
         pqe = 1 - scipy.stats.chi2.cdf(qe, df=dfe)
         pqm = 1 - scipy.stats.chi2.cdf(qm, df=dfm)
 
+        if ((options.bootstrap_mean is not None) or (options.randomize_model is not None)) and (sender is not None):
+            if options.randomize_model is not None:
+                total_steps = options.randomize_model
+            else:
+                total_steps = 0
+            if options.bootstrap_mean is not None:
+                total_steps += options.bootstrap_mean
+            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                       get_text("Conducting Bootstrap Analysis"),
+                                                       total_steps)
+        else:
+            progress_bar = None
+
         # basic global calcs
         mean_e, var_e, _, _, _, _ = mean_effect_var_and_q(e_data, ws_data)
         mean_v = numpy.sum(v_data) / n
@@ -1315,7 +1394,8 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
-                                                                                 options.random_effects, alpha)
+                                                                                 options.random_effects, alpha,
+                                                                                 progress_bar=progress_bar)
         mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, median_e, var_e, mean_v, lower_ci, upper_ci,
                                     lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
 
@@ -1328,6 +1408,8 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
 
         # randomization test
         if options.randomize_model:
+            if progress_bar is not None:
+                progress_bar.setLabelText(get_text("Conducting Randomization Analysis"))
             nreps = options.randomize_model
             # decimal places to use for randomization-based p-value
             rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
@@ -1338,6 +1420,8 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
                 rand_qm, _, _, _ = calculate_glm(rand_e_data, x_data, w_matrix)
                 if rand_qm >= qm:
                     cnt_q += 1
+                if progress_bar is not None:
+                    progress_bar.setValue(progress_bar.value() + 1)
             p_random = cnt_q / (nreps + 1)
             p_random_str = format(p_random, inline_float(rand_p_dec))
         else:
@@ -1438,8 +1522,17 @@ class NestedGroup:
                 sn += cn
             return sq, sn
 
+    def nested_count(self):
+        """
+        count the total number of nested groups, including this one
+        """
+        count = 1
+        for c in self.children:
+            count += c.nested_count()
+        return count
+
     def group_calculations(self, e, w, chart_order: int, boot_data, bootstrap_mean, alpha: float = 0.05,
-                           norm_ci: bool = True):
+                           norm_ci: bool = True, progress_bar=None):
         chart_order += 1
         mean_output = []
         het_output = []
@@ -1461,7 +1554,7 @@ class NestedGroup:
                                                               scale=math.sqrt(group_var))
         (group_lower_bs, group_upper_bs,
          group_lower_bias, group_upper_bias) = bootstrap_means(bootstrap_mean, group_boot, self.mean,
-                                                               0, False, alpha)
+                                                               0, False, alpha, progress_bar=progress_bar)
         if self.index > 0:
             indent = "  " + "→ "*self.index
         else:
@@ -1472,7 +1565,8 @@ class NestedGroup:
                                            group_lower_bias, group_upper_bias))
         for child in self.children:
             child_het, child_mean, chart_order = child.group_calculations(e, w, chart_order, boot_data,
-                                                                          bootstrap_mean, alpha)
+                                                                          bootstrap_mean, alpha,
+                                                                          progress_bar=progress_bar)
             het_output.extend(child_het)
             mean_output.extend(child_mean)
         if len(self.children) > 0:
@@ -1526,7 +1620,8 @@ def find_next_nested_level(index, group_data, parent) -> list:
     return group_list
 
 
-def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True,
+                         sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -1566,7 +1661,6 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
     boot_data = numpy.array(boot_data)
 
     top_level = find_next_nested_level(0, group_data, None)
-
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     n = len(e_data)
@@ -1582,6 +1676,23 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
     if check_data_for_nested(output_blocks, n, top_level, [level.label for level in group_levels]):
         output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
 
+        total_groups = 0
+        for group in top_level:
+            total_groups += group.nested_count()
+
+        if ((options.bootstrap_mean is not None) or (options.randomize_model is not None)) and (sender is not None):
+            if options.randomize_model is not None:
+                total_steps = options.randomize_model
+            else:
+                total_steps = 0
+            if options.bootstrap_mean is not None:
+                total_steps += options.bootstrap_mean * (total_groups + 1)
+            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                       get_text("Conducting Bootstrap Analysis"),
+                                                       total_steps)
+        else:
+            progress_bar = None
+
         mean_e, var_e, qt, sum_w, sum_w2, sum_ew = mean_effect_var_and_q(e_data, w_data)
         median_e = median_effect(e_data, w_data)
         mean_v = numpy.sum(v_data) / n
@@ -1590,7 +1701,8 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         else:
             lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
-                                                                                 mean_e, 0, False, alpha)
+                                                                                 mean_e, 0, False, alpha,
+                                                                                 progress_bar=progress_bar)
         global_mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, median_e, var_e, mean_v, lower_ci,
                                            upper_ci, lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
         df = n-1
@@ -1607,7 +1719,8 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         group_mean_values = []
         for group in top_level:
             het_out, mean_out, chart_order = group.group_calculations(e_data, w_data, chart_order, boot_data,
-                                                                      options.bootstrap_mean, alpha)
+                                                                      options.bootstrap_mean, alpha,
+                                                                      progress_bar=progress_bar)
             group_het_values.extend(het_out)
             group_mean_values.extend(mean_out)
 
@@ -1644,6 +1757,8 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
 
         # randomization test
         if options.randomize_model:
+            if progress_bar is not None:
+                progress_bar.setLabelText(get_text("Conducting Randomization Analysis"))
             nreps = options.randomize_model
             # decimal places to use for randomization-based p-value
             rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
@@ -1662,6 +1777,8 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
                         tmp_qm += tq
                     if tmp_qm >= model_het_values[i].q:
                         cnt_list[i] += 1
+                if progress_bar is not None:
+                    progress_bar.setValue(progress_bar.value() + 1)
             for i in range(len(group_levels)):
                 p_random = cnt_list[i] / (nreps + 1)
                 p_random_str = format(p_random, inline_float(rand_p_dec))
@@ -1886,7 +2003,8 @@ def phylogenetic_correlation(tip_names, root):
     return p
 
 
-def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True,
+                               sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -2124,7 +2242,8 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
 
 
 # ---------- jackknife meta-analysis ----------
-def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True,
+                            sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -2163,6 +2282,14 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
     if n > 1:
         output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
 
+        if (options.bootstrap_mean is not None) and (sender is not None):
+            total_steps = options.bootstrap_mean*(n + 1)
+            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                       get_text("Conducting Bootstrap Analysis"),
+                                                       total_steps)
+        else:
+            progress_bar = None
+
         # global value
         df = n - 1
         mean_e, var_e, qt, sum_w, sum_w2, sum_ew = mean_effect_var_and_q(e_data, w_data)
@@ -2184,7 +2311,8 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
 
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
-                                                                                 options.random_effects, alpha)
+                                                                                 options.random_effects, alpha,
+                                                                                 progress_bar=progress_bar)
         plot_order = 0
         mean_data = mean_data_tuple(get_text("Mean"), plot_order, n, mean_e, median_e, var_e, mean_v, lower_ci,
                                     upper_ci, lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
@@ -2226,7 +2354,8 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
                 lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
             lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, tmp_boot,
                                                                                      mean_e, pooled_var,
-                                                                                     options.random_effects, alpha)
+                                                                                     options.random_effects, alpha,
+                                                                                     progress_bar=progress_bar)
             mean_data = mean_data_tuple(j_label, plot_order, n-1, mean_e, median_e, var_e, mean_v, lower_ci, upper_ci,
                                         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
             jackknife_means.append(mean_data)
@@ -2309,7 +2438,7 @@ def kendalls_tau(e_ranks, x_ranks):
     return tau
 
 
-def rank_correlation_analysis(data, options, decimal_places: int = 4):
+def rank_correlation_analysis(data, options, decimal_places: int = 4, sender=None):
     # filter and prepare data for analysis
     effect_sizes = options.effect_data
     variances = options.effect_vars
@@ -2387,6 +2516,13 @@ def rank_correlation_analysis(data, options, decimal_places: int = 4):
 
         # test with randomization
         nreps = options.randomize_model
+
+        if sender is not None:
+            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                       get_text("Conducting Randomization Analysis"), nreps)
+        else:
+            progress_bar = None
+
         # decimal places to use for randomization-based p-value
         rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
         cnt_r = 1
@@ -2399,6 +2535,9 @@ def rank_correlation_analysis(data, options, decimal_places: int = 4):
                 rand_r = correlation(e_ranks, x_ranks)
             if abs(rand_r) >= abs(r):
                 cnt_r += 1
+            if progress_bar is not None:
+                progress_bar.setValue(progress_bar.value() + 1)
+
         p_random = cnt_r / (nreps + 1)
         p_random_str = format(p_random, inline_float(rand_p_dec))
         rstr = format(r, inline_float(decimal_places))
