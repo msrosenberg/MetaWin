@@ -435,7 +435,7 @@ class MetaAnalysisSimpleStructureExtraDialog(QDialog):
         failsafe_layout.addWidget(self.orwin_label, 5, 0)
         self.orwin_alpha_box = QLineEdit()
         self.orwin_alpha_box.setText("0.20")
-        self.orwin_alpha_box.setValidator(QDoubleValidator(0.001, 10, 3))
+        self.orwin_alpha_box.setValidator(QDoubleValidator(-10, 10, 3))
         failsafe_layout.addWidget(self.orwin_alpha_box, 5, 1)
         failsafe_group.setLayout(failsafe_layout)
         self.click_orwin_checkbox()
