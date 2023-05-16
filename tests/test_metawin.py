@@ -348,6 +348,19 @@ def test_simple_meta_analysis_lep():
     assert round(analysis_values.i2, 2) == i2_answer
 
 
+def test_i2_confidence_interval():
+    # not a formal test, just crosschecking values
+    data, _ = import_test_data("borenstein_chap18.txt")
+    options = MetaWinAnalysis.MetaAnalysisOptions()
+    options.structure = MetaWinAnalysis.SIMPLE_MA
+    options.effect_data = data.cols[0]
+    options.effect_vars = data.cols[1]
+    options.create_graph = False
+
+    output, figure, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    print_test_output(output)
+
+
 def test_simple_meta_analysis_lep_randeff():
     # answers from Chapter 9, Handbook of Meta-Analysis in Ecology and Evolution
     qt_answer = 23.01
