@@ -190,7 +190,7 @@ references = {
     "Higgins_Thompson_2002": ["Higgins, J.P.T. and S.G. Thompson (2002) Quantifying heterogeneity in a meta-analysis. "
                               "<em>Statistics in Medicine</em> 21:1539&ndash;1558.", "Higgins and Thompson (2002)"],
 
-    "Huedo-Medina_et_2006": ["Huedo-Medina, T.B., F. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) "
+    "Huedo-Medina_et_2006": ["Huedo-Medina, T.B., J. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) "
                              "Assessing heterogeneity in meta-analysis: Q statistic or I2 index? "
                              "<em>Psychological Methods</em> 11:193&ndash;206.", "Huedo-Medina <em>et al.</em> (2006)"],
 

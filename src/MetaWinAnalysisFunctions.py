@@ -368,16 +368,16 @@ def bootstrap_means(bootstrap_n, boot_data, obs_mean, pooled_var, random_effects
 def calc_i2(qt, n, alpha: float = 0.05):
     try:
         i2 = max(0, 100 * (qt - (n - 1))/qt)
-        ln_h2 = math.log(qt/(n - 1))
+        ln_h = math.log(math.sqrt(qt/(n - 1)))
         if qt > n - 1:
-            se = (math.log(qt) - math.log(n-1))/(2*(math.sqrt(2*qt)-math.sqrt(2*n - 3)))
+            se_ln_h = (math.log(qt) - math.log(n-1))/(2*(math.sqrt(2*qt)-math.sqrt(2*n - 3)))
         else:
-            se = math.sqrt((1/(2*(n - 2))) * (1 - (1/(3*(n - 2)**2))))
+            se_ln_h = math.sqrt((1/(2*(n - 2))) * (1 - (1/(3*(n - 2)**2))))
         z = -scipy.stats.norm.ppf(alpha / 2)
-        lower_h2 = math.exp(ln_h2 - z*se)
-        upper_h2 = math.exp(ln_h2 + z*se)
-        lower_i2 = max(0, 100*(lower_h2 - 1)/lower_h2)
-        upper_i2 = max(0, 100*(upper_h2 - 1)/upper_h2)
+        lower_h = math.exp(ln_h - z*se_ln_h)
+        upper_h = math.exp(ln_h + z*se_ln_h)
+        lower_i2 = max(0, 100*(lower_h**2 - 1)/lower_h**2)
+        upper_i2 = max(0, 100*(upper_h**2 - 1)/upper_h**2)
     except ZeroDivisionError:
         i2, lower_i2, upper_i2 = 0, 0, 0
     return i2, lower_i2, upper_i2
