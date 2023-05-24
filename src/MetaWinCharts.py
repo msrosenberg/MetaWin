@@ -7,6 +7,8 @@ from typing import Optional, Tuple, Union
 
 from matplotlib import patches
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+# the following import is necessary to force pyinstaller to include these backends for vector output when packaging
+from matplotlib.backends import backend_svg, backend_ps, backend_pgf, backend_pdf
 from matplotlib.figure import Figure
 from matplotlib.colors import XKCD_COLORS, hex2color
 import numpy
