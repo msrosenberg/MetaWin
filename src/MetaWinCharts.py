@@ -46,6 +46,8 @@ UNFILLED_MARKERS = {"point", "plus", "X", "vertical line", "horizontal line", "t
                     "tick down", "upward caret", "downward caret", "left caret", "right caret",
                     "centered upward caret", "centered downward caret", "centered left caret", "centered right caret"}
 
+FIGURE_CANVAS = None
+
 
 # ---------- Chart Data Classes ---------- #
 class BaseChartData:
@@ -758,7 +760,19 @@ def base_figure():
     """
     create the baseline figure used for all plots
     """
-    figure_canvas = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
+
+    # The following solution is a bit clunky, but serves to erase an existing figure prior to a new one
+    # being created. Without it, triggering the save figure action would serially try to save all figures that
+    # had been created in that session, rather than just the most recent.
+    # I have yet to come up with a better approach that works.
+    global FIGURE_CANVAS
+    if FIGURE_CANVAS is None:
+        figure_canvas = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
+        FIGURE_CANVAS = figure_canvas
+    else:
+        figure_canvas = FIGURE_CANVAS
+        figure_canvas.figure.clf()
+
     faxes = figure_canvas.figure.subplots()
     faxes.spines["right"].set_visible(False)
     faxes.spines["top"].set_visible(False)
