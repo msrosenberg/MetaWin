@@ -654,7 +654,7 @@ class MainWindow(QMainWindow):
                 else:
                     outstr = self.output_area.toPlainText()
                 try:
-                    with open(save_name[0], "w") as outfile:
+                    with open(save_name[0], "w", encoding="utf8") as outfile:
                         outfile.writelines(outstr)
                     self.output_saved = True
                     return True
