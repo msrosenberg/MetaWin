@@ -9,7 +9,7 @@ import sys
 from PyQt6.QtWidgets import QMainWindow, QTabWidget, QTableWidget, QFileDialog, QTableWidgetItem, QMenu, QInputDialog, \
     QApplication, QTextEdit, QColorDialog, QToolBar, QFrame, QHBoxLayout, QVBoxLayout, QLabel, QFontDialog, \
     QWidgetAction, QComboBox
-from PyQt6.QtGui import QIcon, QColor, QAction, QActionGroup
+from PyQt6.QtGui import QIcon, QColor, QAction, QActionGroup, QTextCursor
 from PyQt6 import QtCore
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT
 
@@ -315,7 +315,8 @@ class MainWindow(QMainWindow):
         self.main_area.addTab(output_frame, QIcon(MetaWinConstants.output_icon), get_text("Output"))
 
         # initial output text
-        self.write_output("<h1>MetaWin</h1>")
+        # the title is set directly in order to eliminate a stray blank lane at beginning of output
+        self.output_area.setHtml("<h1>MetaWin</h1>")
         self.write_output(MetaWinConstants.mw3_citation)
         self.write_output_block([version_str(),
                                  get_text("Started at ") + datetime.datetime.now().strftime("%B %d, %Y, %I:%M %p")])
@@ -524,7 +525,12 @@ class MainWindow(QMainWindow):
         """
         Add a string to the output text box, while storing the fact that the output has not been saved.
         """
-        self.output_area.append(output)
+        # self.output_area.append(output)
+        # this approach to adding text to the output is a workaround for what appears to be a Qt bug
+        #   while appended text looks fine when within the GUI, if exported toHtml() or toMarkdown() all lines
+        #   get converted to level 1 headers
+        self.output_area.setHtml(self.output_area.toHtml() + output)
+        self.output_area.moveCursor(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
         self.output_saved = False
 
     def row_header_popup(self, pos) -> None:
