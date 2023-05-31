@@ -9,7 +9,7 @@ import sys
 from PyQt6.QtWidgets import QMainWindow, QTabWidget, QTableWidget, QFileDialog, QTableWidgetItem, QMenu, QInputDialog, \
     QApplication, QTextEdit, QColorDialog, QToolBar, QFrame, QHBoxLayout, QVBoxLayout, QLabel, QFontDialog, \
     QWidgetAction, QComboBox
-from PyQt6.QtGui import QIcon, QColor, QAction, QActionGroup
+from PyQt6.QtGui import QIcon, QColor, QAction, QActionGroup, QTextCursor
 from PyQt6 import QtCore
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT
 
@@ -315,7 +315,8 @@ class MainWindow(QMainWindow):
         self.main_area.addTab(output_frame, QIcon(MetaWinConstants.output_icon), get_text("Output"))
 
         # initial output text
-        self.write_output("<h1>MetaWin</h1>")
+        # the title is set directly in order to eliminate a stray blank lane at beginning of output
+        self.output_area.setHtml("<h1>MetaWin</h1>")
         self.write_output(MetaWinConstants.mw3_citation)
         self.write_output_block([version_str(),
                                  get_text("Started at ") + datetime.datetime.now().strftime("%B %d, %Y, %I:%M %p")])
@@ -508,10 +509,21 @@ class MainWindow(QMainWindow):
     def write_multi_output_blocks(self, output: list) -> None:
         """
         Given a list of lists of strings, write each sublist to the output area as a single block
+
+        Move cursor to the start of the new block
         """
+        # find position of end of current output
+        self.output_area.moveCursor(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
+        current_position = self.output_area.textCursor().position()
         for block in output:
             self.write_output_block(block)
-        self.write_output("")
+        self.write_output("<p></p>")
+        # reset cursor position to end, then set it back to end of previous block
+        # this causes viewpane to scroll so that new output is near top of view (if possible)
+        self.output_area.moveCursor(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
+        cursor = self.output_area.textCursor()
+        cursor.setPosition(current_position+1)
+        self.output_area.setTextCursor(cursor)
 
     def write_output_block(self, output: list) -> None:
         """
@@ -524,7 +536,11 @@ class MainWindow(QMainWindow):
         """
         Add a string to the output text box, while storing the fact that the output has not been saved.
         """
-        self.output_area.append(output)
+        # self.output_area.append(output)
+        # this approach to adding text to the output is a workaround for what appears to be a Qt bug
+        #   while appended text looks fine when within the GUI, if exported toHtml() or toMarkdown() all lines
+        #   get converted to level 1 headers
+        self.output_area.setHtml(self.output_area.toHtml() + output)
         self.output_saved = False
 
     def row_header_popup(self, pos) -> None:
@@ -654,7 +670,7 @@ class MainWindow(QMainWindow):
                 else:
                     outstr = self.output_area.toPlainText()
                 try:
-                    with open(save_name[0], "w") as outfile:
+                    with open(save_name[0], "w", encoding="utf8") as outfile:
                         outfile.writelines(outstr)
                     self.output_saved = True
                     return True

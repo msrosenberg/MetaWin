@@ -13,7 +13,7 @@ mean_data_tuple = namedtuple("mean_data_tuple", ["name", "order", "n", "mean", "
 
 MAJOR_VERSION = 3
 MINOR_VERSION = 0
-PATCH_VERSION = 11
+PATCH_VERSION = 12
 
 # validity check when fetching value from data matrix
 VALUE_NUMBER = 0

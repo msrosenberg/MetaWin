@@ -7,6 +7,8 @@ from typing import Optional, Tuple, Union
 
 from matplotlib import patches
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+# the following import is necessary to force pyinstaller to include these backends for vector output when packaging
+from matplotlib.backends import backend_svg, backend_ps, backend_pgf, backend_pdf
 from matplotlib.figure import Figure
 from matplotlib.colors import XKCD_COLORS, hex2color
 import numpy
@@ -43,6 +45,8 @@ MARKER_STYLES = {"point": ".", "circle": "o", "downward triangle": "v", "upward 
 UNFILLED_MARKERS = {"point", "plus", "X", "vertical line", "horizontal line", "tick left", "tick right", "tick up",
                     "tick down", "upward caret", "downward caret", "left caret", "right caret",
                     "centered upward caret", "centered downward caret", "centered left caret", "centered right caret"}
+
+FIGURE_CANVAS = None
 
 
 # ---------- Chart Data Classes ---------- #
@@ -756,7 +760,19 @@ def base_figure():
     """
     create the baseline figure used for all plots
     """
-    figure_canvas = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
+
+    # The following solution is a bit clunky, but serves to erase an existing figure prior to a new one
+    # being created. Without it, triggering the save figure action would serially try to save all figures that
+    # had been created in that session, rather than just the most recent.
+    # I have yet to come up with a better approach that works.
+    global FIGURE_CANVAS
+    if FIGURE_CANVAS is None:
+        figure_canvas = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
+        FIGURE_CANVAS = figure_canvas
+    else:
+        figure_canvas = FIGURE_CANVAS
+        figure_canvas.figure.clf()
+
     faxes = figure_canvas.figure.subplots()
     faxes.spines["right"].set_visible(False)
     faxes.spines["top"].set_visible(False)
