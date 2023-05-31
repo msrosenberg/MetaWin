@@ -509,10 +509,21 @@ class MainWindow(QMainWindow):
     def write_multi_output_blocks(self, output: list) -> None:
         """
         Given a list of lists of strings, write each sublist to the output area as a single block
+
+        Move cursor to the start of the new block
         """
+        # find position of end of current output
+        self.output_area.moveCursor(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
+        current_position = self.output_area.textCursor().position()
         for block in output:
             self.write_output_block(block)
-        self.write_output("")
+        self.write_output("<p></p>")
+        # reset cursor position to end, then set it back to end of previous block
+        # this causes viewpane to scroll so that new output is near top of view (if possible)
+        self.output_area.moveCursor(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
+        cursor = self.output_area.textCursor()
+        cursor.setPosition(current_position+1)
+        self.output_area.setTextCursor(cursor)
 
     def write_output_block(self, output: list) -> None:
         """
@@ -530,7 +541,6 @@ class MainWindow(QMainWindow):
         #   while appended text looks fine when within the GUI, if exported toHtml() or toMarkdown() all lines
         #   get converted to level 1 headers
         self.output_area.setHtml(self.output_area.toHtml() + output)
-        self.output_area.moveCursor(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
         self.output_saved = False
 
     def row_header_popup(self, pos) -> None:
