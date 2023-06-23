@@ -32,30 +32,39 @@ import MetaWinDraw
 
 
 TEST_FIGURES = True
+# if the following line is not present, the tests with figures all crash for no obvious
+# reason. The call must be preloading something
+FIGURE_CANVAS = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
 
 
 class TestFigureDialog(QDialog):
-    def __init__(self, chart_data):
+    def __init__(self, chart_data, figure=None):
         super().__init__()
-        # self.init_ui(chart_data)
-        # pass
+        self.init_ui(chart_data, figure)
 
-    # def init_ui(self, chart_data):
-    #     ok_button = QPushButton("Ok")
-    #     ok_button.clicked.connect(self.accept)
-    #     figure_layout = QVBoxLayout()
-    #     figure = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
-    #     MetaWinCharts.create_figure(chart_data, figure)
-    #     figure_layout.addWidget(figure)
-    #     caption_area = QTextEdit()
-    #     caption_area.setText(chart_data.caption_text())
-    #     main_frame = QFrame()
-    #     main_frame.setLayout(figure_layout)
-    #     main_layout = QVBoxLayout()
-    #     main_layout.addWidget(main_frame)
-    #     main_layout.addWidget(caption_area)
-    #     main_layout.addWidget(ok_button)
-    #     self.setLayout(main_layout)
+    def init_ui(self, chart_data, prefigure=None):
+        ok_button = QPushButton("Ok")
+        ok_button.clicked.connect(self.accept)
+        figure_layout = QVBoxLayout()
+        if prefigure is None:
+            figure = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
+            MetaWinCharts.create_figure(chart_data, figure)
+        else:
+            figure = prefigure
+        figure.draw()
+        figure_layout.addWidget(figure)
+        caption_area = QTextEdit()
+        if isinstance(chart_data, str):
+            caption_area.setText(chart_data)
+        else:
+            caption_area.setText(chart_data.caption_text())
+        main_frame = QFrame()
+        main_frame.setLayout(figure_layout)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(main_frame)
+        main_layout.addWidget(caption_area)
+        main_layout.addWidget(ok_button)
+        self.setLayout(main_layout)
 
 
 def print_test_output(output: list) -> None:
@@ -1208,10 +1217,10 @@ def test_tree_import():
     for i, taxon in enumerate(taxa_list):
         assert taxon == names_answer[i]
 
-    # if TEST_FIGURES:
-    #     figure = MetaWinCharts.chart_phylogeny(tree)
-    #     test_win = TestFigureDialog(figure, "imported phylogeny")
-    #     test_win.exec()
+    if TEST_FIGURES:
+        figure = MetaWinCharts.chart_phylogeny(tree)
+        test_win = TestFigureDialog("imported phylogeny", figure)
+        test_win.exec()
 
 
 def test_scatter_plot():
