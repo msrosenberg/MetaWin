@@ -1155,7 +1155,7 @@ def draw_tree(faxes, tree, minx, maxx, miny, maxy, scale, draw_labels: bool = Fa
 
 def chart_phylogeny(root) -> FigureCanvasQTAgg:
     # set up drawing space
-    figure_canvas =  FigureCanvasQTAgg(Figure(figsize=(8, 6)))
+    figure_canvas = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
     faxes = figure_canvas.figure.subplots()
     faxes.spines["right"].set_visible(False)
     faxes.spines["top"].set_visible(False)
