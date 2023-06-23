@@ -733,7 +733,7 @@ class MainWindow(QMainWindow):
 
     def show_figure(self, chart_data) -> None:
         """
-        Replace the current figure in the graphics tab with a new figure, toolbar, and caption
+        Create a new figure based on the chart_data, display it and its caption
         """
         self.main_area.setTabVisible(2, True)
         self.caption_box.setText(chart_data.caption_text())

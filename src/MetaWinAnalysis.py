@@ -1910,4 +1910,4 @@ def meta_analysis(sender, data, last_effect, last_var, decimal_places: int = 4, 
             sender.last_effect = meta_analysis_options.effect_data
             sender.last_var = meta_analysis_options.effect_vars
             return output, chart_data
-    return None, None, None
+    return None, None

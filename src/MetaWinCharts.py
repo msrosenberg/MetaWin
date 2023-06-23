@@ -46,11 +46,6 @@ UNFILLED_MARKERS = {"point", "plus", "X", "vertical line", "horizontal line", "t
                     "tick down", "upward caret", "downward caret", "left caret", "right caret",
                     "centered upward caret", "centered downward caret", "centered left caret", "centered right caret"}
 
-# I need a single hook to the FigureCanvasQTAgg that I can use to erase existing figures prior
-# to creating new ones, otherwise the save figure function will try to serially save every
-# figure that had been created. This is currently the cleanest solution I can find.
-# FIGURE_CANVAS = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
-
 
 # ---------- Chart Data Classes ---------- #
 class BaseChartData:
@@ -815,8 +810,6 @@ def create_figure(chart_data, figure_canvas):
         faxes.spines["left"].set_visible(False)
     if chart_data.rescale_x is not None:
         faxes.set_xlim(chart_data.rescale_x[0], chart_data.rescale_x[1])
-
-    # return figure_canvas
 
 
 def chart_forest_plot(analysis_type: str, effect_name, forest_data, alpha: float = 0.05,
