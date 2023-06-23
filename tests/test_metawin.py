@@ -37,24 +37,25 @@ TEST_FIGURES = True
 class TestFigureDialog(QDialog):
     def __init__(self, chart_data):
         super().__init__()
-        self.init_ui(chart_data)
+        # self.init_ui(chart_data)
+        # pass
 
-    def init_ui(self, chart_data):
-        ok_button = QPushButton("Ok")
-        ok_button.clicked.connect(self.accept)
-        figure_layout = QVBoxLayout()
-        figure = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
-        MetaWinCharts.create_figure(chart_data, figure)
-        figure_layout.addWidget(figure)
-        caption_area = QTextEdit()
-        caption_area.setText(chart_data.caption_text())
-        main_frame = QFrame()
-        main_frame.setLayout(figure_layout)
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(main_frame)
-        main_layout.addWidget(caption_area)
-        main_layout.addWidget(ok_button)
-        self.setLayout(main_layout)
+    # def init_ui(self, chart_data):
+    #     ok_button = QPushButton("Ok")
+    #     ok_button.clicked.connect(self.accept)
+    #     figure_layout = QVBoxLayout()
+    #     figure = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
+    #     MetaWinCharts.create_figure(chart_data, figure)
+    #     figure_layout.addWidget(figure)
+    #     caption_area = QTextEdit()
+    #     caption_area.setText(chart_data.caption_text())
+    #     main_frame = QFrame()
+    #     main_frame.setLayout(figure_layout)
+    #     main_layout = QVBoxLayout()
+    #     main_layout.addWidget(main_frame)
+    #     main_layout.addWidget(caption_area)
+    #     main_layout.addWidget(ok_button)
+    #     self.setLayout(main_layout)
 
 
 def print_test_output(output: list) -> None:
