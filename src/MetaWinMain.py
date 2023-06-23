@@ -739,6 +739,7 @@ class MainWindow(QMainWindow):
         self.graph_layout.addWidget(figure, stretch=8)
         self.graph_layout.addWidget(caption_box, stretch=1)
         self.chart_data = chart_data
+        figure.draw()
 
     def load_phylogeny(self) -> None:
         inname = QFileDialog.getOpenFileName(self, get_text("Load Phylogeny"))
