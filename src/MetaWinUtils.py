@@ -145,7 +145,11 @@ def get_reference(cite: str) -> str:
     """
     Retrieve the full formatted reference based on the internal cite key
     """
-    return MetaWinConstants.references[cite][0]
+    if MetaWinConstants.references[cite][2] == "":
+        doi = ""
+    else:
+        doi = " DOI: " + MetaWinConstants.references[cite][2]
+    return MetaWinConstants.references[cite][0] + doi
 
 
 def create_reference_list(citations: list, as_string: bool = False) -> Union[str, list]:
