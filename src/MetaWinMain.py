@@ -74,6 +74,7 @@ class MainWindow(QMainWindow):
         self.conf_int_action = None
         # self.language_actions = None
         self.language_box = None
+        self.color_name_space_actions = None
         self.output_saved = True
         self.data_saved = True
         self.empty_col_num = 10
@@ -245,6 +246,22 @@ class MainWindow(QMainWindow):
         localization_action.triggered.connect(self.localization)
         language_menu.addAction(localization_action)
         options_menu.addMenu(language_menu)
+
+        # color name space submenu
+        color_name_space_menu = QMenu(get_text("Color Name Space"), self)
+        color_name_space_menu.setIcon(QIcon(MetaWinConstants.color_swatch_icon))
+        self.color_name_space_actions = QActionGroup(self)
+        self.color_name_space_actions.setExclusive(True)
+        for color_space in ("XKCD", "CSS4"):
+            c_action = QAction(color_space, self)
+            c_action.setCheckable(True)
+            self.color_name_space_actions.addAction(c_action)
+            if color_space == MetaWinCharts.color_name_space:
+                c_action.setChecked(True)
+            c_action.triggered.connect(self.color_name_space_clicked)
+            color_name_space_menu.addAction(c_action)
+        options_menu.addMenu(color_name_space_menu)
+
 
         # help menu
         help_menu = menubar.addMenu(get_text("Help"))
@@ -830,6 +847,11 @@ class MainWindow(QMainWindow):
 
     def localization(self) -> None:
         webbrowser.open(self.localization_help)
+
+    def color_name_space_clicked(self) -> None:
+        for cns in self.color_name_space_actions.actions():
+            if cns.isChecked():
+                MetaWinCharts.color_name_space = cns.text()
 
     def click_check_for_update(self):
         self.check_for_update()

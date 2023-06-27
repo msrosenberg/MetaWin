@@ -86,6 +86,7 @@ show_toolbar_icon = resource_path(icon_path + "toolbar-position-left-add-filled@
 hide_toolbar_icon = resource_path(icon_path + "toolbar-position-left-cancel-filled@256px.png")
 english_icon = resource_path(icon_path + "flag-united-states@256px.png")
 spanish_icon = resource_path(icon_path + "flag-spain@256px.png")
+color_swatch_icon = resource_path(icon_path + "color-swatches@256px.png")
 
 metawin_icon = resource_path(icon_path + "metawin3toolbar_icon.png")
 metawin_splash = resource_path(icon_path + "metawin3splash_square.png")
