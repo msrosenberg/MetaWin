@@ -1210,16 +1210,22 @@ def find_color_name(color: str) -> str:
     Given a color as a hex string, e.g., #0123A5, find the closest named color from the CSS 4 color name list
     and return that name
     """
-    names = list(color_name_space)
+    if color_name_space == "CSS4":
+        color_names = CSS4_COLORS
+    else:
+        color_names = XKCD_COLORS
+    names = list(color_names)
     dist = 10000
     match = "None"
     r, g, b = hex2color(color)
     for n in names:
-        rx, gx, bx = hex2color(color_name_space[n])
+        rx, gx, bx = hex2color(color_names[n])
         # Squared Euclidean distance in RGB space should be good enough
         #  Squared is more computationally efficient than non-squared, as we skip calculating the square-root
         d = (rx-r)**2 + (gx-g)**2 + (bx-b)**2
         if d < dist:
             match = n
             dist = d
-    return match[5:]
+    if color_name_space == "XKCD":
+        return match[5:]
+    return match
