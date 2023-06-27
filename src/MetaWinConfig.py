@@ -94,7 +94,7 @@ def validate_config(key, value):
             return value
         return "Normal"
     elif key == "color name space":
-        if value == "CSS4":
+        if value == "X11/CSS4":
             return value
         return "xkcd"
     return value

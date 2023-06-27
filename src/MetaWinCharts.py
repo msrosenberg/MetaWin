@@ -1210,7 +1210,7 @@ def find_color_name(color: str) -> str:
     Given a color as a hex string, e.g., #0123A5, find the closest named color from the CSS 4 color name list
     and return that name
     """
-    if color_name_space == "CSS4":
+    if color_name_space == "X11/CSS4":
         color_names = CSS4_COLORS
     else:
         color_names = XKCD_COLORS

@@ -436,17 +436,33 @@
                 matching the specific color to the closest named color from a color name space. By default
                 <span class="metawin">MetaWin</span> will use a set of approximately 1,000
                 named colors based on a <a href="https://blog.xkcd.com/2010/05/03/color-survey-results/">survey done at
-                XKCD</a>. This set was chosen as the default primarily because of it's size. With that many
-                crowd-coursed color names, many me be a bit odd, so simply be warned if strange color labels appear.
+                xkcd</a>. This set was chosen as the default primarily because of it's size. With that many
+                crowdsourced color names, many may be a bit odd, so simply be warned if strange color labels appear.
             </p>
             <p>
                 Alternatively, one can choose to have color names in captions based on the X11/CSS4 color name space.
                 This set is more formal, but only contains approximately 150 named colors and the names all lack
-                internal spacing (so for example, "lightblue" rather than "light blue"). The option to switch between
-                color name space is found under the <span class="menu">Color Name Space</span> submenu of the
-                <span class="menu">Options</span> menu.
+                internal spacing (so for example, "lightblue" rather than "light blue"). The following table compares
+                the names of some of the more common default colors used in <span class="metawin">MetaWin</span>.
+            </p>
+            <table>
+                <tr><th>Color</th><th>xkcd name</th><th>X11/CSS4 name</th></tr>
+                <tr><td style="background-color: #000000">&nbsp;</td><td>black</td><td>black</td></tr>
+                <tr><td style="background-color: #c0c0c0">&nbsp;</td><td>silver</td><td>silver</td></tr>
+                <tr><td style="background-color: #1f77b4">&nbsp;</td><td>bluish</td><td>steelblue</td></tr>
+                <tr><td style="background-color: #2ca02c">&nbsp;</td><td>green</td><td>forestgreen</td></tr>
+                <tr><td style="background-color: #d62728">&nbsp;</td><td>tomato</td><td>crimson</td></tr>
+                <tr><td style="background-color: #ff0000">&nbsp;</td><td>fire engine red</td><td>red</td></tr>
+                <tr><td style="background-color: #ff7f0e">&nbsp;</td><td>pumpkin orange</td><td>darkorange</td></tr>
+            </table>
+            <p>
+               Note that the names output by <span class="metawin">MetaWin</span> are based on finding the closest
+                color that is named, such that the actual color used may not be the color precisely defined by the
+                name space.
             </p>
             <p>
+                The option to switch between color name space is found under the <span class="menu">Options</span> menu.
+            </p>            <p>
                 Currently only line and markers description appear in captions. Line descriptions include only color
                 and style (solid, dahsed, etc.), while markers include color and shape (two colors if the primary
                 and border colors are different). Properties such as size and thickness are not included in captions.
