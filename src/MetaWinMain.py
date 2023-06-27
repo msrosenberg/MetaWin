@@ -43,6 +43,7 @@ class MainWindow(QMainWindow):
         self.tree_info_label = None
         self.clicked_header = None
         MetaWinLanguage.current_language = config["language"]
+        MetaWinCharts.color_name_space = config["color name space"]
         self.output_decimals = config["output decimals"]
         self.data_decimals = config["data decimals"]
         self.filtered_row_color = config["filtered row color"]

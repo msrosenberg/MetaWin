@@ -10,13 +10,15 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 # the following import is necessary to force pyinstaller to include these backends for vector output when packaging
 from matplotlib.backends import backend_svg, backend_ps, backend_pgf, backend_pdf
-from matplotlib.colors import XKCD_COLORS, hex2color
+from matplotlib.colors import XKCD_COLORS, hex2color, CSS4_COLORS
 import numpy
 import scipy.stats
 
 from MetaWinUtils import exponential_label, get_citation, create_reference_list
 from MetaWinLanguage import get_text
 import MetaWinWidgets
+
+color_name_space = XKCD_COLORS
 
 
 # weighting options for the histograms
@@ -1208,12 +1210,12 @@ def find_color_name(color: str) -> str:
     Given a color as a hex string, e.g., #0123A5, find the closest named color from the CSS 4 color name list
     and return that name
     """
-    names = list(XKCD_COLORS)
+    names = list(color_name_space)
     dist = 10000
     match = "None"
     r, g, b = hex2color(color)
     for n in names:
-        rx, gx, bx = hex2color(XKCD_COLORS[n])
+        rx, gx, bx = hex2color(color_name_space[n])
         # Squared Euclidean distance in RGB space should be good enough
         #  Squared is more computationally efficient than non-squared, as we skip calculating the square-root
         d = (rx-r)**2 + (gx-g)**2 + (bx-b)**2
