@@ -49,7 +49,7 @@ def default_config() -> dict:
         "auto update check": True,
         "alpha": 0.05,
         "confidence interval distribution": "Normal",
-        "color name space": "XKCD"
+        "color name space": "xkcd"
     }
 
 
@@ -96,7 +96,7 @@ def validate_config(key, value):
     elif key == "color name space":
         if value == "CSS4":
             return value
-        return "XKCD"
+        return "xkcd"
     return value
 
 

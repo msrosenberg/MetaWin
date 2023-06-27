@@ -252,7 +252,7 @@ class MainWindow(QMainWindow):
         color_name_space_menu.setIcon(QIcon(MetaWinConstants.color_swatch_icon))
         self.color_name_space_actions = QActionGroup(self)
         self.color_name_space_actions.setExclusive(True)
-        for color_space in ("XKCD", "CSS4"):
+        for color_space in ("xkcd", "CSS4"):
             c_action = QAction(color_space, self)
             c_action.setCheckable(True)
             self.color_name_space_actions.addAction(c_action)

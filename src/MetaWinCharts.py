@@ -1226,6 +1226,6 @@ def find_color_name(color: str) -> str:
         if d < dist:
             match = n
             dist = d
-    if color_name_space == "XKCD":
+    if color_name_space == "xkcd":
         return match[5:]
     return match
