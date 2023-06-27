@@ -370,10 +370,8 @@ def draw_scatter_plot(data, x_data_col, y_data_col):
     if len(x_data) > 0:
         x_data = numpy.array(x_data)
         y_data = numpy.array(y_data)
-        figure, chart_data = MetaWinCharts.chart_scatter(x_data, y_data, x_data_col.label, y_data_col.label)
-        # fig_caption = get_text("Scatter plot of {} vs. {}.").format(y_data_col.label, x_data_col.label)
-        return figure, chart_data
-    return None, None
+        return MetaWinCharts.chart_scatter(x_data, y_data, x_data_col.label, y_data_col.label)
+    return None
 
 
 def draw_scatter_dialog(sender, data):
@@ -381,12 +379,12 @@ def draw_scatter_dialog(sender, data):
     if sender.draw_dialog.exec():
         x_data_col = sender.draw_dialog.columns[sender.draw_dialog.x_box.currentIndex()]
         y_data_col = sender.draw_dialog.columns[sender.draw_dialog.y_box.currentIndex()]
-        figure, chart_data = draw_scatter_plot(data, x_data_col, y_data_col)
-        if figure is not None:
-            return figure, chart_data
+        chart_data = draw_scatter_plot(data, x_data_col, y_data_col)
+        if chart_data is not None:
+            return chart_data
         else:
             MetaWinMessages.report_critical(sender, "Error", "No valid data found for given options.")
-    return None, None
+    return None
 
 
 def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float]:
@@ -429,14 +427,9 @@ def draw_normal_quantile_plot(data, e_data_col, v_data_col, alpha: float = 0.05)
         y_data = numpy.array(y_data)
         slope, intercept = calculate_regression(x_data, y_data)
 
-        figure, chart_data = MetaWinCharts.chart_normal_quantile(get_text("Normal Quantile"),
-                                                                 get_text("Standardized Effect Size"),
-                                                                 x_data, y_data, slope, intercept, alpha)
-        # fig_caption = get_text("normal_quantile_caption").format(get_citation("Wang_and_Bushman_1998")) + \
-        #               create_reference_list(["Wang_and_Bushman_1998"], True)
-
-        return figure, chart_data
-    return None, None
+        return MetaWinCharts.chart_normal_quantile(get_text("Normal Quantile"), get_text("Standardized Effect Size"),
+                                                   x_data, y_data, slope, intercept, alpha)
+    return None
 
 
 def draw_normal_quantile_dialog(sender, data, last_effect, last_var, alpha: float = 0.05):
@@ -444,12 +437,12 @@ def draw_normal_quantile_dialog(sender, data, last_effect, last_var, alpha: floa
     if sender.draw_dialog.exec():
         e_data_col = sender.draw_dialog.columns[sender.draw_dialog.effect_size_box.currentIndex()]
         v_data_col = sender.draw_dialog.columns[sender.draw_dialog.variance_box.currentIndex()]
-        figure, chart_data = draw_normal_quantile_plot(data, e_data_col, v_data_col, alpha)
-        if figure is not None:
-            return figure, chart_data
+        chart_data = draw_normal_quantile_plot(data, e_data_col, v_data_col, alpha)
+        if chart_data is not None:
+            return chart_data
         else:
             MetaWinMessages.report_critical(sender, "Error", "No valid data found for given options.")
-    return None, None
+    return None
 
 
 def draw_radial_plot(data, e_data_col, v_data_col, is_log: bool = False):
@@ -480,12 +473,8 @@ def draw_radial_plot(data, e_data_col, v_data_col, is_log: bool = False):
         # calculate a regression through the origin, rather than with an intercept
         slope_through_origin = numpy.sum(x_data*y_data)/numpy.sum(numpy.square(x_data))
 
-        figure, chart_data = MetaWinCharts.chart_radial(e_data_col.label, x_data, y_data, slope_through_origin, min_e,
-                                                        max_e, is_log)
-        # fig_caption = get_text("Radial_chart_caption").format(e_data_col.label)
-        # fig_caption += create_reference_list(["Galbraith_1988", "Galbraith_1994"], True)
-        return figure, chart_data
-    return None, None
+        return MetaWinCharts.chart_radial(e_data_col.label, x_data, y_data, slope_through_origin, min_e, max_e, is_log)
+    return None
 
 
 def draw_radial_dialog(sender, data, last_effect, last_var):
@@ -494,12 +483,12 @@ def draw_radial_dialog(sender, data, last_effect, last_var):
         e_data_col = sender.draw_dialog.columns[sender.draw_dialog.effect_size_box.currentIndex()]
         v_data_col = sender.draw_dialog.columns[sender.draw_dialog.variance_box.currentIndex()]
         is_log = sender.draw_dialog.log_transform_box.isChecked()
-        figure, chart_data = draw_radial_plot(data, e_data_col, v_data_col, is_log)
-        if figure is not None:
-            return figure, chart_data
+        chart_data = draw_radial_plot(data, e_data_col, v_data_col, is_log)
+        if chart_data is not None:
+            return chart_data
         else:
             MetaWinMessages.report_critical(sender, "Error", "No valid data found for given options.")
-    return None, None
+    return None
 
 
 def draw_histogram_plot(data, e_data_col, w_data_col, weight_type, n_bins: int):
@@ -533,9 +522,8 @@ def draw_histogram_plot(data, e_data_col, w_data_col, weight_type, n_bins: int):
     if len(e_data) > 0:
         e_data = numpy.array(e_data)
         w_data = numpy.array(w_data)
-        figure, chart_data = MetaWinCharts.chart_histogram(e_data, w_data, n_bins, e_data_col.label, weight_type)
-        return figure, chart_data
-    return None, None
+        return MetaWinCharts.chart_histogram(e_data, w_data, n_bins, e_data_col.label, weight_type)
+    return None
 
 
 def draw_histogram_dialog(sender, data, last_effect, last_var):
@@ -550,12 +538,12 @@ def draw_histogram_dialog(sender, data, last_effect, last_var):
         else:
             weight_type = MetaWinCharts.WEIGHT_NONE
         n_bins = int(sender.draw_dialog.bin_edit.text())
-        figure, chart_data = draw_histogram_plot(data, e_data_col, w_data_col, weight_type, n_bins)
-        if figure is not None:
-            return figure, chart_data
+        chart_data = draw_histogram_plot(data, e_data_col, w_data_col, weight_type, n_bins)
+        if chart_data is not None:
+            return chart_data
         else:
             MetaWinMessages.report_critical(sender, "Error", "No valid data found for given options.")
-    return None, None
+    return None
 
 
 def draw_forest_plot(data, e_data_col, v_data_col, alpha: float = 0.05):
@@ -576,11 +564,7 @@ def draw_forest_plot(data, e_data_col, v_data_col, alpha: float = 0.05):
         else:
             filtered.append(row.label)
 
-    figure, chart_data = MetaWinCharts.chart_forest_plot("forest plot", e_data_col.label, data_list, alpha, None)
-
-    # fig_caption = get_text("Forest plot of individual effect sizes for each study.") + \
-    #               MetaWinCharts.common_forest_plot_caption(e_data_col.label, alpha, inc_median=False)
-    return figure, chart_data
+    return MetaWinCharts.chart_forest_plot("forest plot", e_data_col.label, data_list, alpha, None)
 
 
 def draw_forest_dialog(sender, data, last_effect, last_var, alpha: float = 0.05):
@@ -588,16 +572,16 @@ def draw_forest_dialog(sender, data, last_effect, last_var, alpha: float = 0.05)
     if sender.draw_dialog.exec():
         e_data_col = sender.draw_dialog.columns[sender.draw_dialog.effect_size_box.currentIndex()]
         v_data_col = sender.draw_dialog.columns[sender.draw_dialog.variance_box.currentIndex()]
-        figure, chart_data = draw_forest_plot(data, e_data_col, v_data_col, alpha)
-        if figure is not None:
-            return figure, chart_data
+        chart_data = draw_forest_plot(data, e_data_col, v_data_col, alpha)
+        if chart_data is not None:
+            return chart_data
         else:
             MetaWinMessages.report_critical(sender, "Error", "No valid data found for given options.")
-    return None, None
+    return None
 
 
 def edit_figure(sender, chart_data):
     sender.edit_fig_dialog = MetaAnalysisEditFigure(chart_data)
     if sender.edit_fig_dialog.exec():
-        return MetaWinCharts.create_figure(chart_data)
+        return chart_data
     return None

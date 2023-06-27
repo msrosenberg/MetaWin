@@ -3,13 +3,13 @@ Module for creating figures using the matplotlib backend for Qt
 """
 
 import math
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 from matplotlib import patches
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
 # the following import is necessary to force pyinstaller to include these backends for vector output when packaging
 from matplotlib.backends import backend_svg, backend_ps, backend_pgf, backend_pdf
-from matplotlib.figure import Figure
 from matplotlib.colors import XKCD_COLORS, hex2color
 import numpy
 import scipy.stats
@@ -45,11 +45,6 @@ MARKER_STYLES = {"point": ".", "circle": "o", "downward triangle": "v", "upward 
 UNFILLED_MARKERS = {"point", "plus", "X", "vertical line", "horizontal line", "tick left", "tick right", "tick up",
                     "tick down", "upward caret", "downward caret", "left caret", "right caret",
                     "centered upward caret", "centered downward caret", "centered left caret", "centered right caret"}
-
-# I need a single hook to the FigureCanvasQTAgg that I can use to erase existing figures prior
-# to creating new ones, otherwise the save figure function will try to serially save every
-# figure that had been created. This is currently the cleanest solution I can find.
-FIGURE_CANVAS = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
 
 
 # ---------- Chart Data Classes ---------- #
@@ -759,19 +754,20 @@ class ChartData:
         return outlist
 
 
-def base_figure():
+def base_figure(figure_canvas):
     """
     create the baseline figure used for all plots
     """
-    figure_canvas = FIGURE_CANVAS
+    # figure_canvas = FIGURE_CANVAS
     figure_canvas.figure.clf()  # clean any existing figures
     faxes = figure_canvas.figure.subplots()
     faxes.spines["right"].set_visible(False)
     faxes.spines["top"].set_visible(False)
-    return figure_canvas, faxes
+    # return figure_canvas, faxes
+    return faxes
 
 
-def create_figure(chart_data):
+def create_figure(chart_data, figure_canvas):
     """
     create a figure given pre-determined chart data
 
@@ -779,7 +775,7 @@ def create_figure(chart_data):
     which subsequently can allow user modification of plot styles and redrawing of the figure w/o needing to
     recalculate anything
     """
-    figure_canvas, faxes = base_figure()
+    faxes = base_figure(figure_canvas)
     faxes.set_ylabel(chart_data.y_label)
     faxes.set_xlabel(chart_data.x_label)
     for data in chart_data.data:
@@ -815,12 +811,10 @@ def create_figure(chart_data):
     if chart_data.rescale_x is not None:
         faxes.set_xlim(chart_data.rescale_x[0], chart_data.rescale_x[1])
 
-    return figure_canvas
-
 
 def chart_forest_plot(analysis_type: str, effect_name, forest_data, alpha: float = 0.05,
                       bootstrap_n: Optional[int] = None, extra_name: Optional[str] = None,
-                      normal_ci: bool = True) -> Tuple[FigureCanvasQTAgg, ChartData]:
+                      normal_ci: bool = True) -> ChartData:
     chart_data = ChartData(analysis_type)
     chart_data.caption.e_label = effect_name
     chart_data.caption.alpha = alpha
@@ -888,8 +882,7 @@ def chart_forest_plot(analysis_type: str, effect_name, forest_data, alpha: float
                                                          bias_cis, ci_y_data, marker=7, zorder=4, color="#d62728",
                                                          label="{:0.0%} CI (bias-corrected bootstrap)".format(1-alpha))
 
-    figure_canvas = create_figure(chart_data)
-    return figure_canvas, chart_data
+    return chart_data
 
 
 def add_regression_to_chart(x_name: str, y_name: str, x_data, y_data, slope: float, intercept: float,
@@ -905,7 +898,7 @@ def add_regression_to_chart(x_name: str, y_name: str, x_data, y_data, slope: flo
 
 
 def chart_regression(x_name, y_name, x_data, y_data, slope, intercept, model, ref_list,
-                     citations) -> Tuple[FigureCanvasQTAgg, ChartData]:
+                     citations) -> ChartData:
     x_min = numpy.min(x_data)
     x_max = numpy.max(x_data)
     chart_data = ChartData("regression")
@@ -917,8 +910,7 @@ def chart_regression(x_name, y_name, x_data, y_data, slope, intercept, model, re
 
     add_regression_to_chart(x_name, y_name, x_data, y_data, slope, intercept, x_min, x_max, chart_data)
 
-    figure_canvas = create_figure(chart_data)
-    return figure_canvas, chart_data
+    return chart_data
 
 
 def add_quantile_axes_to_chart(x_data, y_data, slope: float, intercept: float, chart_data, alpha: float = 0.05) -> None:
@@ -956,15 +948,14 @@ def add_quantile_axes_to_chart(x_data, y_data, slope: float, intercept: float, c
 
 
 def chart_normal_quantile(x_name, y_name, x_data, y_data, slope, intercept,
-                          alpha: float = 0.05) -> Tuple[FigureCanvasQTAgg, ChartData]:
+                          alpha: float = 0.05) -> ChartData:
     chart_data = ChartData("normal quantile")
     add_quantile_axes_to_chart(x_data, y_data, slope, intercept, chart_data, alpha)
     x_min = numpy.min(x_data)
     x_max = numpy.max(x_data)
     add_regression_to_chart(x_name, y_name, x_data, y_data, slope, intercept, x_min, x_max, chart_data)
 
-    figure_canvas = create_figure(chart_data)
-    return figure_canvas, chart_data
+    return chart_data
 
 
 def add_radial_curve_to_chart(effect_label: str, r: float, min_e: float, max_e: float, chart_data,
@@ -1042,8 +1033,7 @@ def add_radial_curve_to_chart(effect_label: str, r: float, min_e: float, max_e: 
     chart_data.add_line(get_text("Vertical Axis Zero Line"), 0, 0, r+1, 0, color="silver", linestyle="dotted")
 
 
-def chart_radial(e_name, x_data, y_data, slope, min_e, max_e, is_log: bool = False) -> Tuple[FigureCanvasQTAgg,
-                                                                                             ChartData]:
+def chart_radial(e_name, x_data, y_data, slope, min_e, max_e, is_log: bool = False) -> ChartData:
     chart_data = ChartData("radial")
     chart_data.caption.e_label = e_name
     max_d = numpy.max(numpy.sqrt(numpy.square(x_data) + numpy.square(y_data)))+1
@@ -1054,12 +1044,10 @@ def chart_radial(e_name, x_data, y_data, slope, min_e, max_e, is_log: bool = Fal
     add_radial_curve_to_chart(e_name, max_d, min_e, max_e, chart_data, is_log)
     chart_data.rescale_x = (0, max_d+2)
 
-    figure_canvas = create_figure(chart_data)
-    return figure_canvas, chart_data
+    return chart_data
 
 
-def chart_histogram(e_data, w_data, n_bins, e_label,
-                    weighted: int = WEIGHT_NONE) -> Tuple[FigureCanvasQTAgg, ChartData]:
+def chart_histogram(e_data, w_data, n_bins, e_label, weighted: int = WEIGHT_NONE) -> ChartData:
     if weighted == WEIGHT_NONE:
         cnts, bins = numpy.histogram(e_data, n_bins)
         y_label = get_text("Count")
@@ -1075,8 +1063,7 @@ def chart_histogram(e_data, w_data, n_bins, e_label,
     chart_data.y_label = y_label
     chart_data.add_histogram("Bin Counts", cnts, bins, edgecolor="black", linewidth=1)
 
-    figure_canvas = create_figure(chart_data)
-    return figure_canvas, chart_data
+    return chart_data
 
 
 def draw_tree(faxes, tree, minx, maxx, miny, maxy, scale, draw_labels: bool = False, draw_branch_lengths: bool = False):
@@ -1175,7 +1162,7 @@ def chart_phylogeny(root) -> FigureCanvasQTAgg:
     return figure_canvas
 
 
-def chart_scatter(x_data, y_data, x_label: str = "x", y_label: str = "y") -> Tuple[FigureCanvasQTAgg, ChartData]:
+def chart_scatter(x_data, y_data, x_label: str = "x", y_label: str = "y") -> ChartData:
     chart_data = ChartData("scatter plot")
     chart_data.caption.x_label = x_label
     chart_data.caption.y_label = y_label
@@ -1183,11 +1170,10 @@ def chart_scatter(x_data, y_data, x_label: str = "x", y_label: str = "y") -> Tup
     chart_data.y_label = y_label
     chart_data.add_scatter(get_text("Point Data"), x_data, y_data)
 
-    figure_canvas = create_figure(chart_data)
-    return figure_canvas, chart_data
+    return chart_data
 
 
-def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> Tuple[FigureCanvasQTAgg, ChartData]:
+def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> ChartData:
     chart_data = ChartData("trim and fill")
     chart_data.caption.e_label = effect_label
     chart_data.x_label = effect_label
@@ -1214,8 +1200,7 @@ def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> Tupl
     chart_data.caption.inferred_mean = chart_data.add_line(get_text("Inferred Mean"), new_mean, y_min, new_mean, y_max,
                                                            color="red", linestyle="dashed", zorder=1)
 
-    figure_canvas = create_figure(chart_data)
-    return figure_canvas, chart_data
+    return chart_data
 
 
 def find_color_name(color: str) -> str:
