@@ -1205,6 +1205,42 @@ def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> Char
     return chart_data
 
 
+def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str = "sample size") -> ChartData:
+    chart_data = ChartData("scatter plot")
+    chart_data.caption.x_label = x_label
+    chart_data.caption.y_label = y_label
+    chart_data.x_label = x_label
+    chart_data.y_label = y_label
+    chart_data.add_scatter(get_text("Point Data"), x_data, y_data)
+
+    y_min = numpy.min(y_data)
+    y_max = numpy.max(y_data)
+    # x_ends = numpy.max(numpy.abs(x_data))
+    chart_data.caption.no_effect = chart_data.add_line(get_text("Line of No Effect"), mean_e, y_min, mean_e, y_max,
+                                                       color="silver", linestyle="dotted", zorder=1)
+    if y_label != "sample size":
+        curve_y = numpy.linspace(y_min, y_max, 50)
+        if y_label == "standard error":
+            curve_x_min = mean_e - curve_y*1.96
+            curve_x_max = mean_e + curve_y*1.96
+        elif y_label == "precision":
+            curve_x_min = mean_e - (1/curve_y)*1.96
+            curve_x_max = mean_e + (1/curve_y)*1.96
+        elif y_label == "variance":
+            curve_x_min = mean_e - numpy.sqrt(curve_y)*1.96
+            curve_x_max = mean_e + numpy.sqrt(curve_y)*1.96
+        else:
+            curve_x_min = mean_e - (1/numpy.sqrt(curve_y))*1.96
+            curve_x_max = mean_e + (1/numpy.sqrt(curve_y))*1.96
+
+        chart_data.caption.lower_limit = chart_data.add_multi_line(get_text("Lower Prediction Limit"), curve_x_min, curve_y,
+                                                               linestyle="dashed", color="silver", zorder=3)
+        chart_data.caption.upper_limit = chart_data.add_multi_line(get_text("Upper Prediction Limit"), curve_x_max, curve_y,
+                                                               linestyle="dashed", color="silver", zorder=3)
+
+    return chart_data
+
+
 def find_color_name(color: str) -> str:
     """
     Given a color as a hex string, e.g., #0123A5, find the closest named color from the CSS 4 color name list

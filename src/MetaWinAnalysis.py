@@ -7,7 +7,7 @@ from typing import Optional
 import webbrowser
 
 from PyQt6.QtWidgets import QDialog, QPushButton, QLabel, QVBoxLayout, QGridLayout, QFrame, QComboBox, QGroupBox, \
-    QCheckBox, QLineEdit, QRadioButton, QHBoxLayout
+    QCheckBox, QLineEdit, QHBoxLayout
 from PyQt6.QtGui import QIcon, QIntValidator, QDoubleValidator
 
 from MetaWinData import MetaWinData

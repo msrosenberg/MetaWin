@@ -153,6 +153,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                                                      "indicated by {}, with the corresponding line the {:0.0%} "
                                                      "confidence interval.",
                       "forest_plot_median_caption": " Medians are represented by {}.",
+                      "Funnel Plot": "Funnel Plot",
                       "group_forest_plot":
                           "Forest plot of effect sizes for the mean of all studies, as well as subgroups of studies "
                           "designated by {}.",
@@ -338,6 +339,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Source": "Source",
                       "Spaces": "Spaces",
                       "Standard Deviation": "Standard Deviation",
+                      "Standard Error": "Standard Error",
                       "Standardized": "Standardized",
                       "Standardized Effect Size": "Standardized Effect Size",
                       "Started at ": "Started at ",

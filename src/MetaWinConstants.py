@@ -104,6 +104,7 @@ help_index = {
     "effect_sizes": resource_path(doc_path + "metawin_help.html#effect_sizes", True),
     "filtering_data": resource_path(doc_path + "metawin_help.html#filtering_data", True),
     "forest_plot": resource_path(doc_path + "metawin_help.html#forest_plot", True),
+    "funnel_plot": resource_path(doc_path + "metawin_help.html#funnel_plot", True),
     "galbraith_plot": resource_path(doc_path + "metawin_help.html#galbraith_plot", True),
     "glm_analysis": resource_path(doc_path + "metawin_help.html#glm_analysis", True),
     "graph_edit": resource_path(doc_path + "metawin_help.html#graph_edit", True),

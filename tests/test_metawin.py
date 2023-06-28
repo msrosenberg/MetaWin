@@ -1551,4 +1551,3 @@ def test_match_color_to_name():
     print(cmatch, math.sqrt(cdist))
     print(xmatch, math.sqrt(xdist))
     print(len(cnames), len(xnames))
-

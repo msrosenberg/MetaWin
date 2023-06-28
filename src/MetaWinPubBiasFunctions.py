@@ -346,3 +346,72 @@ def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float 
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
 
     return output_blocks, chart_data, None, citations
+
+
+def funnel_plot_setup(data, options):
+    # filter and prepare data for analysis
+    effect_sizes = options.effect_data
+    variances = options.effect_vars
+    if options.sample_size is not None:
+        sample_sizes = options.sample_size
+        do_n = True
+    else:
+        sample_sizes = None
+        do_n = False
+
+    e_data = []
+    w_data = []
+    v_data = []
+    n_data = []
+    bad_data = []
+    study_names = []
+    filtered = []
+
+    for r, row in enumerate(data.rows):
+        if row.not_filtered():
+            e = data.check_value(r, effect_sizes.position(), value_type=MetaWinConstants.VALUE_NUMBER)
+            v = data.check_value(r, variances.position(), value_type=MetaWinConstants.VALUE_NUMBER)
+            if do_n:
+                ns = data.check_value(r, sample_sizes.position(), value_type=MetaWinConstants.VALUE_NUMBER)
+            else:
+                ns = 1
+            if (e is not None) and (v is not None) and (v > 0) and (ns is not None) and (ns > 0):
+                e_data.append(e)
+                w_data.append(1/v)
+                v_data.append(v)
+                if do_n:
+                    n_data.append(ns)
+                study_names.append(row.label)
+            else:
+                bad_data.append(row.label)
+        else:
+            filtered.append(row.label)
+    e_data = numpy.array(e_data)
+    w_data = numpy.array(w_data)
+    v_data = numpy.array(v_data)
+
+    if options.funnel_y == "variance":
+        y_data = v_data
+    elif options.funnel_y == "inverse variance":
+        y_data = w_data
+    elif options.funnel_y == "standard error":
+        y_data = numpy.sqrt(v_data)
+    elif options.funnel_y == "precision":
+        y_data = 1/numpy.sqrt(v_data)
+    else:
+        y_data = numpy.array(n_data)
+
+    output_blocks = output_filtered_bad(filtered, bad_data)
+
+    n = len(e_data)
+    # citations = []
+    if n > 1:
+        output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
+        mean_e, *_ = mean_effect_var_and_q(e_data, w_data)
+
+        chart_data = MetaWinCharts.chart_funnel_plot(e_data, y_data, mean_e, effect_sizes.label, options.funnel_y)
+    else:
+        output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
+        chart_data = None
+
+    return output_blocks, chart_data

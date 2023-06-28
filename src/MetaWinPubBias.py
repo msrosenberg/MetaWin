@@ -22,6 +22,7 @@ from MetaWinLanguage import get_text
 
 TRIM_FILL = 1
 RANKCOR = 2
+FUNNEL = 3
 
 
 class PubBiasOptions:
@@ -38,6 +39,7 @@ class PubBiasOptions:
         self.k_estimator = "L"
         self.cor_test = "tau"
         self.norm_ci = True
+        self.funnel_y = None
 
     def report_choices(self):
         output_blocks = []
@@ -56,6 +58,8 @@ class PubBiasOptions:
                               get_citation("Begg_Mazumdar_1994"))
                 citations.append("Begg_1994")
                 citations.append("Begg_Mazumdar_1994")
+            elif self.pub_bias_test == FUNNEL:
+                output.append(get_text("Funnel Plot"))
 
             output_blocks.append(output)
 
@@ -77,11 +81,12 @@ class PubBiasOptions:
             output_blocks.append(output)
 
             output = []
-            if self.norm_ci:
-                output.append("→ {}".format(get_text("ci from norm")))
-            else:
-                output.append("→ {}".format(get_text("ci from t")))
-            output_blocks.append(output)
+            if self.pub_bias_test != FUNNEL:
+                if self.norm_ci:
+                    output.append("→ {}".format(get_text("ci from norm")))
+                else:
+                    output.append("→ {}".format(get_text("ci from t")))
+                output_blocks.append(output)
 
             if self.pub_bias_test == RANKCOR:
                 output_blocks.append(["→ {}: {} {}".format(get_text("Randomization to test correlation"),
@@ -102,6 +107,9 @@ class PubBiasTestDialog(QDialog):
 
     def init_ui(self):
         analysis_layout = QVBoxLayout()
+        funnel_button = QPushButton(get_text("Funnel Plot"))
+        funnel_button.clicked.connect(self.funnel_button_click)
+        analysis_layout.addWidget(funnel_button)
         rank_cor_button = QPushButton(get_text("Rank Correlation Analysis"))
         rank_cor_button.clicked.connect(self.rank_cor_button_click)
         analysis_layout.addWidget(rank_cor_button)
@@ -137,6 +145,10 @@ class PubBiasTestDialog(QDialog):
 
     def rank_cor_button_click(self):
         self.__options.pub_bias_test = RANKCOR
+        self.accept()
+
+    def funnel_button_click(self):
+        self.__options.pub_bias_test = FUNNEL
         self.accept()
 
 
@@ -328,6 +340,114 @@ class PubBiasRankCorrelationDialog(QDialog):
             options.sample_size = None
 
 
+class PubBiasFunnelPlotDialog(QDialog):
+    """
+    Dialog for choosing options for a funnel plot
+    """
+    def __init__(self, data: MetaWinData, last_effect, last_var):
+        super().__init__()
+        self.help = MetaWinConstants.help_index["funnel_plot"]
+        self.effect_size_box = None
+        self.variance_box = None
+        self.sample_size_box = None
+        self.columns = None
+        self.n_button = None
+        self.v_button = None
+        self.invv_button = None
+        self.se_button = None
+        self.prec_button = None
+        self.sample_size_label = None
+        self.variance_label = None
+        self.init_ui(data, last_effect, last_var)
+
+    def init_ui(self, data: MetaWinData, last_effect, last_var):
+        button_layout, _ = add_ok_cancel_help_button_layout(self)
+
+        analysis_label = QLabel(get_text("Funnel Plot"))
+        analysis_label.setStyleSheet(MetaWinConstants.title_label_style)
+
+        effect_size_label, self.variance_label = add_effect_choice_to_dialog(self, data, last_effect, last_var)
+
+        self.sample_size_box = QComboBox()
+        for col in self.columns:
+            self.sample_size_box.addItem(col.label)
+        self.sample_size_label = QLabel(get_text("Sample Size"))
+
+        options_layout = QVBoxLayout()
+        options_layout.addWidget(effect_size_label)
+        options_layout.addWidget(self.effect_size_box)
+        options_layout.addWidget(self.variance_label)
+        options_layout.addWidget(self.variance_box)
+        options_layout.addWidget(self.sample_size_label)
+        options_layout.addWidget(self.sample_size_box)
+
+        y_box = QGroupBox(get_text("Correlate Effect Size with"))
+        y_layout = QVBoxLayout()
+        self.n_button = QRadioButton(get_text("Sample Size"))
+        self.v_button = QRadioButton(get_text("Variance"))
+        self.invv_button = QRadioButton(get_text("Inverse Variance"))
+        self.se_button = QRadioButton(get_text("Standard Error"))
+        self.prec_button = QRadioButton(get_text("Precision"))
+
+        self.n_button.clicked.connect(self.click_y_variable)
+        self.v_button.clicked.connect(self.click_y_variable)
+        self.invv_button.clicked.connect(self.click_y_variable)
+        self.se_button.clicked.connect(self.click_y_variable)
+        self.prec_button.clicked.connect(self.click_y_variable)
+
+        y_layout.addWidget(self.n_button)
+        y_layout.addWidget(self.v_button)
+        y_layout.addWidget(self.invv_button)
+        y_layout.addWidget(self.se_button)
+        y_layout.addWidget(self.prec_button)
+        y_box.setLayout(y_layout)
+        self.n_button.setChecked(True)
+        self.click_y_variable()
+
+        main_frame = QFrame()
+        main_frame.setFrameShape(QFrame.Shape.Panel)
+        main_frame.setFrameShadow(QFrame.Shadow.Sunken)
+        main_frame.setLineWidth(2)
+        main_frame.setLayout(options_layout)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(analysis_label)
+        main_layout.addWidget(main_frame)
+        main_layout.addWidget(y_box)
+        main_layout.addLayout(button_layout)
+
+        self.setLayout(main_layout)
+        self.setWindowIcon(QIcon(MetaWinConstants.metawin_icon))
+        self.setWindowTitle(get_text("Funnel Plot"))
+
+    def show_help(self):
+        webbrowser.open(self.help)
+
+    def click_y_variable(self):
+        if self.n_button.isChecked():
+            self.sample_size_box.setEnabled(True)
+            self.sample_size_label.setEnabled(True)
+        else:
+            self.sample_size_box.setEnabled(False)
+            self.sample_size_label.setEnabled(False)
+
+    def set_options(self, options: PubBiasOptions):
+        options.effect_data = self.columns[self.effect_size_box.currentIndex()]
+        options.effect_vars = self.columns[self.variance_box.currentIndex()]
+        if self.n_button.isChecked():
+            options.sample_size = self.columns[self.sample_size_box.currentIndex()]
+            options.funnel_y = "sample size"
+        else:
+            options.sample_size = None
+            if self.v_button.isChecked():
+                options.funnel_y = "variance"
+            elif self.invv_button.isChecked():
+                options.funnel_y = "inverse variance"
+            elif self.se_button.isChecked():
+                options.funnel_y = "standard error"
+            elif self.prec_button.isChecked():
+                options.funnel_y = "precision"
+
+
 def do_pub_bias(data, options, decimal_places: int = 4, alpha: float = 0.05,  norm_ci: bool = True, sender=None):
     """
     primary function controlling the execution of publication biases
@@ -344,8 +464,12 @@ def do_pub_bias(data, options, decimal_places: int = 4, alpha: float = 0.05,  no
          citations) = MetaWinPubBiasFunctions.trim_and_fill_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.pub_bias_test == RANKCOR:
         output, citations = MetaWinPubBiasFunctions.rank_correlation_analysis(data, options, decimal_places,
-                                                                               sender=sender)
+                                                                              sender=sender)
         chart_data = None
+        analysis_values = None
+    elif options.pub_bias_test == FUNNEL:
+        output, chart_data = MetaWinPubBiasFunctions.funnel_plot_setup(data, options)
+        citations = []
         analysis_values = None
     else:
         output = []
@@ -370,6 +494,8 @@ def publication_bias(sender, data, last_effect, last_var, decimal_places: int = 
             sender.pub_bias_structure_dialog = PubBiasTrimFillDialog(data, last_effect, last_var)
         elif pub_bias_options.pub_bias_test == RANKCOR:
             sender.pub_bias_structure_dialog = PubBiasRankCorrelationDialog(data, last_effect, last_var)
+        elif pub_bias_options.pub_bias_test == FUNNEL:
+            sender.pub_bias_structure_dialog = PubBiasFunnelPlotDialog(data, last_effect, last_var)
         else:
             pub_bias_options.pub_bias_test = None
 
