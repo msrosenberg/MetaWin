@@ -91,11 +91,15 @@
                     </li>
                 </ul>
               </li>
-              <li><a href="#analsyses">Analyses</a>
+              <li><a href="#pub_bias">Publication Bias</a>
                 <ul>
-                    <li><a href="#basic_analysis">Basic Meta-Analysis</a></li>
                     <li><a href="#rank_correlation">Rank Correlation Analysis</a></li>
                     <li><a href="#trim_fill">Trim and Fill Analysis</a></li>
+                </ul>
+              </li>
+              <li><a href="#analyses">Analyses</a>
+                <ul>
+                    <li><a href="#basic_analysis">Basic Meta-Analysis</a></li>
                     <li><a href="#jackknife_analysis">Jackknife Meta-Analysis</a></li>
                     <li><a href="#cumulative_analysis">Cumulative Meta-Analysis</a></li>
                     <li><a href="#grouped_analysis">Grouped Meta-Analysis</a></li>
@@ -820,6 +824,200 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
 
         </div>
 
+
+        <div class="major_div">
+          <h1 id="pub_bias">Publication Bias</h1>
+            <p>
+                Publication bias analysis can be accessed by choosing
+                <span class="menu">Publication Bias</span> from the
+              <span class="menu">Computation</span> menu or
+              <img class="toolbar-button" src="images/waste-bin-full-filled-browse@256px.png"/> from the toolbar. Doing
+                so will bring up a dialog where you can choose the type of analysis you want to perform.
+            </p>
+
+
+
+
+          <h2 id="rank_correlation">Rank Correlation Analysis</h2>
+            <p>
+                Rank Correlation Analysis (<a href="#begg_1994">Begg 1994</a>; <a href="#begg_mazumdar_1994">Begg and
+                Mazumdar 1994</a>) is a simple test for publication bias, which uses a correlation of ranks to
+                look for a relationship between a standardized effect size and either sample size or a standardized
+                variance. The test is considered a statistical analogue of a funnel plot. For each study, the
+                standardized variance is calculated as:
+            </p>
+            <p>$$v_i^* = v_i - 1/{\sum{w}} ,$$</p>
+            <p>
+                and the standardized effect size of each study is calculated as
+            <p>$$\theta_i^* = \frac{\theta_i - \bar{\theta}}{\sqrt{v_i^*}}.$$</p>
+            <p>
+                This standardized effect size is then compared to either the individual study sample sizes or the
+                standardized variance using a rank correlation test (<a href="sokal_rohlf_1995">Sokal and Rohlf
+                1995</a>). A significant correlation may indicate a
+                publication bias where larger effect sizes (in one direction, <em>e.g.</em>, positive) are more likely
+                to be published than smaller ones.
+            </p>
+
+           <h3>Running a Rank Correlation Analysis</h3>
+            <p>
+                The Rank Correlation Analysis only uses a single dialog. Other than choosing the data sources, the
+                dialog asks whether the user wants the correlation to be vs. standardized variance or sample size,
+                where the latter choice then also requires the user to input the column containing sample sizes.
+            </p>
+            <p>
+                Additionally, there is an option to perform the rank correlation using Kendall's &tau;
+                (<a href="#kendall_1938">Kendall 1938</a>) or Spearman's &rho; (<a href="#spearman_1904">Spearman
+                1904</a>). Because the distribution of these metrics can be complicated, particularly when the
+                number of studies is low, <span class="metawin">MetaWin</span> automatically uses a randomization
+                procedure to thest their significance, with the number of iterations user-specifiable.
+            </p>
+
+            <figure><img src="images/analysis_rank_cor_dialog.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The following is an example of the output from a Rank Correlation Analysis.
+            </p>
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Rank Correlation Analysis<br/>
+→ Citations: Begg (1994), Begg and Mazumdar (1994)
+</p>
+<p>
+→ Effect Sizes: effect<br/>
+→ Effect Size Variances: variance<br/>
+→ Rank Correlation Method: Kendall's τ<br/>
+→ Citation: Kendall (1938)<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Randomization to test correlation: 999 iterations
+</p>
+<p>
+85 studies will be included in this analysis
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Rank Correlation Results</span>
+</p>
+<p>
+Kendall's τ = 0.2826<br/>
+Probability = 0.0010
+<p>
+<strong>References</strong>
+</p>
+<p>Begg, C.B. (1994) Publication bias. Pp. 399-409 in <em>The Handbook of Research Synthesis</em>, H. Cooper and
+    L.V. Hedges, eds. Sage, New York.</p>
+<p>Begg, C.B., and M. Mazumdar (1994) Operating characteristics of a rank correlation test for publication bias.
+    <em>Biometrics</em> 50:1088–1101.</p>
+<p>Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>. 30(1–2):81–89.</p>
+<p>Sokal, R.R., and F.J. Rohlf (1995) <em>Biometry</em> (3rd edition). Freeman, San Francisco.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+          <h2 id="trim_fill">Trim and Fill Analysis</h2>
+            <p>
+                "Trim and Fill" is a simple method to adjust for funnel plot asymmetry. It analyzes the distribution
+                of points and estimates "missing" studies in order to create the expected symmetry of an unbiased
+                funnel plot (<a href="#duval_tweedie_2000a">Duval and Tweedie 2000a</a>,
+                <a href="#duval_tweedie_2000b">2000b</a>).
+            </p>
+            <p>
+                Fundamentally the analysis works by iteratively estimating the asymmetry of the data around the mean,
+                and then removing a number of studies until symmetry is achieved. At this point the removed studies
+                are added back into the dataset, along with imputed "missing" studies that are the mirror image
+                (reflected across the mean) of those same re-added studies. The mean (and median) pre- and
+                post-addition of the imputed studies are reported.
+            </p>
+            <p>
+                Three different estimators of the number of missing studies are described by
+                <a href="#duval_tweedie_2000a">Duval and Tweedie (2000a)</a>, all of which are options within
+                <span class="metawin">MetaWin</span>.
+            </p>
+
+           <h3>Running a Trim and Fill analysis</h3>
+            <p>
+                The Trim and Fill analysis only uses a single dialog. Other than choosing the data sources and
+                whether you want a graph of the results, the one additional option is which of the three
+                estimators you wish to use for the analysis:
+                <em>R</em><sub>0</sub>, <em>L</em><sub>0</sub>, or <em>Q</em><sub>0</sub>.
+            </p>
+
+            <figure><img src="images/analysis_trim_fill_dialog.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The following is an example of the output from a trim and fill analysis. It includes the estimated
+                number of missing studies and the mean and median before and after imputation of these missing
+                studies.
+            </p>
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Trim and Fill Analysis<br/>
+→ Citations: Duval and Tweedie (2000a), Duval and Tweedie (2000b)
+</p>
+<p>
+→ Effect Sizes: effect<br/>
+→ Effect Size Variances: variance<br/>
+→ Estimator of Missing Studies: L0<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Standard confidence intervals around means based on Normal distribution
+</p>
+<p>
+85 studies will be included in this analysis
+</p>
+<p>
+Trim and Fill Analysis estimated 19 missing studies.
+</p>
+<strong>Mean Effect Sizes</strong>
+<pre><code>
+                             n     Mean    Median        95% CI
+--------------------------------------------------------------------
+Original Mean effect         85   5.0777   4.9119   4.9019 to 5.2534
+Trim and Fill Mean effect   104   4.9453   4.8298   4.7747 to 5.1159
+</code></pre>
+<p>
+<strong>References</strong>
+</p>
+<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
+    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
+<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
+    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
+</blockquote>
+
+<figure><img src="images/analysis_trim_fill_fig.png"></figure>
+<blockquote class="output-example">
+Funnel plot of effect vs. precision, showing the results of a Trim and Fill Analysis (Duval and Tweedie 2000a, b).
+    Solid black circles represent the original data; open red circles represent inferred "missing" data.
+    The dashed line represents the mean effect size of the original data, the dotted line the mean effect size
+    including the inferred data.
+<p>
+<strong>References</strong>
+</p>
+<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
+    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
+<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
+    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
+</blockquote>
+
+
+
+        </div>
+
+
         <div class="major_div">
           <h1 id="analyses">Analyses</h1>
             <p>
@@ -1055,182 +1253,6 @@ Fail-safe n = 19.8523
     <p><strong>References</strong></p>
 Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
     <em>Ecology</em> 78:1277–1283.
-</blockquote>
-
-
-          <h2 id="rank_correlation">Rank Correlation Analysis</h2>
-            <p>
-                Rank Correlation Analysis (<a href="#begg_1994">Begg 1994</a>; <a href="#begg_mazumdar_1994">Begg and
-                Mazumdar 1994</a>) is a simple test for publication bias, which uses a correlation of ranks to
-                look for a relationship between a standardized effect size and either sample size or a standardized
-                variance. The test is considered a statistical analogue of a funnel plot. For each study, the
-                standardized variance is calculated as:
-            </p>
-            <p>$$v_i^* = v_i - 1/{\sum{w}} ,$$</p>
-            <p>
-                and the standardized effect size of each study is calculated as
-            <p>$$\theta_i^* = \frac{\theta_i - \bar{\theta}}{\sqrt{v_i^*}}.$$</p>
-            <p>
-                This standardized effect size is then compared to either the individual study sample sizes or the
-                standardized variance using a rank correlation test (<a href="sokal_rohlf_1995">Sokal and Rohlf
-                1995</a>). A significant correlation may indicate a
-                publication bias where larger effect sizes (in one direction, <em>e.g.</em>, positive) are more likely
-                to be published than smaller ones.
-            </p>
-
-           <h3>Running a Rank Correlation Analysis</h3>
-            <p>
-                The Rank Correlation Analysis only uses a single dialog. Other than choosing the data sources, the
-                dialog asks whether the user wants the correlation to be vs. standardized variance or sample size,
-                where the latter choice then also requires the user to input the column containing sample sizes.
-            </p>
-            <p>
-                Additionally, there is an option to perform the rank correlation using Kendall's &tau;
-                (<a href="#kendall_1938">Kendall 1938</a>) or Spearman's &rho; (<a href="#spearman_1904">Spearman
-                1904</a>). Because the distribution of these metrics can be complicated, particularly when the
-                number of studies is low, <span class="metawin">MetaWin</span> automatically uses a randomization
-                procedure to thest their significance, with the number of iterations user-specifiable.
-            </p>
-
-            <figure><img src="images/analysis_rank_cor_dialog.png"></figure>
-
-           <h3>Output</h3>
-            <p>
-                The following is an example of the output from a Rank Correlation Analysis.
-            </p>
-<blockquote class="output-example">
-<p>
-<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
-</p>
-<p>
-Rank Correlation Analysis<br/>
-→ Citations: Begg (1994), Begg and Mazumdar (1994)
-</p>
-<p>
-→ Effect Sizes: effect<br/>
-→ Effect Size Variances: variance<br/>
-→ Rank Correlation Method: Kendall's τ<br/>
-→ Citation: Kendall (1938)<br/>
-→ Fixed Effects Model
-</p>
-<p>
-→ Randomization to test correlation: 999 iterations
-</p>
-<p>
-85 studies will be included in this analysis
-</p>
-<p>
-<span style="font-weight: bold; font-size: 1.25em">Rank Correlation Results</span>
-</p>
-<p>
-Kendall's τ = 0.2826<br/>
-Probability = 0.0010
-<p>
-<strong>References</strong>
-</p>
-<p>Begg, C.B. (1994) Publication bias. Pp. 399-409 in <em>The Handbook of Research Synthesis</em>, H. Cooper and
-    L.V. Hedges, eds. Sage, New York.</p>
-<p>Begg, C.B., and M. Mazumdar (1994) Operating characteristics of a rank correlation test for publication bias.
-    <em>Biometrics</em> 50:1088–1101.</p>
-<p>Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>. 30(1–2):81–89.</p>
-<p>Sokal, R.R., and F.J. Rohlf (1995) <em>Biometry</em> (3rd edition). Freeman, San Francisco.</p>
-</blockquote>
-
-
-
-
-
-
-
-
-          <h2 id="trim_fill">Trim and Fill Analysis</h2>
-            <p>
-                "Trim and Fill" is a simple method to adjust for funnel plot asymmetry. It analyzes the distribution
-                of points and estimates "missing" studies in order to create the expected symmetry of an unbiased
-                funnel plot (<a href="#duval_tweedie_2000a">Duval and Tweedie 2000a</a>,
-                <a href="#duval_tweedie_2000b">2000b</a>).
-            </p>
-            <p>
-                Fundamentally the analysis works by iteratively estimating the asymmetry of the data around the mean,
-                and then removing a number of studies until symmetry is achieved. At this point the removed studies
-                are added back into the dataset, along with imputed "missing" studies that are the mirror image
-                (reflected across the mean) of those same re-added studies. The mean (and median) pre- and
-                post-addition of the imputed studies are reported.
-            </p>
-            <p>
-                Three different estimators of the number of missing studies are described by
-                <a href="#duval_tweedie_2000a">Duval and Tweedie (2000a)</a>, all of which are options within
-                <span class="metawin">MetaWin</span>.
-            </p>
-
-           <h3>Running a Trim and Fill analysis</h3>
-            <p>
-                The Trim and Fill analysis only uses a single dialog. Other than choosing the data sources and
-                whether you want a graph of the results, the one additional option is which of the three
-                estimators you wish to use for the analysis:
-                <em>R</em><sub>0</sub>, <em>L</em><sub>0</sub>, or <em>Q</em><sub>0</sub>.
-            </p>
-
-            <figure><img src="images/analysis_trim_fill_dialog.png"></figure>
-
-           <h3>Output</h3>
-            <p>
-                The following is an example of the output from a trim and fill analysis. It includes the estimated
-                number of missing studies and the mean and median before and after imputation of these missing
-                studies.
-            </p>
-<blockquote class="output-example">
-<p>
-<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
-</p>
-<p>
-Trim and Fill Analysis<br/>
-→ Citations: Duval and Tweedie (2000a), Duval and Tweedie (2000b)
-</p>
-<p>
-→ Effect Sizes: effect<br/>
-→ Effect Size Variances: variance<br/>
-→ Estimator of Missing Studies: L0<br/>
-→ Fixed Effects Model
-</p>
-<p>
-→ Standard confidence intervals around means based on Normal distribution
-</p>
-<p>
-85 studies will be included in this analysis
-</p>
-<p>
-Trim and Fill Analysis estimated 19 missing studies.
-</p>
-<strong>Mean Effect Sizes</strong>
-<pre><code>
-                             n     Mean    Median        95% CI
---------------------------------------------------------------------
-Original Mean effect         85   5.0777   4.9119   4.9019 to 5.2534
-Trim and Fill Mean effect   104   4.9453   4.8298   4.7747 to 5.1159
-</code></pre>
-<p>
-<strong>References</strong>
-</p>
-<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
-    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
-<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
-    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
-</blockquote>
-
-<figure><img src="images/analysis_trim_fill_fig.png"></figure>
-<blockquote class="output-example">
-Funnel plot of effect vs. precision, showing the results of a Trim and Fill Analysis (Duval and Tweedie 2000a, b).
-    Solid black circles represent the original data; open red circles represent inferred "missing" data.
-    The dashed line represents the mean effect size of the original data, the dotted line the mean effect size
-    including the inferred data.
-<p>
-<strong>References</strong>
-</p>
-<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
-    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
-<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
-    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
 </blockquote>
 
 

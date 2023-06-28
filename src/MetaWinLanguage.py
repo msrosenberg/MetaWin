@@ -286,6 +286,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "prompt_data_save_clear": "Do you want to save the data before clearing it?",
                       "prompt_data_save_quit": "Do you want to save the data before quitting?",
                       "prompt_output_save_quit": "Do you want to save the output before quitting?",
+                      "Publication Bias": "Publication Bias",
                       "Radial Arc": "Radial Arc",
                       "Radial Arc Labels": "Radial Arc Labels",
                       "Radial_chart_caption": "Radial chart (Galbraith 1988, 1994) of standardized {} vs. precision. "

@@ -12,7 +12,7 @@ from PyQt6.QtGui import QIcon, QIntValidator, QDoubleValidator
 
 from MetaWinData import MetaWinData
 import MetaWinConstants
-import MetaWinAnalysisFunctions
+import MetaWinPubBiasFunctions
 # from MetaWinMessages import report_warning
 from MetaWinWidgets import add_ok_cancel_help_button_layout, add_cancel_help_button_layout, add_drag_drop_list, \
     create_list_item, add_effect_choice_to_dialog
@@ -126,7 +126,7 @@ class PubBiasTestDialog(QDialog):
         self.setLayout(main_layout)
 
         self.setWindowIcon(QIcon(MetaWinConstants.metawin_icon))
-        self.setWindowTitle(get_text("Meta-Analysis"))
+        self.setWindowTitle(get_text("Publication Bias"))
 
     def show_help(self):
         webbrowser.open(self.help)
@@ -335,15 +335,15 @@ def do_pub_bias(data, options, decimal_places: int = 4, alpha: float = 0.05,  no
     based on specific options, farms out analysis to computational functions, then collects and returns
     results
     """
-    output_blocks = [["<h2>{}</h2>".format(get_text("Analysis"))]]
+    output_blocks = [["<h2>{}</h2>".format(get_text("Publication Bias"))]]
     options.norm_ci = norm_ci
     output, all_citations = options.report_choices()
     output_blocks.extend(output)
     if options.pub_bias_test == TRIM_FILL:
         (output, chart_data, analysis_values,
-         citations) = MetaWinAnalysisFunctions.trim_and_fill_analysis(data, options, decimal_places, alpha, norm_ci)
+         citations) = MetaWinPubBiasFunctions.trim_and_fill_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.pub_bias_test == RANKCOR:
-        output, citations = MetaWinAnalysisFunctions.rank_correlation_analysis(data, options, decimal_places,
+        output, citations = MetaWinPubBiasFunctions.rank_correlation_analysis(data, options, decimal_places,
                                                                                sender=sender)
         chart_data = None
         analysis_values = None
