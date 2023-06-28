@@ -226,6 +226,9 @@ references = {
                            "Press: Princeton, NJ.</span></li>", "Lajeunesse <em>et al.</em> (2013)",
                            "10.23943/princeton/9780691137285.003.0017"],
 
+    "Light_Pillemer_1984": ["Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing "
+                            "Research</em>. Harvard University Press: Cambridge.", "Light and Pillemer (1984)", ""],
+
     "Mantel_and_Haenszel_1959": ["Mantel, N., and W. Haenszel (1959) Statistical aspects of the analysis of data "
                                  "from retrospective studies of disease. <em>Journal of the National Cancer "
                                  "Institute</em> 22:719&ndash;748.", "Mantel and Haenszel (1959)",
@@ -236,6 +239,11 @@ references = {
                                  "Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds. "
                                  "Princeton University Press: Princeton, NJ.", "Mengersen and Gurevitch (2013)",
                                  "10.23943/princeton/9780691137285.003.0007"],
+
+    "Nakagawa_et_2022": ["Nakagawa, S., M. Lagisz, M.D. Jennions, J. Koricheva, D.W.A. Noble, T.H. Parker, A. "
+                         "Sánchez-Tójar, Y. Yang, and R.E. O'Dea (2022) Methods for testing publication bias in "
+                         "ecological and evolutionary meta-analyses. <em>Methods in Ecology and Evolution</em> "
+                         "13(1):4&ndash;21.", "Nakagawa <em>et al.</em> (2022)", "10.1111/2041-210X.13724"],
 
     "Normand_1999": ["Normand, S.-L.T. (1999) Meta-analysis: Formulating, evaluating, combining, and reporting. "
                      "<em>Statistics in Medicine</em> 18:321&mdash;359.", "Normand (1999)",

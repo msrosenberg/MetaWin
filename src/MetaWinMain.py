@@ -132,7 +132,7 @@ class MainWindow(QMainWindow):
 
         # draw menu
         draw_menu = menubar.addMenu(get_text("Draw"))
-        draw_scatter_action = QAction(QIcon(MetaWinConstants.scatter_icon), get_text("Scatter/Funnel Plot"), self)
+        draw_scatter_action = QAction(QIcon(MetaWinConstants.scatter_icon), get_text("Scatter Plot"), self)
         draw_scatter_action.triggered.connect(self.draw_scatter_plot)
         draw_menu.addAction(draw_scatter_action)
         draw_histogram_action = QAction(QIcon(MetaWinConstants.histogram_icon), get_text("Weighted Histogram"), self)

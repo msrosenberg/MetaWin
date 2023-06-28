@@ -404,14 +404,15 @@ def funnel_plot_setup(data, options):
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     n = len(e_data)
-    # citations = []
+    citations = []
     if n > 1:
         output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
         mean_e, *_ = mean_effect_var_and_q(e_data, w_data)
-
+        citations.append("Light_Pillemer_1984")
+        citations.append("Nakagawa_et_2022")
         chart_data = MetaWinCharts.chart_funnel_plot(e_data, y_data, mean_e, effect_sizes.label, options.funnel_y)
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
         chart_data = None
 
-    return output_blocks, chart_data
+    return output_blocks, chart_data, citations

@@ -1215,7 +1215,6 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
 
     y_min = numpy.min(y_data)
     y_max = numpy.max(y_data)
-    # x_ends = numpy.max(numpy.abs(x_data))
     chart_data.caption.no_effect = chart_data.add_line(get_text("Line of No Effect"), mean_e, y_min, mean_e, y_max,
                                                        color="silver", linestyle="dotted", zorder=1)
     if y_label != "sample size":

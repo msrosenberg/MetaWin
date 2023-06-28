@@ -326,7 +326,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Save Output": "Save Output",
                       "Save Figure": "Save Figure",
                       "Scatter plot of {} vs. {}.": "Scatter plot of {} vs. {}.",
-                      "Scatter/Funnel Plot": "Scatter/Funnel Plot",
+                      "Scatter Plot": "Scatter Plot",
                       "Select All": "Select All",
                       "Select Groups to Include in Analyses": "Select Groups to Include in Analyses",
                       "Shape": "Shape",

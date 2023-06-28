@@ -468,8 +468,7 @@ def do_pub_bias(data, options, decimal_places: int = 4, alpha: float = 0.05,  no
         chart_data = None
         analysis_values = None
     elif options.pub_bias_test == FUNNEL:
-        output, chart_data = MetaWinPubBiasFunctions.funnel_plot_setup(data, options)
-        citations = []
+        output, chart_data, citations = MetaWinPubBiasFunctions.funnel_plot_setup(data, options)
         analysis_values = None
     else:
         output = []
