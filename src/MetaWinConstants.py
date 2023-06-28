@@ -13,7 +13,7 @@ mean_data_tuple = namedtuple("mean_data_tuple", ["name", "order", "n", "mean", "
 
 MAJOR_VERSION = 3
 MINOR_VERSION = 0
-PATCH_VERSION = 12
+PATCH_VERSION = 13
 
 # validity check when fetching value from data matrix
 VALUE_NUMBER = 0
@@ -86,6 +86,9 @@ show_toolbar_icon = resource_path(icon_path + "toolbar-position-left-add-filled@
 hide_toolbar_icon = resource_path(icon_path + "toolbar-position-left-cancel-filled@256px.png")
 english_icon = resource_path(icon_path + "flag-united-states@256px.png")
 spanish_icon = resource_path(icon_path + "flag-spain@256px.png")
+color_swatch_icon = resource_path(icon_path + "color-swatches@256px.png")
+# in anticipation of a new section
+# pub_bias_icon = resource_path(icon_path + "waste-bin-full-filled-browse@256px.png")
 
 metawin_icon = resource_path(icon_path + "metawin3toolbar_icon.png")
 metawin_splash = resource_path(icon_path + "metawin3splash_square.png")
@@ -129,127 +132,145 @@ title_label_style = "font-weight: bold; font-size: 16px"
 # full reference and citation list
 references = {
     "Adams_et_1997": ["Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of "
-                      "ecological data. <em>Ecology</em> 78:1277&ndash;1283.", "Adams <em>et al.</em> (1997)"],
+                      "ecological data. <em>Ecology</em> 78:1277&ndash;1283.", "Adams <em>et al.</em> (1997)",
+                      "10.1890/0012-9658(1997)078[1277:RTFMAO]2.0.CO;2"],
 
     "Begg_1994": ["Begg, C.B. (1994) Publication bias. Pp. 399-409 in <em>The Handbook of Research Synthesis</em>, "
-                  "H. Cooper and L.V. Hedges, eds. Sage, New York.", "Begg (1994)"],
+                  "H. Cooper and L.V. Hedges, eds. Sage, New York.", "Begg (1994)", ""],
 
     "Begg_Mazumdar_1994": ["Begg, C.B., and M. Mazumdar (1994) Operating characteristics of a rank correlation test "
-                           "for publication bias. <em>Biometrics</em> 50:1088&ndash;1101.", "Begg and Mazumdar (1994)"],
+                           "for publication bias. <em>Biometrics</em> 50:1088&ndash;1101.", "Begg and Mazumdar (1994)",
+                           "10.2307/2533446"],
 
     "Berlin_et_1989": ["Berlin, J.A., N.M. Laird, H.S. Sacks, and T.C. Chalmers (1989) A comparison of statistical "
                        "methods for combining event rates from clinical trials. <em>Statistics in Medicine</em> "
-                       "8:141&ndash;151.", "Berlin <em>et al.</em> (1989)"],
+                       "8:141&ndash;151.", "Berlin <em>et al.</em> (1989)", "10.1002/sim.4780080202"],
 
     "Chalmers_1991": ["Chalmers, T.C. (1991) Problems induced by meta-analyses. <em>Statistics in Medicine</em> "
-                      "10:971&ndash;980.", "Chalmers (1991)"],
+                      "10:971&ndash;980.", "Chalmers (1991)", "10.1002/sim.4780100618"],
 
     "Cooper_1998": ["Cooper, H. (1998) <em>Synthesizing research: A guide for literature reviews</em> (3rd edition). "
-                    "Sage, Thousand Oaks, CA.", "Cooper (1998)"],
+                    "Sage, Thousand Oaks, CA.", "Cooper (1998)", ""],
 
     "DerSimonian_Laird_1986": ["DerSimonian, R., and N. Laird (1986) Meta-analysis in clinical trials. "
-                               "<em>Controlled Clinical Trials</em> 7:177&ndash;188.", "DerSimonian and Laird (1986)"],
+                               "<em>Controlled Clinical Trials</em> 7:177&ndash;188.", "DerSimonian and Laird (1986)",
+                               "10.1016/0197-2456(86)90046-2"],
 
     "Dixon_1993": ["Dixon, P.M. (1993) The bootstrap and the jackknife: Describing the precision of ecological "
                    "indices. Pp. 290&mdash;318 in <em>Design and Analysis of Ecological Experiments</em>, "
-                   "S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall, New York.", "Dixon (1993)"],
+                   "S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall, New York.", "Dixon (1993)", ""],
 
     "Duval_Tweedie_2000a": ["Duval, S. and R. Tweedie (2000a) A nonparametric \"trim and fill\" method "
                             "of accounting for publication bias in meta-analysis. <em>Journal of the American "
-                            "Statistical Association</em> 95(449):89&ndash;98.", "Duval and Tweedie (2000a)"],
+                            "Statistical Association</em> 95(449):89&ndash;98.", "Duval and Tweedie (2000a)",
+                            "10.1080/01621459.2000.10473905"],
 
     "Duval_Tweedie_2000b": ["Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of "
                             "testing and adjusting for publication bias in meta-analysis. "
-                            "<em>Biometrics</em> 56:455&ndash;463.", "Duval and Tweedie (2000b)"],
+                            "<em>Biometrics</em> 56:455&ndash;463.", "Duval and Tweedie (2000b)",
+                            "10.1111/j.0006-341X.2000.00455.x"],
+
+    "Egger_et_1997": ["Egger, M., G.D. Smith, M. Schneider, and C. Minder (1997) Bias in meta-analysis detected by a "
+                      "simple, graphical test. <em>BMJ</em> 315:629&ndash;634.", "Egger <em>et al.</em> (1997)",
+                      "10.1136/bmj.315.7109.629"],
 
     "Fisher_1928": ["Fisher, R.A. (1928) <em>Statistical methods for research workers</em> (2nd edition). "
-                    "Oliver and Boyd, London.", "Fisher (1928)"],
+                    "Oliver and Boyd, London.", "Fisher (1928)", ""],
 
     "Galbraith_1988": ["Galbraith, R.F. (1988) A note on graphical presentation of estimated odds ratios from "
                        "several clinical trials. <em>Statistics in Medicine</em> 7:889&ndash;894.",
-                       "Galbraith (1988)"],
+                       "Galbraith (1988)", "10.1002/sim.4780070807"],
 
     "Galbraith_1994": ["Galbraith, R.F. (1994) Some applications of radial plots. <em>Journal of the American "
-                       "Statistical Association</em> 89:1232&ndash;1242.", "Galbraith (1994)"],
+                       "Statistical Association</em> 89:1232&ndash;1242.", "Galbraith (1994)",
+                       "10.1080/01621459.1994.10476864"],
 
     "Greenland_1987": ["Greenland, S. (1987) Quantitative methods in the review of epidemiologic literature. "
-                       "<em>Epidemiologic Review</em> 9:1&ndash;30.", "Greenland (1987)"],
+                       "<em>Epidemiologic Review</em> 9:1&ndash;30.", "Greenland (1987)",
+                       "10.1093/oxfordjournals.epirev.a036298"],
 
     "Gurevitch_Heges_1993": ["Gurevitch, J., and L.V. Hedges (1993) Meta-analysis: Combining the results of "
                              "independent experiments. Pp. 378&ndash;398 in <em>Design and analysis of "
                              "experiments</em>, S.M. Scheiner and J. Gurevitch, eds. Chapman and Hall, New York.",
-                             "Gurevitch and Hedges (1993)"],
+                             "Gurevitch and Hedges (1993)", ""],
 
     "Hedges_Olkin_1985": ["Hedges, L.V. and I. Olkin (1985) <em>Statistical Methods for Meta-analysis</em>. "
-                          "Academic Press, Orlando, FL.", "Hedges and Olkin (1985)"],
+                          "Academic Press, Orlando, FL.", "Hedges and Olkin (1985)", ""],
 
     "Hedges_et_1999": ["Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response ratios in "
                        "experimental ecology. <em>Ecology</em> 80(4):1150&ndash;1156.",
-                       "Hedges <em>et al.</em> (1999)"],
+                       "Hedges <em>et al.</em> (1999)", "10.1890/0012-9658(1999)080[1150:TMAORR]2.0.CO;2"],
 
     "Higgins_Thompson_2002": ["Higgins, J.P.T. and S.G. Thompson (2002) Quantifying heterogeneity in a meta-analysis. "
-                              "<em>Statistics in Medicine</em> 21:1539&ndash;1558.", "Higgins and Thompson (2002)"],
+                              "<em>Statistics in Medicine</em> 21:1539&ndash;1558.", "Higgins and Thompson (2002)",
+                              "10.1002/sim.1186"],
 
     "Huedo-Medina_et_2006": ["Huedo-Medina, T.B., J. Sánchez-Meca, F. Marín-Martínez, and J. Botella (2006) "
                              "Assessing heterogeneity in meta-analysis: Q statistic or I2 index? "
-                             "<em>Psychological Methods</em> 11:193&ndash;206.", "Huedo-Medina <em>et al.</em> (2006)"],
+                             "<em>Psychological Methods</em> 11:193&ndash;206.", "Huedo-Medina <em>et al.</em> (2006)",
+                             "10.1037/1082-989X.11.2.193"],
 
     "Kendall_1938": ["Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>. "
-                     "30(1&ndash;2):81&ndash;89.", "Kendall (1938)"],
+                     "30(1&ndash;2):81&ndash;89.", "Kendall (1938)", "10.1093/biomet/30.1-2.81"],
 
     "LAbbe_et_1987": ["L&rsquo;Abbé, K.A., A.S. Detsky, and K. O&rsquo;Rourke (1987) Meta-analysis in clinical "
                       "research. <em>Annals of Internal Medicine</em> 107:224&ndash;233.",
-                      "L&rsquo;Abbé <em>et al.</em> (1987)"],
+                      "L&rsquo;Abbé <em>et al.</em> (1987)", "10.7326/0003-4819-107-2-224"],
 
     "Lajeunesse_2009": ["Lajeunesse, M.J. (2009) Meta-analysis and the comparative phylogenetic method. <em>American "
-                        "Naturalist</em> 174:369&ndash;381.", "Lajeunesse (2009)"],
+                        "Naturalist</em> 174:369&ndash;381.", "Lajeunesse (2009)", "10.1086/603628"],
 
     "Lajeunesse_et_2013": ["Lajeunesse, M.J., M.S. Rosenberg, and M.D. Jennions (2013) Phylogenetically independent "
                            "meta-analysis. Pp. 284–299 in <em>Handbook of Meta-analysis in Ecology and "
                            "Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds. Princeton University "
-                           "Press: Princeton, NJ.</span></li>", "Lajeunesse <em>et al.</em> (2013)"],
+                           "Press: Princeton, NJ.</span></li>", "Lajeunesse <em>et al.</em> (2013)",
+                           "10.23943/princeton/9780691137285.003.0017"],
 
     "Mantel_and_Haenszel_1959": ["Mantel, N., and W. Haenszel (1959) Statistical aspects of the analysis of data "
                                  "from retrospective studies of disease. <em>Journal of the National Cancer "
-                                 "Institute</em> 22:719&ndash;748.", "Mantel and Haenszel (1959)"],
+                                 "Institute</em> 22:719&ndash;748.", "Mantel and Haenszel (1959)",
+                                 "10.1093/jnci/22.4.719"],
 
     "Mengerson_Gurevitch_2013": ["Mengersen, K., and J. Gurevitch (2013) Using other metrics of effect size in "
                                  "meta-analysis. Pp. 72&ndash;85 in <em>Handbook of Meta-analysis in Ecology and "
                                  "Evolution</em>, J. Koricheva, J. Gurevitch and K.L. Mengersen, eds. "
-                                 "Princeton University Press: Princeton, NJ.", "Mengersen and Gurevitch (2013)"],
+                                 "Princeton University Press: Princeton, NJ.", "Mengersen and Gurevitch (2013)",
+                                 "10.23943/princeton/9780691137285.003.0007"],
 
     "Normand_1999": ["Normand, S.-L.T. (1999) Meta-analysis: Formulating, evaluating, combining, and reporting. "
-                     "<em>Statistics in Medicine</em> 18:321&mdash;359.", "Normand (1999)"],
+                     "<em>Statistics in Medicine</em> 18:321&mdash;359.", "Normand (1999)",
+                     "10.1002/(SICI)1097-0258(19990215)18:3<321::AID-SIM28>3.0.CO;2-P"],
 
     "Orwin_1983": ["Orwin, R.G. (1983) A fail-safe <em>N</em> for effect size in meta-analysis. <em>Journal of "
-                   "Educational Statistics</em> 8(2):157&ndash;159.", "Orwin (1983)"],
+                   "Educational Statistics</em> 8(2):157&ndash;159.", "Orwin (1983)", "10.2307/1164923"],
 
     "Rosenberg_et_2000": ["Rosenberg, M.S., D.C. Adams, and J. Gurevitch (2000) <em>MetaWin: Statistical Software "
                           "for Meta-analysis</em>. Sinauer Associates, Sunderland, MA.",
-                          "Rosenberg <em>et al.</em> (2000)"],
+                          "Rosenberg <em>et al.</em> (2000)", ""],
 
     "Rosenberg_2005": ["Rosenberg, M.S. (2005) The file-drawer problem revisited: A general weighted method for "
                        "calculating fail-safe numbers in meta-analysis. <em>Evolution</em> 59(2):464&ndash;468.",
-                       "Rosenberg (2005)"],
+                       "Rosenberg (2005)", "10.1554/04-602"],
 
     "Rosenberg_2013": ["Rosenberg, M.S. (2013) Moment and least-squares based approaches to meta-analytic inference. "
                        "Pp. 108&ndash;124 in <em>Handbook of Meta-analysis in Ecology and Evolution</em>, "
                        "J. Koricheva, J. Gurevitch and K.L. Mengersen, eds. Princeton University Press: Princeton, NJ.",
-                       "Rosenberg (2013)"],
+                       "Rosenberg (2013)", "10.23943/princeton/9780691137285.003.0009"],
 
     "Rosenthal_1979": ["Rosenthal, R. (1979) The &ldquo;file drawer problem&rdquo; and tolerance for null results. "
-                       "<em>Psychological Bulletin</em> 86(3):638&ndash;641.", "Rosenthal (1979)"],
+                       "<em>Psychological Bulletin</em> 86(3):638&ndash;641.", "Rosenthal (1979)",
+                       "10.1037/0033-2909.86.3.638"],
 
     "Rosenthal_1991": ["Rosenthal, R. (1991) <em>Meta-analytic procedures for social research<em> (revised edition). "
-                       "Sage, Newbury Park, CA.", "Rosenthal (1991)"],
+                       "Sage, Newbury Park, CA.", "Rosenthal (1991)", ""],
 
     "Sokal_Rohlf_1995": ["Sokal, R.R., and F.J. Rohlf (1995) <em>Biometry</em> (3rd edition). Freeman, San Francisco.",
-                         "Sokal and Rohlf (1995)"],
+                         "Sokal and Rohlf (1995)", ""],
 
     "Spearman_1904": ["Spearman C. (1904) The proof and measurement of association between two things. <em>American "
-                      "Journal of Psychology</em>. 15(1):72&ndash;101.", "Spearman (1904)"],
+                      "Journal of Psychology</em>. 15(1):72&ndash;101.", "Spearman (1904)", "10.2307/1412159"],
 
     "Wang_and_Bushman_1998": ["Wang, M.C., and B.J. Bushman (1998) Using the normal quantile plot to explore "
                               "meta-analytic data sets. <em>Psychological Methods</em> 3:46&ndash;54.",
-                              "Wang and Bushman (1998)"]
+                              "Wang and Bushman (1998)", "10.1037/1082-989X.3.1.46"]
 }

@@ -44,6 +44,8 @@ added_files = [("resources/images/exit@256px.png", "resources/images"),
 			   ("resources/images/flag-spain@256px.png", "resources/images"),
 			   ("resources/images/letter-t@256px.png", "resources/images"),
 			   ("resources/images/sum-gear-filled@256px.png", "resources/images"),
+			   ("resources/images/color-swatches@256px.png", "resources/images"),
+			   ("resources/images/waste-bin-full-filled-browse@256px.png", "resources/images"),
 
 			   ("resources/images/metawin3icon.png", "resources/images"),
 			   ("resources/images/draw_forest.png", "resources/images"),

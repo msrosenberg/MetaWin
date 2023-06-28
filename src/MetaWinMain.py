@@ -11,7 +11,8 @@ from PyQt6.QtWidgets import QMainWindow, QTabWidget, QTableWidget, QFileDialog, 
     QWidgetAction, QComboBox
 from PyQt6.QtGui import QIcon, QColor, QAction, QActionGroup, QTextCursor
 from PyQt6 import QtCore
-from matplotlib.backends.backend_qtagg import NavigationToolbar2QT
+from matplotlib.backends.backend_qtagg import NavigationToolbar2QT, FigureCanvasQTAgg
+from matplotlib.figure import Figure
 
 import MetaWinCharts
 from MetaWinAbout import MetaWinAbout
@@ -42,6 +43,7 @@ class MainWindow(QMainWindow):
         self.tree_info_label = None
         self.clicked_header = None
         MetaWinLanguage.current_language = config["language"]
+        MetaWinCharts.color_name_space = config["color name space"]
         self.output_decimals = config["output decimals"]
         self.data_decimals = config["data decimals"]
         self.filtered_row_color = config["filtered row color"]
@@ -72,11 +74,14 @@ class MainWindow(QMainWindow):
         self.conf_int_action = None
         # self.language_actions = None
         self.language_box = None
+        self.color_name_space_actions = None
         self.output_saved = True
         self.data_saved = True
         self.empty_col_num = 10
         self.empty_row_num = 15
         self.chart_data = None
+        self.figure_canvas = None
+        self.caption_box = None
         self.init_ui()
 
     def init_ui(self):
@@ -242,6 +247,22 @@ class MainWindow(QMainWindow):
         language_menu.addAction(localization_action)
         options_menu.addMenu(language_menu)
 
+        # color name space submenu
+        color_name_space_menu = QMenu(get_text("Color Name Space"), self)
+        color_name_space_menu.setIcon(QIcon(MetaWinConstants.color_swatch_icon))
+        self.color_name_space_actions = QActionGroup(self)
+        self.color_name_space_actions.setExclusive(True)
+        for color_space in ("xkcd", "X11/CSS4"):
+            c_action = QAction(color_space, self)
+            c_action.setCheckable(True)
+            self.color_name_space_actions.addAction(c_action)
+            if color_space == MetaWinCharts.color_name_space:
+                c_action.setChecked(True)
+            c_action.triggered.connect(self.color_name_space_clicked)
+            color_name_space_menu.addAction(c_action)
+        options_menu.addMenu(color_name_space_menu)
+
+
         # help menu
         help_menu = menubar.addMenu(get_text("Help"))
         about_action = QAction(QIcon(MetaWinConstants.metawin_icon), get_text("About MetaWin"), self)
@@ -338,6 +359,12 @@ class MainWindow(QMainWindow):
         self.graph_toolbar.addAction(export_graph_data_action)
         self.graph_toolbar.addAction(edit_graph_action)
         graph_master_layout.addWidget(self.graph_toolbar)
+        self.figure_canvas = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
+        toolbar = NavigationToolbar2QT(self.figure_canvas, None)
+        self.save_graph_action.triggered.connect(toolbar.save_figure)
+        self.caption_box = QTextEdit()
+        self.graph_layout.addWidget(self.figure_canvas, stretch=8)
+        self.graph_layout.addWidget(self.caption_box, stretch=1)
         graph_master_layout.addLayout(self.graph_layout)
         self.graph_area.setLayout(graph_master_layout)
         self.main_area.addTab(self.graph_area, QIcon(MetaWinConstants.graph_icon), get_text("Graph"))
@@ -711,34 +738,26 @@ class MainWindow(QMainWindow):
                 norm_ci = False
             else:
                 norm_ci = True
-            output, figure, chart_data = MetaWinAnalysis.meta_analysis(self, self.data, self.last_effect,
-                                                                       self.last_var, self.output_decimals,
-                                                                       self.alpha, self.phylogeny, norm_ci)
+            output, chart_data = MetaWinAnalysis.meta_analysis(self, self.data, self.last_effect, self.last_var,
+                                                               self.output_decimals, self.alpha, self.phylogeny,
+                                                               norm_ci)
             if output is not None:
                 self.write_multi_output_blocks(output)
                 self.main_area.setCurrentIndex(1)
-                if figure is not None:
-                    self.show_figure(figure, chart_data)
+                if chart_data is not None:
+                    self.show_figure(chart_data)
         else:
             MetaWinMessages.report_warning(self, get_text("Warning"), get_text("No data has been loaded."))
 
-    def show_figure(self, figure, chart_data) -> None:
+    def show_figure(self, chart_data) -> None:
         """
-        Replace the current figure in the graphics tab with a new figure, toolbar, and caption
+        Create a new figure based on the chart_data, display it and its caption
         """
         self.main_area.setTabVisible(2, True)
-        # erase existing figure elements
-        for i in reversed(range(self.graph_layout.count())):
-            self.graph_layout.itemAt(i).widget().setParent(None)
-
-        # create new figure
-        toolbar = NavigationToolbar2QT(figure, None)
-        self.save_graph_action.triggered.connect(toolbar.save_figure)
-        caption_box = QTextEdit()
-        caption_box.setText(chart_data.caption_text())
-        self.graph_layout.addWidget(figure, stretch=8)
-        self.graph_layout.addWidget(caption_box, stretch=1)
+        self.caption_box.setText(chart_data.caption_text())
         self.chart_data = chart_data
+        MetaWinCharts.create_figure(chart_data, self.figure_canvas)
+        self.figure_canvas.draw()
 
     def load_phylogeny(self) -> None:
         inname = QFileDialog.getOpenFileName(self, get_text("Load Phylogeny"))
@@ -758,39 +777,37 @@ class MainWindow(QMainWindow):
 
     def draw_scatter_plot(self) -> None:
         if self.data is not None:
-            figure, chart_data = MetaWinDraw.draw_scatter_dialog(self, self.data)
-            if figure is not None:
-                self.show_figure(figure, chart_data)
+            chart_data = MetaWinDraw.draw_scatter_dialog(self, self.data)
+            if chart_data is not None:
+                self.show_figure(chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def draw_histogram(self) -> None:
         if self.data is not None:
-            figure, chart_data = MetaWinDraw.draw_histogram_dialog(self, self.data, self.last_effect, self.last_var)
-            if figure is not None:
-                self.show_figure(figure, chart_data)
+            chart_data = MetaWinDraw.draw_histogram_dialog(self, self.data, self.last_effect, self.last_var)
+            if chart_data is not None:
+                self.show_figure(chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def draw_normal_quantile_plot(self) -> None:
         if self.data is not None:
-            figure, chart_data = MetaWinDraw.draw_normal_quantile_dialog(self, self.data, self.last_effect,
-                                                                         self.last_var)
-            if figure is not None:
-                self.show_figure(figure, chart_data)
+            chart_data = MetaWinDraw.draw_normal_quantile_dialog(self, self.data, self.last_effect, self.last_var)
+            if chart_data is not None:
+                self.show_figure(chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def draw_radial_plot(self) -> None:
         if self.data is not None:
-            figure, chart_data = MetaWinDraw.draw_radial_dialog(self, self.data, self.last_effect, self.last_var)
-            if figure is not None:
-                self.show_figure(figure, chart_data)
+            chart_data = MetaWinDraw.draw_radial_dialog(self, self.data, self.last_effect, self.last_var)
+            if chart_data is not None:
+                self.show_figure(chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def draw_forest_plot(self) -> None:
         if self.data is not None:
-            figure, chart_data = MetaWinDraw.draw_forest_dialog(self, self.data, self.last_effect, self.last_var,
-                                                                self.alpha)
-            if figure is not None:
-                self.show_figure(figure, chart_data)
+            chart_data = MetaWinDraw.draw_forest_dialog(self, self.data, self.last_effect, self.last_var, self.alpha)
+            if chart_data is not None:
+                self.show_figure(chart_data)
                 self.main_area.setCurrentIndex(2)
 
     def clear_filters(self) -> None:
@@ -831,6 +848,11 @@ class MainWindow(QMainWindow):
     def localization(self) -> None:
         webbrowser.open(self.localization_help)
 
+    def color_name_space_clicked(self) -> None:
+        for cns in self.color_name_space_actions.actions():
+            if cns.isChecked():
+                MetaWinCharts.color_name_space = cns.text()
+
     def click_check_for_update(self):
         self.check_for_update()
 
@@ -861,9 +883,9 @@ class MainWindow(QMainWindow):
 
     def edit_graph(self):
         if self.chart_data is not None:
-            figure = MetaWinDraw.edit_figure(self, self.chart_data)
-            if figure is not None:
-                self.show_figure(figure, self.chart_data)
+            chart_data = MetaWinDraw.edit_figure(self, self.chart_data)
+            if chart_data is not None:
+                self.show_figure(chart_data)
 
     def change_conf_int_distribution(self):
         if self.confidence_interval_dist == "Normal":

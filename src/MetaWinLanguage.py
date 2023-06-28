@@ -40,6 +40,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Clear Data": "Clear Data",
                       "Clear Filters": "Clear Filters",
                       "Color": "Color",
+                      "Color Name Space": "Color Name Space",
                       "Column": "Column",
                       "Column Delimiters": "Column Delimiters",
                       "Column headers in first row": "Column headers in first row",

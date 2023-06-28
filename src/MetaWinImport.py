@@ -237,7 +237,11 @@ def split_text_data(raw_data: list, import_options: ImportTextOptions) -> MetaWi
     if import_options.col_headers:
         r = raw_data[0]
         cols = split_line(r.rstrip(), split_chars, import_options.do_consecutive)
-        for c in cols:
+        if import_options.row_labels:
+            i = 1
+        else:
+            i = 0
+        for c in cols[i:]:
             new_data.add_col(c)
         ncols = len(cols)
         start_row = 1

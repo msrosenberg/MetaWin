@@ -7,6 +7,7 @@ import os
 from matplotlib.colors import is_color_like
 
 import MetaWinLanguage
+import MetaWinCharts
 
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), "metawin.config")
 
@@ -47,7 +48,8 @@ def default_config() -> dict:
         "filtered col color": "red",
         "auto update check": True,
         "alpha": 0.05,
-        "confidence interval distribution": "Normal"
+        "confidence interval distribution": "Normal",
+        "color name space": "xkcd"
     }
 
 
@@ -91,6 +93,10 @@ def validate_config(key, value):
         if value == "Students t":
             return value
         return "Normal"
+    elif key == "color name space":
+        if value == "X11/CSS4":
+            return value
+        return "xkcd"
     return value
 
 
@@ -109,5 +115,6 @@ def export_config(main_window) -> None:
             outfile.write("auto update check={}\n".format(main_window.auto_update_check))
             outfile.write("alpha={}\n".format(main_window.alpha))
             outfile.write("confidence interval distribution={}".format(main_window.confidence_interval_dist))
+            outfile.write("color name space={}\n".format(MetaWinCharts.color_name_space))
     except IOError:
         pass
