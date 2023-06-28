@@ -13,7 +13,7 @@ mean_data_tuple = namedtuple("mean_data_tuple", ["name", "order", "n", "mean", "
 
 MAJOR_VERSION = 3
 MINOR_VERSION = 0
-PATCH_VERSION = 12
+PATCH_VERSION = 13
 
 # validity check when fetching value from data matrix
 VALUE_NUMBER = 0
@@ -169,6 +169,10 @@ references = {
                             "testing and adjusting for publication bias in meta-analysis. "
                             "<em>Biometrics</em> 56:455&ndash;463.", "Duval and Tweedie (2000b)",
                             "10.1111/j.0006-341X.2000.00455.x"],
+
+    "Egger_et_1997": ["Egger, M., G.D. Smith, M. Schneider, and C. Minder (1997) Bias in meta-analysis detected by a "
+                      "simple, graphical test. <em>BMJ</em> 315:629&ndash;634.", "Egger <em>et al.</em> (1997)",
+                      "10.1136/bmj.315.7109.629"],
 
     "Fisher_1928": ["Fisher, R.A. (1928) <em>Statistical methods for research workers</em> (2nd edition). "
                     "Oliver and Boyd, London.", "Fisher (1928)", ""],

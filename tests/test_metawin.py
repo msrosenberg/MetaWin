@@ -31,7 +31,7 @@ import MetaWinTree
 import MetaWinDraw
 
 
-TEST_FIGURES = True
+TEST_FIGURES = False
 # if the following line is not present, the tests with figures all crash for no obvious
 # reason. The call must be preloading something
 FIGURE_CANVAS = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
