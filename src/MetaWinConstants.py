@@ -87,8 +87,7 @@ hide_toolbar_icon = resource_path(icon_path + "toolbar-position-left-cancel-fill
 english_icon = resource_path(icon_path + "flag-united-states@256px.png")
 spanish_icon = resource_path(icon_path + "flag-spain@256px.png")
 color_swatch_icon = resource_path(icon_path + "color-swatches@256px.png")
-# in anticipation of a new section
-# pub_bias_icon = resource_path(icon_path + "waste-bin-full-filled-browse@256px.png")
+pub_bias_icon = resource_path(icon_path + "waste-bin-full-filled-browse@256px.png")
 
 metawin_icon = resource_path(icon_path + "metawin3toolbar_icon.png")
 metawin_splash = resource_path(icon_path + "metawin3splash_square.png")

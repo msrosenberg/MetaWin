@@ -27,6 +27,7 @@ from MetaWinEffects import EffectSizeOptions, do_effect_calculations
 from MetaWinData import MetaWinData
 import MetaWinEffectFunctions
 import MetaWinAnalysis
+import MetaWinPubBias
 import MetaWinTree
 import MetaWinDraw
 
@@ -1317,14 +1318,14 @@ def test_trim_and_fill_analysis():
         data = split_text_data(indata, import_options)
         convert_strings_to_numbers(data)
 
-    options = MetaWinAnalysis.MetaAnalysisOptions()
-    options.structure = MetaWinAnalysis.TRIM_FILL
+    options = MetaWinPubBias.PubBiasOptions()
+    options.pub_bias_test = MetaWinPubBias.TRIM_FILL
     options.effect_data = data.cols[1]
     options.effect_vars = data.cols[0]
     options.create_graph = True
     options.k_estimator = "L"
 
-    output, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
@@ -1346,14 +1347,14 @@ def test_trim_and_fill_analysis_negative_mean():
 
     for r in range(data.nrows()):
         data.replace_value(r, 1, -data.value(r, 1).value)
-    options = MetaWinAnalysis.MetaAnalysisOptions()
-    options.structure = MetaWinAnalysis.TRIM_FILL
+    options = MetaWinPubBias.PubBiasOptions()
+    options.pub_bias_test = MetaWinPubBias.TRIM_FILL
     options.effect_data = data.cols[1]
     options.effect_vars = data.cols[0]
     options.create_graph = True
     options.k_estimator = "R"
 
-    output, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
