@@ -177,11 +177,6 @@ class MetaAnalysisOptions:
                                                     self.bootstrap_mean, get_text("iterations")),
                                "→ {}: ".format(get_text("Citations")) + get_citation("Adams_et_1997") + ", " +
                                get_citation("Dixon_1993")])
-                # output_blocks.append(["→ {}: {} {}".format(get_text("Use bootstrap for confidence intervals around "
-                #                                                     "means"), self.bootstrap_mean,
-                #                                            get_text("iterations")),
-                #                       "→ {}: ".format(get_text("Citations")) + get_citation("Adams_et_1997") + ", " +
-                #                       get_citation("Dixon_1993")])
                 citations.append("Adams_et_1997")
                 citations.append("Dixon_1993")
             output_blocks.append(output)
@@ -217,12 +212,6 @@ class MetaAnalysisStructureDialog(QDialog):
         simple_button = QPushButton(get_text("Basic Meta-Analysis"))
         simple_button.clicked.connect(self.simple_button_click)
         analysis_layout.addWidget(simple_button)
-        # rank_cor_button = QPushButton(get_text("Rank Correlation Analysis"))
-        # rank_cor_button.clicked.connect(self.rank_cor_button_click)
-        # analysis_layout.addWidget(rank_cor_button)
-        # trim_fill_button = QPushButton(get_text("Trim and Fill Analysis"))
-        # trim_fill_button.clicked.connect(self.trim_fill_button_click)
-        # analysis_layout.addWidget(trim_fill_button)
         jackknife_button = QPushButton(get_text("Jackknife Meta-Analysis"))
         jackknife_button.clicked.connect(self.jackknife_button_click)
         analysis_layout.addWidget(jackknife_button)
@@ -297,17 +286,9 @@ class MetaAnalysisStructureDialog(QDialog):
         self.__options.structure = PHYLOGENETIC_MA
         self.accept()
 
-    # def trim_fill_button_click(self):
-    #     self.__options.structure = TRIM_FILL
-    #     self.accept()
-
     def jackknife_button_click(self):
         self.__options.structure = JACKKNIFE
         self.accept()
-
-    # def rank_cor_button_click(self):
-    #     self.__options.structure = RANKCOR
-    #     self.accept()
 
 
 class MetaAnalysisSimpleStructureDialog(QDialog):
@@ -1231,87 +1212,6 @@ class MetaAnalysisNestedStructureExtraDialog(QDialog):
         options.create_graph = self.graph_checkbox.isChecked()
 
 
-# class MetaAnalysisTrimFillDialog(QDialog):
-#     """
-#     Dialog for choosing options for a trim and fill analysis
-#     """
-#     def __init__(self, data: MetaWinData, last_effect, last_var):
-#         super().__init__()
-#         self.help = MetaWinConstants.help_index["trim_fill"]
-#         self.effect_size_box = None
-#         self.variance_box = None
-#         self.columns = None
-#         self.random_effects_checkbox = None
-#         self.log_transform_box = None
-#         self.graph_checkbox = None
-#         self.r_button = None
-#         self.l_button = None
-#         self.q_button = None
-#         self.init_ui(data, last_effect, last_var)
-#
-#     def init_ui(self, data: MetaWinData, last_effect, last_var):
-#         button_layout, _ = add_ok_cancel_help_button_layout(self)
-#
-#         analysis_label = QLabel(get_text("Trim and Fill Analysis"))
-#         analysis_label.setStyleSheet(MetaWinConstants.title_label_style)
-#
-#         effect_size_label, variance_label = add_effect_choice_to_dialog(self, data, last_effect, last_var)
-#         self.random_effects_checkbox = QCheckBox(get_text("Include Random Effects Variance?"))
-#
-#         options_layout = QVBoxLayout()
-#         options_layout.addWidget(effect_size_label)
-#         options_layout.addWidget(self.effect_size_box)
-#         options_layout.addWidget(self.log_transform_box)
-#         options_layout.addWidget(variance_label)
-#         options_layout.addWidget(self.variance_box)
-#         options_layout.addWidget(self.random_effects_checkbox)
-#
-#         missing_box = QGroupBox(get_text("Estimator of Missing Studies"))
-#         missing_layout = QHBoxLayout()
-#         self.r_button = QRadioButton("R0")
-#         self.l_button = QRadioButton("L0")
-#         self.q_button = QRadioButton("Q0")
-#         missing_layout.addWidget(self.r_button)
-#         missing_layout.addWidget(self.l_button)
-#         missing_layout.addWidget(self.q_button)
-#         missing_box.setLayout(missing_layout)
-#         self.l_button.setChecked(True)
-#
-#         self.graph_checkbox = QCheckBox(get_text("Graph Trim and Fill Funnel Plot"))
-#
-#         main_frame = QFrame()
-#         main_frame.setFrameShape(QFrame.Shape.Panel)
-#         main_frame.setFrameShadow(QFrame.Shadow.Sunken)
-#         main_frame.setLineWidth(2)
-#         main_frame.setLayout(options_layout)
-#         main_layout = QVBoxLayout()
-#         main_layout.addWidget(analysis_label)
-#         main_layout.addWidget(main_frame)
-#         main_layout.addWidget(missing_box)
-#         main_layout.addWidget(self.graph_checkbox)
-#         main_layout.addLayout(button_layout)
-#
-#         self.setLayout(main_layout)
-#         self.setWindowIcon(QIcon(MetaWinConstants.metawin_icon))
-#         self.setWindowTitle(get_text("Trim and Fill Analysis"))
-#
-#     def show_help(self):
-#         webbrowser.open(self.help)
-#
-#     def set_options(self, options: MetaAnalysisOptions):
-#         options.effect_data = self.columns[self.effect_size_box.currentIndex()]
-#         options.effect_vars = self.columns[self.variance_box.currentIndex()]
-#         options.random_effects = self.random_effects_checkbox.isChecked()
-#         options.log_transformed = self.log_transform_box.isChecked()
-#         options.create_graph = self.graph_checkbox.isChecked()
-#         if self.r_button.isChecked():
-#             options.k_estimator = "R"
-#         elif self.q_button.isChecked():
-#             options.k_estimator = "Q"
-#         else:
-#             options.k_estimator = "L"
-
-
 class MetaAnalysisPhylogeneticStructureDialog(QDialog):
     """
     Dialog for choosing options for a phylogenetic meta-analysis
@@ -1637,114 +1537,6 @@ class MetaAnalysisJackknifeExtraDialog(QDialog):
         options.create_graph = self.graph_checkbox.isChecked()
 
 
-# class MetaAnalysisRankCorrelationDialog(QDialog):
-#     """
-#     Dialog for choosing options for a rank correlation analysis
-#     """
-#     def __init__(self, data: MetaWinData, last_effect, last_var):
-#         super().__init__()
-#         self.help = MetaWinConstants.help_index["rank_correlation"]
-#         self.effect_size_box = None
-#         self.variance_box = None
-#         self.sample_size_box = None
-#         self.columns = None
-#         # self.random_effects_checkbox = None
-#         self.kendall_button = None
-#         self.spearman_button = None
-#         self.n_button = None
-#         self.v_button = None
-#         self.randomize_n_box = None
-#         self.init_ui(data, last_effect, last_var)
-#
-#     def init_ui(self, data: MetaWinData, last_effect, last_var):
-#         button_layout, _ = add_ok_cancel_help_button_layout(self)
-#
-#         analysis_label = QLabel(get_text("Rank Correlation Analysis"))
-#         analysis_label.setStyleSheet(MetaWinConstants.title_label_style)
-#
-#         effect_size_label, variance_label = add_effect_choice_to_dialog(self, data, last_effect, last_var)
-#
-#         self.sample_size_box = QComboBox()
-#         for col in self.columns:
-#             self.sample_size_box.addItem(col.label)
-#
-#         options_layout = QVBoxLayout()
-#         options_layout.addWidget(effect_size_label)
-#         options_layout.addWidget(self.effect_size_box)
-#         options_layout.addWidget(variance_label)
-#         options_layout.addWidget(self.variance_box)
-#
-#         cor_box = QGroupBox(get_text("Correlate Effect Size with"))
-#         cor_layout = QVBoxLayout()
-#         self.n_button = QRadioButton(get_text("Sample Size"))
-#         self.v_button = QRadioButton(get_text("Variance"))
-#         self.n_button.clicked.connect(self.click_correlation_variable)
-#         self.v_button.clicked.connect(self.click_correlation_variable)
-#         cor_layout.addWidget(self.v_button)
-#         cor_layout.addWidget(self.n_button)
-#         cor_layout.addWidget(self.sample_size_box)
-#         cor_box.setLayout(cor_layout)
-#         self.v_button.setChecked(True)
-#         self.click_correlation_variable()
-#
-#         test_box = QGroupBox(get_text("Rank Correlation Method"))
-#         test_box_layout = QVBoxLayout()
-#         test_layout = QHBoxLayout()
-#         self.kendall_button = QRadioButton("Kendall's τ")
-#         self.spearman_button = QRadioButton("Spearman's ρ")
-#         test_layout.addWidget(self.kendall_button)
-#         test_layout.addWidget(self.spearman_button)
-#         test_box_layout.addLayout(test_layout)
-#
-#         randomize_n_label = QLabel(get_text("Number of Iterations"))
-#         test_box_layout.addWidget(randomize_n_label)
-#         self.randomize_n_box = QLineEdit()
-#         self.randomize_n_box.setText("999")
-#         self.randomize_n_box.setValidator(QIntValidator(99, 999999))
-#         test_box_layout.addWidget(self.randomize_n_box)
-#
-#         test_box.setLayout(test_box_layout)
-#         self.kendall_button.setChecked(True)
-#
-#         main_frame = QFrame()
-#         main_frame.setFrameShape(QFrame.Shape.Panel)
-#         main_frame.setFrameShadow(QFrame.Shadow.Sunken)
-#         main_frame.setLineWidth(2)
-#         main_frame.setLayout(options_layout)
-#         main_layout = QVBoxLayout()
-#         main_layout.addWidget(analysis_label)
-#         main_layout.addWidget(main_frame)
-#         main_layout.addWidget(cor_box)
-#         main_layout.addWidget(test_box)
-#         main_layout.addLayout(button_layout)
-#
-#         self.setLayout(main_layout)
-#         self.setWindowIcon(QIcon(MetaWinConstants.metawin_icon))
-#         self.setWindowTitle(get_text("Rank Correlation Analysis"))
-#
-#     def show_help(self):
-#         webbrowser.open(self.help)
-#
-#     def click_correlation_variable(self):
-#         if self.n_button.isChecked():
-#             self.sample_size_box.setEnabled(True)
-#         else:
-#             self.sample_size_box.setEnabled(False)
-#
-#     def set_options(self, options: MetaAnalysisOptions):
-#         options.effect_data = self.columns[self.effect_size_box.currentIndex()]
-#         options.effect_vars = self.columns[self.variance_box.currentIndex()]
-#         options.randomize_model = int(self.randomize_n_box.text())
-#         if self.spearman_button.isChecked():
-#             options.cor_test = "rho"
-#         else:
-#             options.cor_test = "tau"
-#         if self.n_button.isChecked():
-#             options.sample_size = self.columns[self.sample_size_box.currentIndex()]
-#         else:
-#             options.sample_size = None
-
-
 def add_resampling_options_to_dialog(sender, test_model: bool = False):
     """
     function to add standard resampling test options to a dialog
@@ -1819,9 +1611,6 @@ def do_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05
         (output, chart_data, analysis_values,
          citations) = MetaWinAnalysisFunctions.nested_meta_analysis(data, options, decimal_places, alpha, norm_ci,
                                                                     sender=sender)
-    # elif options.structure == TRIM_FILL:
-    #     (output, chart_data, analysis_values,
-    #      citations) = MetaWinAnalysisFunctions.trim_and_fill_analysis(data, options, decimal_places, alpha, norm_ci)
     elif options.structure == JACKKNIFE:
         (output, chart_data,
          citations) = MetaWinAnalysisFunctions.jackknife_meta_analysis(data, options, decimal_places, alpha, norm_ci,
@@ -1832,11 +1621,6 @@ def do_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 0.05
                                                                                 alpha, norm_ci, sender=sender)
         analysis_values = None
         chart_data = None
-    # elif options.structure == RANKCOR:
-    #     output, citations = MetaWinAnalysisFunctions.rank_correlation_analysis(data, options, decimal_places,
-    #                                                                            sender=sender)
-    #     chart_data = None
-    #     analysis_values = None
     else:
         output = []
         analysis_values = None
