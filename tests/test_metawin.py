@@ -32,7 +32,7 @@ import MetaWinTree
 import MetaWinDraw
 
 
-TEST_FIGURES = False
+TEST_FIGURES = True
 # if the following line is not present, the tests with figures all crash for no obvious
 # reason. The call must be preloading something
 FIGURE_CANVAS = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
@@ -1551,3 +1551,75 @@ def test_match_color_to_name():
     print(cmatch, math.sqrt(cdist))
     print(xmatch, math.sqrt(xdist))
     print(len(cnames), len(xnames))
+
+
+def test_funnel_plots():
+    """
+    funnel_test2.txt contains a simulated data set copied from Nakagawa et al (2022)
+
+    this test runs through all 5 variants of a funnel plot
+    """
+    filename = "funnel_test2.txt"
+    with open(filename, "r") as infile:
+        indata = infile.readlines()
+        import_options = ImportTextOptions()
+        import_options.col_headers = True
+        data = split_text_data(indata, import_options)
+        convert_strings_to_numbers(data)
+
+    options = MetaWinPubBias.PubBiasOptions()
+    options.pub_bias_test = MetaWinPubBias.FUNNEL
+    options.effect_data = data.cols[0]
+    options.effect_vars = data.cols[1]
+
+    # sample size funnel
+    options.sample_size = data.cols[4]
+    options.funnel_y = "sample size"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+    # variance funnel
+    options.sample_size = None
+    options.funnel_y = "variance"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+    # inverse variance funnel
+    options.funnel_y = "inverse variance"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+    # standard error funnel
+    options.funnel_y = "standard error"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+    # precision funnel
+    options.funnel_y = "precision"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()

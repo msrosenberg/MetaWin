@@ -154,6 +154,10 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                                                      "confidence interval.",
                       "forest_plot_median_caption": " Medians are represented by {}.",
                       "Funnel Plot": "Funnel Plot",
+                      "funnel_plot_caption": "Funnel plot of {} vs. {}. The {} represents the mean effect size.",
+                      "funnel_limit_style1": " The {} represents the 95% confidence interval of the funnel, after {}.",
+                      "funnel_limit_style2": " The {} and {} represent the upper and lower limits of the 95% "
+                                             "confidence interval of the funnel, respectively, after {}.",
                       "group_forest_plot":
                           "Forest plot of effect sizes for the mean of all studies, as well as subgroups of studies "
                           "designated by {}.",
@@ -250,8 +254,8 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                                                 "envelope.",
                       "normal_quantile_style2": "The {} represents the regression and the {} and {} the upper and "
                                                 "lower limits of the 95% prediction envelope, respectively.",
-                      "note_funnel_plot": "Note: A funnel plot is just a scatter plot of a metric (such as a<br/>"
-                                          "mean or effect size) vs. it\'s variance or sample size.",
+                      # "note_funnel_plot": "Note: A funnel plot is just a scatter plot of a metric (such as a<br/>"
+                      #                     "mean or effect size) vs. it\'s variance or sample size.",
                       "nothing (marker is invisible)": "nothing (marker is invisible)",
                       "Number of Bins": "Number of Bins",
                       "Number of decimal places": "Number of decimal places",

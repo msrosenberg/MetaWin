@@ -18,7 +18,7 @@ from MetaWinUtils import exponential_label, get_citation, create_reference_list
 from MetaWinLanguage import get_text
 import MetaWinWidgets
 
-color_name_space = XKCD_COLORS
+color_name_space = "xkcd"
 
 
 # weighting options for the histograms
@@ -601,6 +601,31 @@ class JackknifeAnalysisCaption(ForestPlotBaseCaption):
                self.extra_forest_plot_caption()
 
 
+class FunnelPlotCaption:
+    def __init__(self):
+        self.x_label = ""
+        self.y_label = ""
+        self.mean_effect = None
+        self.upper_limit = None
+        self.lower_limit = None
+
+    def __str__(self):
+        mean_text = self.mean_effect.style_text()
+        if self.upper_limit is None:
+            style_text = ""
+        else:
+            upper_text = self.upper_limit.style_text()
+            lower_text = self.lower_limit.style_text()
+            cite_text = get_citation("Nakagawa_et_2022")
+            if upper_text == lower_text:
+                style_text = get_text("funnel_limit_style1").format(upper_text, cite_text)
+            else:
+                style_text = get_text("funnel_limit_style2").format(upper_text, lower_text, cite_text)
+
+        return get_text("funnel_plot_caption").format(self.x_label, self.y_label, mean_text) + style_text + \
+            create_reference_list(["Light_Pillemer_1984", "Nakagawa_et_2022"], True)
+
+
 # ---------- Main Chart Data Class ---------- #
 class ChartData:
     """
@@ -640,6 +665,8 @@ class ChartData:
             self.caption = JackknifeAnalysisCaption()
         elif caption_type == "forest plot":
             self.caption = ForestPlotCaption()
+        elif caption_type == "funnel plot":
+            self.caption = FunnelPlotCaption()
         else:
             self.caption = ""
 
@@ -1206,7 +1233,7 @@ def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> Char
 
 
 def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str = "sample size") -> ChartData:
-    chart_data = ChartData("scatter plot")
+    chart_data = ChartData("funnel plot")
     chart_data.caption.x_label = x_label
     chart_data.caption.y_label = y_label
     chart_data.x_label = x_label
@@ -1215,8 +1242,8 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
 
     y_min = numpy.min(y_data)
     y_max = numpy.max(y_data)
-    chart_data.caption.no_effect = chart_data.add_line(get_text("Line of No Effect"), mean_e, y_min, mean_e, y_max,
-                                                       color="silver", linestyle="dotted", zorder=1)
+    chart_data.caption.mean_effect = chart_data.add_line(get_text("Mean Effect Size"), mean_e, y_min, mean_e, y_max,
+                                                         color="silver", linestyle="dotted", zorder=1)
     if y_label != "sample size":
         curve_y = numpy.linspace(y_min, y_max, 50)
         if y_label == "standard error":
