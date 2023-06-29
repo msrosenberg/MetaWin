@@ -542,8 +542,8 @@ def do_pub_bias(data, options, decimal_places: int = 4, alpha: float = 0.05,  no
         output, chart_data, citations = MetaWinPubBiasFunctions.funnel_plot_setup(data, options)
         analysis_values = None
     elif options.pub_bias_test == EGGER:
-        output, chart_data, citations = MetaWinPubBiasFunctions.egger_regression(data, options, decimal_places, alpha,
-                                                                                 norm_ci)
+        output, chart_data = MetaWinPubBiasFunctions.egger_regression(data, options, decimal_places, alpha, norm_ci)
+        citations = []
         analysis_values = None
     else:
         output = []

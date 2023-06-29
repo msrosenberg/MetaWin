@@ -1200,8 +1200,9 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
                                               get_citation("Greenland_1987"))
                 model = get_text("fixed effects")
                 fig_citations = ["Hedges_Olkin_1985", "Greenland_1987"]
-            chart_data = MetaWinCharts.chart_regression(options.independent_variable.label, effect_sizes.label, x_data,
-                                                        e_data, b1_slope, b0_intercept, model, ref_list, fig_citations)
+            chart_data = MetaWinCharts.chart_meta_regression(options.independent_variable.label, effect_sizes.label,
+                                                             x_data, e_data, b1_slope, b0_intercept, model, ref_list,
+                                                             fig_citations)
 
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])

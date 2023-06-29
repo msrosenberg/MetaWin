@@ -450,7 +450,6 @@ def egger_regression(data, options, decimal_places: int = 4, alpha: float = 0.05
 
     chart_data = None
     n = len(e_data)
-    citations = []
 
     if n > 2:
         output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
@@ -477,10 +476,9 @@ def egger_regression(data, options, decimal_places: int = 4, alpha: float = 0.05
         output_blocks.append(output)
 
         if options.create_graph:
-            pass
-            # chart_data = MetaWinCharts.chart_trim_fill_plot(effect_sizes.label, tmp_data, n,  original_mean, mean_e)
-
+            chart_data = MetaWinCharts.chart_stnd_regression("precision", "standardized effect size", x_data,
+                                                             y_data, slope, intercept, 0)
     else:
         output_blocks.append([get_text("Fewer than three studies were valid for analysis")])
 
-    return output_blocks, chart_data, citations
+    return output_blocks, chart_data

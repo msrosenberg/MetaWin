@@ -475,7 +475,7 @@ class RadialCaption:
         return get_text("Radial_chart_caption").format(self.e_label)
 
 
-class RegressionCaption:
+class MetaRegressionCaption:
     def __init__(self):
         self.e_label = ""
         self.i_label = ""
@@ -484,8 +484,17 @@ class RegressionCaption:
         self.citations = []
 
     def __str__(self):
-        return get_text("regression_caption").format(self.e_label, self.i_label, self.model, self.ref_list) + \
+        return get_text("metaregression_caption").format(self.e_label, self.i_label, self.model, self.ref_list) + \
                 create_reference_list(self.citations, True)
+
+
+class StndRegressionCaption:
+    def __init__(self):
+        self.x_label = ""
+        self.y_label = ""
+
+    def __str__(self):
+        return get_text("stndregression_caption").format(self.y_label, self.x_label)
 
 
 class TrimAndFillCaption:
@@ -651,7 +660,9 @@ class ChartData:
         elif caption_type == "radial":
             self.caption = RadialCaption()
         elif caption_type == "regression":
-            self.caption = RegressionCaption()
+            self.caption = MetaRegressionCaption()
+        elif caption_type == "standard regression":
+            self.caption = StndRegressionCaption()
         elif caption_type == "trim and fill":
             self.caption = TrimAndFillCaption()
         elif caption_type == "basic analysis":
@@ -929,8 +940,8 @@ def add_regression_to_chart(x_name: str, y_name: str, x_data, y_data, slope: flo
                                                         zorder=8, color="silver")
 
 
-def chart_regression(x_name, y_name, x_data, y_data, slope, intercept, model, ref_list,
-                     citations) -> ChartData:
+def chart_meta_regression(x_name, y_name, x_data, y_data, slope, intercept, model, ref_list,
+                          citations) -> ChartData:
     x_min = numpy.min(x_data)
     x_max = numpy.max(x_data)
     chart_data = ChartData("regression")
@@ -1268,6 +1279,22 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
                                                                linestyle="dashed", color="silver", zorder=3)
         chart_data.caption.upper_limit = chart_data.add_multi_line(get_text("Upper Prediction Limit"), curve_x_max, curve_y,
                                                                linestyle="dashed", color="silver", zorder=3)
+
+    return chart_data
+
+
+def chart_stnd_regression(x_name, y_name, x_data, y_data, slope, intercept, y_marker=None) -> ChartData:
+    x_min = min(0, numpy.min(x_data))
+    x_max = max(0, numpy.max(x_data))
+    chart_data = ChartData("standard regression")
+    chart_data.caption.y_label = y_name
+    chart_data.caption.x_label = x_name
+
+    add_regression_to_chart(x_name, y_name, x_data, y_data, slope, intercept, x_min, x_max, chart_data)
+
+    if y_marker is not None:
+        chart_data.add_line(get_text("Line of No Effect"), x_min, y_marker, x_max, y_marker, color="silver",
+                            linestyle="dotted", zorder=1)
 
     return chart_data
 

@@ -94,6 +94,7 @@
               <li><a href="#pub_bias">Publication Bias</a>
                 <ul>
                     <li><a href="#funnel_plot">Funnel Plot</a></li>
+                    <li><a href="#egger_regression">Egger Regression</a></li>
                     <li><a href="#rank_correlation">Rank Correlation Analysis</a></li>
                     <li><a href="#trim_fill">Trim and Fill Analysis</a></li>
                 </ul>
@@ -875,6 +876,36 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
                 This method is intrinsically graphical, so it always produces a figure and the related text output is
                 fairly minimal.
             </p>
+
+
+          <h2 id="egger_regression">Egger Regression</h2>
+            <p>
+                Egger Regression (<a href="#egger_et_1997">Egger <em>et al.</em> 1997</a>) is a simple analysis designed
+                to formally test for the symmetry desired from a <a href="#funnel_plot">funnel plot</a>. In this
+                test one performs a simple linear regression of a standardized effect size (the effect size &times; precision)
+                against the precision (the square-root of the variance). Unlike most linear regressions, the focus
+                of this test is on the intercept rather than the slope: In an unbiased, symmetric data set the
+                intercept is expected to be zero. If the intercept is not zero, the data is thought to deviate from
+                this symmetric expectation.
+            </p>
+            <p>
+                The structure of this test is almost identical to the regression from a
+                <a href="#galbraith_plot">Galbraith (Radial) Plot</a>, except in that plot the slope is forced through
+                the origin while the Egger test actually examines if it goes through the origin on its own.
+            </p>
+           <h3>Running an Egger Regression</h3>
+            <p>
+                The Egger Regression only uses a single dialog where you can specify the data sources and whether
+                you want the resulting regression graphed. The results are simply a table with the intercept and slope
+                of the regression, their standard errors, confidence intervals and significance
+                (based on Student's t-distribution).
+            </p>
+
+            <figure><img src="images/xxxx"></figure>
+<blockquote class="output-example">
+output pending
+</blockquote>
+
 
           <h2 id="rank_correlation">Rank Correlation Analysis</h2>
             <p>
@@ -2675,6 +2706,9 @@ ratio = 2.8047
                     <em>Biometrics</em> 56:455–463.</span>
                     DOI: <a href="https://doi.org/10.1111/j.0006-341X.2000.00455.x">
                         10.1111/j.0006-341X.2000.00455.x</a></li>
+                <li><span id="egger_et_1997">Egger, M., G.D. Smith, M. Schneider, and C. Minder (1997) Bias in
+                    meta-analysis detected by a simple, graphical test. <em>BMJ</em> 315:629&ndash;634.</span>
+                    DOI: <a href="https://10.1136/bmj.315.7109.629">10.1136/bmj.315.7109.629</a></li>
                 <li><span id="fisher_1928">Fisher, R.A. (1928) <em>Statistical methods for research workers</em>
                     (2nd edition). Oliver and Boyd, London.</span></li>
                 <li><span id="galbraith_1988">Galbraith, R.F. (1988) A note on graphical presentation of estimated
@@ -2732,7 +2766,8 @@ ratio = 2.8047
                 <li><span id="nakagawa_et_2022">Nakagawa, S., M. Lagisz, M.D. Jennions, J. Koricheva, D.W.A. Noble,
                     T.H. Parker, A. Sánchez-Tójar, Y. Yang, and R.E. O'Dea (2022) Methods for testing publication bias
                     in ecological and evolutionary meta-analyses. <em>Methods in Ecology and Evolution</em>
-                    13(1):4&ndash;21.</span> DOI: <a href="10.1111/2041-210X.13724">10.1111/2041-210X.13724</a></li>
+                    13(1):4&ndash;21.</span> DOI:
+                    <a href="https://10.1111/2041-210X.13724">10.1111/2041-210X.13724</a></li>
                 <li><span id="normand_1999">Normand, S.-L.T. (1999) Meta-analysis: Formulating, evaluating, combining,
                     and reporting. <em>Statistics in Medicine</em> 18:321&mdash;359.</span>
                     DOI: <a href="https://doi.org/10.1002/(sici)1097-0258(19990215)18:3<321::aid-sim28>3.0.co;2-p">
