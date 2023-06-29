@@ -102,6 +102,7 @@ help_index = {
     "basic_analysis": resource_path(doc_path + "metawin_help.html#basic_analysis", True),
     "cumulative_analysis": resource_path(doc_path + "metawin_help.html#cumulative_analysis", True),
     "effect_sizes": resource_path(doc_path + "metawin_help.html#effect_sizes", True),
+    "egger_regression": resource_path(doc_path + "metawin_help.html#egger_regression", True),
     "filtering_data": resource_path(doc_path + "metawin_help.html#filtering_data", True),
     "forest_plot": resource_path(doc_path + "metawin_help.html#forest_plot", True),
     "funnel_plot": resource_path(doc_path + "metawin_help.html#funnel_plot", True),

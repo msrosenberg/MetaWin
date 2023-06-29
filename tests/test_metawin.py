@@ -18,6 +18,8 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QFrame, QPushButton, QTextEdit
 import matplotlib.colors as mcolors
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+import numpy
+import scipy
 
 # note these may be marked by the IDE as unknown modules, but pytest.ini will resolve the errors when tests
 # are actually executed
@@ -30,6 +32,7 @@ import MetaWinAnalysis
 import MetaWinPubBias
 import MetaWinTree
 import MetaWinDraw
+import MetaWinUtils
 
 
 TEST_FIGURES = True
@@ -1623,3 +1626,33 @@ def test_funnel_plots():
     if TEST_FIGURES:
         test_win = TestFigureDialog(chart_data)
         test_win.exec()
+
+
+def test_linear_regression():
+    """
+    a test for the basic linear regression function, including standard errors
+
+    data and test values from wikipedia: https://en.wikipedia.org/wiki/Simple_linear_regression
+    """
+    x = [1.47, 1.50, 1.52, 1.55, 1.57, 1.60, 1.63, 1.65, 1.68, 1.70, 1.73, 1.75, 1.78, 1.80, 1.83]
+    y = [52.21, 53.12, 54.48, 55.84, 57.20, 58.57, 59.93, 61.29, 63.11, 64.47, 66.28, 68.10, 69.92, 72.19, 74.46]
+    x = numpy.array(x)
+    y = numpy.array(y)
+    slope, intercept, s2slope, s2intercept = MetaWinUtils.calculate_regression(x, y)
+    print("Regression Test")
+    print("Slope: {}".format(slope))
+    print("Intercept: {}".format(intercept))
+    print("S2 Slope: {}".format(s2slope))
+    print("S2 Intercept: {}".format(s2intercept))
+    assert round(slope, 3) == 61.272
+    assert round(intercept, 3) == -39.062
+    assert round(s2slope, 4) == 3.1539
+    assert round(s2intercept, 5) == 8.63185
+    lower, upper = scipy.stats.t.interval(alpha=0.95, df=13, loc=slope, scale=math.sqrt(s2slope))
+    print("Slope CI: {} - {}".format(lower, upper))
+    assert round(lower, 1) == 57.4
+    assert round(upper, 1) == 65.1
+    lower, upper = scipy.stats.t.interval(alpha=0.95, df=13, loc=intercept, scale=math.sqrt(s2intercept))
+    print("Intercept CI: {} - {}".format(lower, upper))
+    assert round(lower, 1) == -45.4
+    assert round(upper, 1) == -32.7

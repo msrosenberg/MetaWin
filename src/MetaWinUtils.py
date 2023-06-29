@@ -63,7 +63,7 @@ def create_output_table(output_text: list, table_data: list, col_headers: list, 
     :param table_data: a list of lists containing the data to appear in the table; each sublist represents a row
                        of the table and must contain the same number of columns
     :param col_headers: a list containing strings representing headers for each column in the table
-    :param col_formats: a list containing basic string formatting codes, generally expected to be "f" of "d"
+    :param col_formats: a list containing basic string formatting codes, generally expected to be "f" or "d"
     :param out_dec: the number of decimal places to output floating point numbers in the table
     :param sbc: the number of spaces to use between each column in the table
     :param error_row: a boolean list designating if a particular row had generated an error in calculations
@@ -191,6 +191,14 @@ def prob_z_score(z: float) -> float:
     return (1-p)*2
 
 
+def prob_t_score(t: float, df: int) -> float:
+    """
+    this function returns the two-tailed probability of a t-score with df degrees of freedom
+    """
+    p = scipy.stats.t.cdf(abs(t), df=df)
+    return (1-p)*2
+
+
 def get_webpage(url: str, encoding: str = "utf-8") -> list:
     """
     function to fetch the webpage specified by url and  return a list containing the contents of the page
@@ -242,7 +250,7 @@ def version_str() -> str:
                                      MetaWinConstants.MINOR_VERSION, MetaWinConstants.PATCH_VERSION)
 
 
-def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float]:
+def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float, float, float]:
     """
     Basic linear regression of y vs x, returning slope and intercept
     """
@@ -252,7 +260,26 @@ def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float]:
     mean_y = sum_y/n
     mean_x = sum_x/n
     sum_x2 = numpy.sum(numpy.square(x))
+    sum_y2 = numpy.sum(numpy.square(y))
     sum_xy = numpy.sum(x*y)
     slope = (n*sum_xy - sum_x*sum_y)/(n*sum_x2 - sum_x**2)
     intercept = mean_y - slope*mean_x
-    return slope, intercept
+
+    s2error = (n*sum_y2 - sum_y**2 - (slope**2)*(n*sum_x2 - sum_x**2))/(n*(n-2))
+    s2slope = n*s2error/(n*sum_x2 - sum_x**2)
+    s2intercept = s2slope*sum_x2/n
+
+    return slope, intercept, s2slope, s2intercept
+
+"""
+    sum_wxe = numpy.sum(w_data * x_data * e_data)
+    sum_wx = numpy.sum(w_data * x_data)
+    sum_wx2 = numpy.sum(w_data * numpy.square(x_data))
+    b1_slope = (sum_wxe - sum_wx * sum_we / sum_w) / (sum_wx2 - sum_wx ** 2 / sum_w)
+    b0_intercept = (sum_we - b1_slope * sum_wx) / sum_w
+    var_b1 = 1 / (sum_wx2 - sum_wx**2 / sum_w)
+    var_b0 = 1 / (sum_w - sum_wx**2 / sum_wx2)
+    qm = b1_slope ** 2 / var_b1
+    qe = qt - qm
+    return qm, qe, b1_slope, b0_intercept, var_b1, var_b0, sum_wx, sum_wx2
+"""

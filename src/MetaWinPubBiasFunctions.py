@@ -11,7 +11,7 @@ import scipy.stats
 
 import MetaWinConstants
 from MetaWinConstants import mean_data_tuple
-from MetaWinUtils import inline_float
+from MetaWinUtils import inline_float, calculate_regression, prob_t_score, interval_to_str, create_output_table
 import MetaWinCharts
 import MetaWinWidgets
 from MetaWinLanguage import get_text
@@ -414,5 +414,73 @@ def funnel_plot_setup(data, options):
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
         chart_data = None
+
+    return output_blocks, chart_data, citations
+
+
+# ---------- Egger regression ----------
+def egger_regression(data, options, decimal_places: int = 4, alpha: float = 0.05, norm_ci: bool = True):
+    # filter and prepare data for analysis
+    effect_sizes = options.effect_data
+    variances = options.effect_vars
+    e_data = []
+    w_data = []
+    v_data = []
+    bad_data = []
+    study_names = []
+    filtered = []
+    for r, row in enumerate(data.rows):
+        if row.not_filtered():
+            e = data.check_value(r, effect_sizes.position(), value_type=MetaWinConstants.VALUE_NUMBER)
+            v = data.check_value(r, variances.position(), value_type=MetaWinConstants.VALUE_NUMBER)
+            if (e is not None) and (v is not None) and (v > 0):
+                e_data.append(e)
+                w_data.append(1/v)
+                v_data.append(v)
+                study_names.append(row.label)
+            else:
+                bad_data.append(row.label)
+        else:
+            filtered.append(row.label)
+    e_data = numpy.array(e_data)
+    w_data = numpy.array(w_data)
+    # v_data = numpy.array(v_data)
+
+    output_blocks = output_filtered_bad(filtered, bad_data)
+
+    chart_data = None
+    n = len(e_data)
+    citations = []
+
+    if n > 2:
+        output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
+        x_data = numpy.sqrt(w_data)
+        y_data = e_data*x_data
+        slope, intercept, s2slope, s2intercept = calculate_regression(x_data, y_data)
+        se_slope = math.sqrt(s2slope)
+        se_intercept = math.sqrt(s2intercept)
+        slope_lower, slope_upper = scipy.stats.t.interval(alpha=1-alpha, df=n-2, loc=slope, scale=se_slope)
+        intercept_lower, intercept_upper = scipy.stats.t.interval(alpha=1-alpha, df=n-2, loc=intercept,
+                                                                  scale=se_intercept)
+        p_slope = prob_t_score(slope/se_slope, df=n-2)
+        p_intercept = prob_t_score(intercept/se_intercept, df=n-2)
+
+        # output
+        output = []
+        col_headers = [get_text("Predictor"), get_text("Value"), "SE", "df", "{:0.0%} CI".format(1 - alpha), "P(t)"]
+        col_formats = ["", "f", "f", "", "", "f"]
+        table_data = [["Intercept", intercept, se_intercept, n-2, interval_to_str(intercept_lower, intercept_upper,
+                                                                                  decimal_places), p_intercept],
+                      ["Slope", slope, se_slope, n-2, interval_to_str(slope_lower, slope_upper, decimal_places),
+                       p_slope]]
+        create_output_table(output, table_data, col_headers, col_formats, decimal_places)
+        output_blocks.append(output)
+
+        if options.create_graph:
+            pass
+            # chart_data = MetaWinCharts.chart_trim_fill_plot(effect_sizes.label, tmp_data, n,  original_mean, mean_e)
+
+    else:
+        output_blocks.append([get_text("Fewer than three studies were valid for analysis")])
 
     return output_blocks, chart_data, citations

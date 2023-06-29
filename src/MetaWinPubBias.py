@@ -23,6 +23,7 @@ from MetaWinLanguage import get_text
 TRIM_FILL = 1
 RANKCOR = 2
 FUNNEL = 3
+EGGER = 4
 
 
 class PubBiasOptions:
@@ -60,6 +61,14 @@ class PubBiasOptions:
                 citations.append("Begg_Mazumdar_1994")
             elif self.pub_bias_test == FUNNEL:
                 output.append(get_text("Funnel Plot"))
+                output.append("→ {}: ".format(get_text("Citations")) + get_citation("Light_Pillemer_1984") + ", " +
+                              get_citation("Nakagawa_et_2022"))
+                citations.append("Light_Pillemer_1984")
+                citations.append("Nakagawa_et_2022")
+            elif self.pub_bias_test == EGGER:
+                output.append(get_text("Egger Regression"))
+                output.append("→ {}: ".format(get_text("Citations")) + get_citation("Egger_et_1997"))
+                citations.append("Egger_et_1997")
 
             output_blocks.append(output)
 
@@ -77,11 +86,14 @@ class PubBiasOptions:
                     output.append("→ {}: {}".format(get_text("Estimator of Missing Studies"), "Spearman's &rho;"))
                     output.append("→ {}: ".format(get_text("Citation")) + get_citation("Spearman_1904"))
                     citations.append("Spearman_1904")
+            elif self.pub_bias_test == FUNNEL:
+                if self.sample_size is not None:
+                    output.append("→ {}: ".format(get_text("Sample Sizes")) + self.sample_size.label)
 
             output_blocks.append(output)
 
-            output = []
-            if self.pub_bias_test != FUNNEL:
+            if self.pub_bias_test == TRIM_FILL:
+                output = []
                 if self.norm_ci:
                     output.append("→ {}".format(get_text("ci from norm")))
                 else:
@@ -110,12 +122,15 @@ class PubBiasTestDialog(QDialog):
         funnel_button = QPushButton(get_text("Funnel Plot"))
         funnel_button.clicked.connect(self.funnel_button_click)
         analysis_layout.addWidget(funnel_button)
-        rank_cor_button = QPushButton(get_text("Rank Correlation Analysis"))
-        rank_cor_button.clicked.connect(self.rank_cor_button_click)
-        analysis_layout.addWidget(rank_cor_button)
+        egger_button = QPushButton(get_text("Egger Regression"))
+        egger_button.clicked.connect(self.egger_button_click)
+        analysis_layout.addWidget(egger_button)
         trim_fill_button = QPushButton(get_text("Trim and Fill Analysis"))
         trim_fill_button.clicked.connect(self.trim_fill_button_click)
         analysis_layout.addWidget(trim_fill_button)
+        rank_cor_button = QPushButton(get_text("Rank Correlation Analysis"))
+        rank_cor_button.clicked.connect(self.rank_cor_button_click)
+        analysis_layout.addWidget(rank_cor_button)
 
         button_layout = add_cancel_help_button_layout(self)
 
@@ -149,6 +164,10 @@ class PubBiasTestDialog(QDialog):
 
     def funnel_button_click(self):
         self.__options.pub_bias_test = FUNNEL
+        self.accept()
+
+    def egger_button_click(self):
+        self.__options.pub_bias_test = EGGER
         self.accept()
 
 
@@ -357,7 +376,6 @@ class PubBiasFunnelPlotDialog(QDialog):
         self.se_button = None
         self.prec_button = None
         self.sample_size_label = None
-        self.variance_label = None
         self.init_ui(data, last_effect, last_var)
 
     def init_ui(self, data: MetaWinData, last_effect, last_var):
@@ -366,7 +384,7 @@ class PubBiasFunnelPlotDialog(QDialog):
         analysis_label = QLabel(get_text("Funnel Plot"))
         analysis_label.setStyleSheet(MetaWinConstants.title_label_style)
 
-        effect_size_label, self.variance_label = add_effect_choice_to_dialog(self, data, last_effect, last_var)
+        effect_size_label, variance_label = add_effect_choice_to_dialog(self, data, last_effect, last_var)
 
         self.sample_size_box = QComboBox()
         for col in self.columns:
@@ -376,7 +394,7 @@ class PubBiasFunnelPlotDialog(QDialog):
         options_layout = QVBoxLayout()
         options_layout.addWidget(effect_size_label)
         options_layout.addWidget(self.effect_size_box)
-        options_layout.addWidget(self.variance_label)
+        options_layout.addWidget(variance_label)
         options_layout.addWidget(self.variance_box)
         options_layout.addWidget(self.sample_size_label)
         options_layout.addWidget(self.sample_size_box)
@@ -448,6 +466,59 @@ class PubBiasFunnelPlotDialog(QDialog):
                 options.funnel_y = "precision"
 
 
+class PubBiasEggerDialog(QDialog):
+    """
+    Dialog for choosing options for Egger regression
+    """
+    def __init__(self, data: MetaWinData, last_effect, last_var):
+        super().__init__()
+        self.help = MetaWinConstants.help_index["egger_regression"]
+        self.effect_size_box = None
+        self.variance_box = None
+        self.columns = None
+        self.graph_checkbox = None
+        self.init_ui(data, last_effect, last_var)
+
+    def init_ui(self, data: MetaWinData, last_effect, last_var):
+        button_layout, _ = add_ok_cancel_help_button_layout(self)
+
+        analysis_label = QLabel(get_text("Egger Regression"))
+        analysis_label.setStyleSheet(MetaWinConstants.title_label_style)
+
+        effect_size_label, variance_label = add_effect_choice_to_dialog(self, data, last_effect, last_var)
+
+        options_layout = QVBoxLayout()
+        options_layout.addWidget(effect_size_label)
+        options_layout.addWidget(self.effect_size_box)
+        options_layout.addWidget(variance_label)
+        options_layout.addWidget(self.variance_box)
+
+        self.graph_checkbox = QCheckBox(get_text("Graph Regression"))
+
+        main_frame = QFrame()
+        main_frame.setFrameShape(QFrame.Shape.Panel)
+        main_frame.setFrameShadow(QFrame.Shadow.Sunken)
+        main_frame.setLineWidth(2)
+        main_frame.setLayout(options_layout)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(analysis_label)
+        main_layout.addWidget(main_frame)
+        main_layout.addWidget(self.graph_checkbox)
+        main_layout.addLayout(button_layout)
+
+        self.setLayout(main_layout)
+        self.setWindowIcon(QIcon(MetaWinConstants.metawin_icon))
+        self.setWindowTitle(get_text("Egger Regression"))
+
+    def show_help(self):
+        webbrowser.open(self.help)
+
+    def set_options(self, options: PubBiasOptions):
+        options.effect_data = self.columns[self.effect_size_box.currentIndex()]
+        options.effect_vars = self.columns[self.variance_box.currentIndex()]
+        options.create_graph = self.graph_checkbox.isChecked()
+
+
 def do_pub_bias(data, options, decimal_places: int = 4, alpha: float = 0.05,  norm_ci: bool = True, sender=None):
     """
     primary function controlling the execution of publication biases
@@ -470,6 +541,10 @@ def do_pub_bias(data, options, decimal_places: int = 4, alpha: float = 0.05,  no
     elif options.pub_bias_test == FUNNEL:
         output, chart_data, citations = MetaWinPubBiasFunctions.funnel_plot_setup(data, options)
         analysis_values = None
+    elif options.pub_bias_test == EGGER:
+        output, chart_data, citations = MetaWinPubBiasFunctions.egger_regression(data, options, decimal_places, alpha,
+                                                                                 norm_ci)
+        analysis_values = None
     else:
         output = []
         analysis_values = None
@@ -486,21 +561,32 @@ def publication_bias(sender, data, last_effect, last_var, decimal_places: int = 
     """
     primary function for calling various dialogs to retrieve user choices about how to run publication bias tests
     """
+    pub_test_dialogs = {TRIM_FILL: PubBiasTrimFillDialog,
+                        RANKCOR: PubBiasRankCorrelationDialog,
+                        FUNNEL: PubBiasFunnelPlotDialog,
+                        EGGER: PubBiasEggerDialog}
+
     pub_bias_options = PubBiasOptions()
     sender.pub_bias_dialog = PubBiasTestDialog(pub_bias_options)
     if sender.pub_bias_dialog.exec():
-        if pub_bias_options.pub_bias_test == TRIM_FILL:
-            sender.pub_bias_structure_dialog = PubBiasTrimFillDialog(data, last_effect, last_var)
-        elif pub_bias_options.pub_bias_test == RANKCOR:
-            sender.pub_bias_structure_dialog = PubBiasRankCorrelationDialog(data, last_effect, last_var)
-        elif pub_bias_options.pub_bias_test == FUNNEL:
-            sender.pub_bias_structure_dialog = PubBiasFunnelPlotDialog(data, last_effect, last_var)
+        if pub_bias_options.pub_bias_test in pub_test_dialogs:
+            sender.pub_bias_test_dialog = pub_test_dialogs[pub_bias_options.pub_bias_test](data, last_effect, last_var)
         else:
             pub_bias_options.pub_bias_test = None
+        # if pub_bias_options.pub_bias_test == TRIM_FILL:
+        #     sender.pub_bias_test_dialog = PubBiasTrimFillDialog(data, last_effect, last_var)
+        # elif pub_bias_options.pub_bias_test == RANKCOR:
+        #     sender.pub_bias_test_dialog = PubBiasRankCorrelationDialog(data, last_effect, last_var)
+        # elif pub_bias_options.pub_bias_test == FUNNEL:
+        #     sender.pub_bias_test_dialog = PubBiasFunnelPlotDialog(data, last_effect, last_var)
+        # elif pub_bias_options.pub_bias_test == EGGER:
+        #     sender.pub_bias_stru
+        # else:
+        #     pub_bias_options.pub_bias_test = None
 
         if pub_bias_options.pub_bias_test is not None:
-            if sender.pub_bias_structure_dialog.exec():
-                sender.pub_bias_structure_dialog.set_options(pub_bias_options)
+            if sender.pub_bias_test_dialog.exec():
+                sender.pub_bias_test_dialog.set_options(pub_bias_options)
             else:
                 pub_bias_options.pub_bias_test = None
 

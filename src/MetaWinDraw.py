@@ -425,7 +425,7 @@ def draw_normal_quantile_plot(data, e_data_col, v_data_col, alpha: float = 0.05)
 
         x_data = numpy.array(x_data)
         y_data = numpy.array(y_data)
-        slope, intercept = calculate_regression(x_data, y_data)
+        slope, intercept, _, _ = calculate_regression(x_data, y_data)
 
         return MetaWinCharts.chart_normal_quantile(get_text("Normal Quantile"), get_text("Standardized Effect Size"),
                                                    x_data, y_data, slope, intercept, alpha)
