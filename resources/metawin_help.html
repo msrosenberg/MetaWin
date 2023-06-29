@@ -93,6 +93,7 @@
               </li>
               <li><a href="#pub_bias">Publication Bias</a>
                 <ul>
+                    <li><a href="#funnel_plot">Funnel Plot</a></li>
                     <li><a href="#rank_correlation">Rank Correlation Analysis</a></li>
                     <li><a href="#trim_fill">Trim and Fill Analysis</a></li>
                 </ul>
@@ -111,7 +112,7 @@
               </li>
               <li><a href="#graphs">Graphs and Figures</a>
                 <ul>
-                    <li><a href="#scatter_plot">Scatter/Funnel Plot</a></li>
+                    <li><a href="#scatter_plot">Scatter Plot</a></li>
                     <li><a href="#weighted_histogram">Weighted Histogram</a></li>
                     <li><a href="#forest_plot">Forest Plot</a></li>
                     <li><a href="#normal_quantile_plot">Normal Quantile Plot</a></li>
@@ -835,8 +836,48 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
                 so will bring up a dialog where you can choose the type of analysis you want to perform.
             </p>
 
+                    <li><a href="#funnel_plot">Funnel Plot</a></li>
 
 
+          <h2 id="funnel_plot">Funnel Plot</h2>
+            <p>
+                A funnel plot is a special type of scatter plot where a metric (in meta-analysis, usually an effect
+                size) is plotted against sample size or an estimate of variance. The idea of a funnel plot is that if
+                there is a single true value being estimated by all of the studies, those with high variance
+                (or low sample size) will tend to vary a lot around the true value, while those with low variance
+                (or high sample size) will tend to vary only a little around the true value. With a large number of
+                studies you would expect the scatter to be funnel-shaped and symmetric around the true value. If the
+                funnel is asymmetric, this may be an indication of publication bias.
+            </p>
+            <p>
+                If using variance or a derivative, it is possible to build an approximate 95% confidence interval
+                for the funnel by assuming 1.96&plusmn;SE (<a href="#nakagawa_et_2022">Nakagawa <em>et al.</em>
+                2022</a>).
+            </p>
+
+            <figure><img src="images/xxxx"></figure>
+
+            <p>
+                Funnel Plot creation is found as part of the <span class="menu">Publication Bias</span> /
+                <img class="toolbar-button" src="images/waste-bin-full-filled-browse@256px.png"/> analyses. In
+                these figures, the effect size will be plotted on the x-axis, with five options for the y-axis:
+                (1) sample size, (2) variance, (3) inverse variance (=weight), (4) standard error (the square-root
+                of variance in this formulation), and (5) precision (1/SE). All options require specification of
+                effect size and variance data (in order to calcualte the mean effect). The first also requires
+                one to specify sample size.
+            </p>
+            <p>
+                In addition to the scattered points, the plot will include a vertical line for the mean effect size
+                (assuming  a simple weighted, fixed-effects model) and (for options 2-5), the approximately 95%
+                confidence  interval for the scatter. When variance or standard error is chosen as an opion, the
+                y-axis is automatically reversed (smallest numbers at top of axis rather than bottom) so that the
+                expected funnel direction will be consistent across all choices (<em>i.e.</em>, widest at the bottom
+                of the figure, narrowest at the top).
+            </p>
+            <p>
+                This method is intrinsically graphical, so it always produces a figure and the related text output is
+                fairly minimal.
+            </p>
 
           <h2 id="rank_correlation">Rank Correlation Analysis</h2>
             <p>
@@ -2447,20 +2488,15 @@ ratio = 2.8047
                 automatically be excluded from figures.
             </p>
 
-          <h2 id="scatter_plot">Scatter/Funnel Plot</h2>
+          <h2 id="scatter_plot">Scatter Plot</h2>
             <p>
-                A scatter plot is simply a point plot of two continuous variables. A funnel plot is a special type
-                of scatter plot where a metric (in meta-analysis, usually an effect size) is plotted against an
-                estimate of variance (or sample size). The idea of a funnel plot is that if there is a single true
-                value being estimated by all of the studies, those with high variance (or low sample size) will tend
-                to vary a lot around the true value, while those with low variance (or high sample size) will tend
-                to vary only a little around the true value. With a large number of studies you would expect the
-                scatter to be funnel-shaped and symmetric around the true value. If the funnel is asymmetric, this
-                may be an indication of publication bias.
+                A scatter plot is simply a point plot of two continuous variables. One can use this plotting
+                function to create funnel plots, although a more advanced <a href="#funnel_plot">funnel plot</a> figure
+                can be found under <a href="#pub_bias">publication bias analyses</a>.
             </p>
             <figure><img src="images/draw_scatter.png"></figure>
             <p>
-                To draw a scatter or funnel plot, simply choose <span class="menu">Scatter/Funnel Plot</span> from
+                To draw a scatter plot, simply choose <span class="menu">Scatter Plot</span> from
                 the <span class="menu">Draw</span> menu. From here you can choose the two variables to contrast and
                 the figure will show up in the <a href="#graph_tab">Graph Tab</a>.
             </p>
@@ -2684,6 +2720,8 @@ ratio = 2.8047
                     Princeton University Press: Princeton, NJ.</span>
                     DOI: <a href="https://doi.org/10.23943/princeton/9780691137285.003.0017">
                         10.23943/princeton/9780691137285.003.0017</a></li>
+                <li><span id="light_pillemer_1984">Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science
+                    of Reviewing Research</em>. Harvard University Press: Cambridge.</span></li>
                 <li><span id="mantel_haenszel_1959">Mantel, N., and W. Haenszel (1959) Statistical aspects of the
                     analysis of data from retrospective studies of disease. <em>Journal of the National Cancer
                         Institute</em> 22:719&ndash;748.</span>
@@ -2694,6 +2732,10 @@ ratio = 2.8047
                     Princeton University Press: Princeton, NJ.</span>
                     DOI: <a href="https://doi.org/10.23943/princeton/9780691137285.003.0007">
                         10.23943/princeton/9780691137285.003.0007</a></li>
+                <li><span id="nakagawa_et_2022">Nakagawa, S., M. Lagisz, M.D. Jennions, J. Koricheva, D.W.A. Noble,
+                    T.H. Parker, A. Sánchez-Tójar, Y. Yang, and R.E. O'Dea (2022) Methods for testing publication bias
+                    in ecological and evolutionary meta-analyses. <em>Methods in Ecology and Evolution</em>
+                    13(1):4&ndash;21.</span> DOI: <a href="10.1111/2041-210X.13724">10.1111/2041-210X.13724</a></li>
                 <li><span id="normand_1999">Normand, S.-L.T. (1999) Meta-analysis: Formulating, evaluating, combining,
                     and reporting. <em>Statistics in Medicine</em> 18:321&mdash;359.</span>
                     DOI: <a href="https://doi.org/10.1002/(sici)1097-0258(19990215)18:3<321::aid-sim28>3.0.co;2-p">
