@@ -640,6 +640,7 @@ class ChartData:
         # special adjustments
         self.suppress_y = False
         self.rescale_x = None
+        self.invert_y = False
         # caption
         if caption_type == "normal quantile":
             self.caption = NormalQuantileCaption()
@@ -839,6 +840,8 @@ def create_figure(chart_data, figure_canvas):
         faxes.spines["left"].set_visible(False)
     if chart_data.rescale_x is not None:
         faxes.set_xlim(chart_data.rescale_x[0], chart_data.rescale_x[1])
+    if chart_data.invert_y:
+        faxes.invert_yaxis()
 
 
 def chart_forest_plot(analysis_type: str, effect_name, forest_data, alpha: float = 0.05,
@@ -1249,12 +1252,14 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
         if y_label == "standard error":
             curve_x_min = mean_e - curve_y*1.96
             curve_x_max = mean_e + curve_y*1.96
+            chart_data.invert_y = True
         elif y_label == "precision":
             curve_x_min = mean_e - (1/curve_y)*1.96
             curve_x_max = mean_e + (1/curve_y)*1.96
         elif y_label == "variance":
             curve_x_min = mean_e - numpy.sqrt(curve_y)*1.96
             curve_x_max = mean_e + numpy.sqrt(curve_y)*1.96
+            chart_data.invert_y = True
         else:
             curve_x_min = mean_e - (1/numpy.sqrt(curve_y))*1.96
             curve_x_max = mean_e + (1/numpy.sqrt(curve_y))*1.96
