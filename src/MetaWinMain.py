@@ -549,7 +549,7 @@ class MainWindow(QMainWindow):
         current_position = self.output_area.textCursor().position()
         for block in output:
             self.write_output_block(block)
-        self.write_output("<p></p>")
+        # self.write_output("<p></p>")
         # reset cursor position to end, then set it back to end of previous block
         # this causes viewpane to scroll so that new output is near top of view (if possible)
         self.output_area.moveCursor(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
@@ -562,7 +562,7 @@ class MainWindow(QMainWindow):
         Add a list of strings to the output area as a single string, separated by the html break
         tag <br>. This adds them to the text edit without extra spacing/blank lines in between them
         """
-        self.write_output("<br>".join(output))
+        self.write_output("<p>" + "<br>".join(output) + "</p>")
 
     def write_output(self, output: str) -> None:
         """
