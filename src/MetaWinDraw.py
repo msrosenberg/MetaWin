@@ -38,7 +38,7 @@ class MetaAnalysisDrawScatterDialog(QDialog):
     def init_ui(self, data: MetaWinData):
         button_layout, _ = add_ok_cancel_help_button_layout(self)
 
-        draw_label = QLabel(get_text("Scatter/Funnel Plot"))
+        draw_label = QLabel(get_text("Scatter Plot"))
         draw_label.setStyleSheet(MetaWinConstants.title_label_style)
 
         self.columns = data.cols
@@ -50,7 +50,7 @@ class MetaAnalysisDrawScatterDialog(QDialog):
             self.y_box.addItem(col.label)
         x_label = QLabel(get_text("Data for X-axis"))
         y_label = QLabel(get_text("Data for Y-axis"))
-        info_label = QLabel(get_text("note_funnel_plot"))
+        # info_label = QLabel(get_text("note_funnel_plot"))
 
         options_layout = QVBoxLayout()
         options_layout.addWidget(x_label)
@@ -66,12 +66,12 @@ class MetaAnalysisDrawScatterDialog(QDialog):
         main_layout = QVBoxLayout()
         main_layout.addWidget(draw_label)
         main_layout.addWidget(main_frame)
-        main_layout.addWidget(info_label)
+        # main_layout.addWidget(info_label)
         main_layout.addLayout(button_layout)
 
         self.setLayout(main_layout)
         self.setWindowIcon(QIcon(MetaWinConstants.metawin_icon))
-        self.setWindowTitle(get_text("Scatter/Funnel Plot"))
+        self.setWindowTitle(get_text("Scatter Plot"))
 
     def show_help(self):
         webbrowser.open(self.help)
