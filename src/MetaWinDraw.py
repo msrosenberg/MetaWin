@@ -9,7 +9,6 @@ The actual plotting of the figures is done by the MetaWinCharts module
 """
 import webbrowser
 import math
-from typing import Tuple
 
 from PyQt6.QtWidgets import QDialog, QLabel, QVBoxLayout, QFrame, QComboBox, QGroupBox, QLineEdit, QRadioButton, \
     QGridLayout
@@ -24,6 +23,7 @@ from MetaWinConstants import mean_data_tuple
 from MetaWinWidgets import add_ok_cancel_help_button_layout, add_effect_choice_to_dialog
 import MetaWinCharts
 from MetaWinLanguage import get_text
+from MetaWinUtils import calculate_regression
 
 
 class MetaAnalysisDrawScatterDialog(QDialog):
@@ -387,20 +387,20 @@ def draw_scatter_dialog(sender, data):
     return None
 
 
-def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float]:
-    """
-    Basic linear regression of y vs x, returning slope and intercept
-    """
-    n = len(x)
-    sum_y = numpy.sum(y)
-    sum_x = numpy.sum(x)
-    mean_y = sum_y/n
-    mean_x = sum_x/n
-    sum_x2 = numpy.sum(numpy.square(x))
-    sum_xy = numpy.sum(x*y)
-    slope = (n*sum_xy - sum_x*sum_y)/(n*sum_x2 - sum_x**2)
-    intercept = mean_y - slope*mean_x
-    return slope, intercept
+# def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float]:
+#     """
+#     Basic linear regression of y vs x, returning slope and intercept
+#     """
+#     n = len(x)
+#     sum_y = numpy.sum(y)
+#     sum_x = numpy.sum(x)
+#     mean_y = sum_y/n
+#     mean_x = sum_x/n
+#     sum_x2 = numpy.sum(numpy.square(x))
+#     sum_xy = numpy.sum(x*y)
+#     slope = (n*sum_xy - sum_x*sum_y)/(n*sum_x2 - sum_x**2)
+#     intercept = mean_y - slope*mean_x
+#     return slope, intercept
 
 
 def draw_normal_quantile_plot(data, e_data_col, v_data_col, alpha: float = 0.05):

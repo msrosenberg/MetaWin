@@ -2,12 +2,13 @@
 Module with a number of general utility functions
 """
 
-from typing import Optional, Union
+from typing import Optional, Union, Tuple
 import re
 import urllib.request
 import math
 
 import scipy.stats
+import numpy
 
 import MetaWinConstants
 from MetaWinLanguage import get_text
@@ -38,7 +39,7 @@ def interval_to_str(lower_value, upper_value, decimal_places: int = 4) -> str:
     floating point numbers
     """
     return format(lower_value, inline_float(decimal_places)) + " to " + \
-           format(upper_value, inline_float(decimal_places))
+        format(upper_value, inline_float(decimal_places))
 
 
 def strip_html(x: str) -> str:
@@ -239,3 +240,19 @@ def version_str() -> str:
     """
     return "{} {}.{}.{} beta".format(get_text("Version"), MetaWinConstants.MAJOR_VERSION,
                                      MetaWinConstants.MINOR_VERSION, MetaWinConstants.PATCH_VERSION)
+
+
+def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float]:
+    """
+    Basic linear regression of y vs x, returning slope and intercept
+    """
+    n = len(x)
+    sum_y = numpy.sum(y)
+    sum_x = numpy.sum(x)
+    mean_y = sum_y/n
+    mean_x = sum_x/n
+    sum_x2 = numpy.sum(numpy.square(x))
+    sum_xy = numpy.sum(x*y)
+    slope = (n*sum_xy - sum_x*sum_y)/(n*sum_x2 - sum_x**2)
+    intercept = mean_y - slope*mean_x
+    return slope, intercept
