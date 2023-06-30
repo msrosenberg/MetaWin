@@ -62,9 +62,9 @@ class PubBiasOptions:
             elif self.pub_bias_test == FUNNEL:
                 output.append(get_text("Funnel Plot"))
                 output.append("→ {}: ".format(get_text("Citations")) + get_citation("Light_Pillemer_1984") + ", " +
-                              get_citation("Nakagawa_et_2022"))
+                              get_citation("Sterne_Egger_2001"))
                 citations.append("Light_Pillemer_1984")
-                citations.append("Nakagawa_et_2022")
+                citations.append("Sterne_Egger_2001")
             elif self.pub_bias_test == EGGER:
                 output.append(get_text("Egger Regression"))
                 output.append("→ {}: ".format(get_text("Citations")) + get_citation("Egger_et_1997"))

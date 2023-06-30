@@ -223,6 +223,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Mean": "Mean",
                       "Means": "Means",
                       "Means and Standard Deviations": "Means and Standard Deviations",
+                      "Mean Effect Size": "Mean Effect Size",
                       "Mean Effect Sizes": "Mean Effect Sizes",
                       "Median": "Median",
                       "Medians": "Medians",

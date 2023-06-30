@@ -231,7 +231,7 @@ references = {
                             "Research</em>. Harvard University Press: Cambridge.", "Light and Pillemer (1984)", ""],
 
     "Lin_Chu_2018": ["Lin, L., and H. Chu (2018) Quantifying publication bias in meta-analysis. <em>Biometrics</em> "
-                     "74(3):785-794.", "Lin and Chu (2018)", "10.1111/biom.12817"],
+                     "74(3):785&ndash;794.", "Lin and Chu (2018)", "10.1111/biom.12817"],
 
     "Mantel_and_Haenszel_1959": ["Mantel, N., and W. Haenszel (1959) Statistical aspects of the analysis of data "
                                  "from retrospective studies of disease. <em>Journal of the National Cancer "
@@ -281,6 +281,10 @@ references = {
 
     "Spearman_1904": ["Spearman C. (1904) The proof and measurement of association between two things. <em>American "
                       "Journal of Psychology</em>. 15(1):72&ndash;101.", "Spearman (1904)", "10.2307/1412159"],
+
+    "Sterne_Egger_2001": ["Sterne, J.A.C., and M. Egger (2001) Funnel plots for detecting bias in meta-analysis: "
+                          "Guidelines on choice of axis. <em>Journal of Clinical Epidemiology</em> "
+                          "54(10):1045&ndash;1055.", "Sterne and Egger (2001)", "10.1016/S0895-4356(01)00377-8"],
 
     "Wang_and_Bushman_1998": ["Wang, M.C., and B.J. Bushman (1998) Using the normal quantile plot to explore "
                               "meta-analytic data sets. <em>Psychological Methods</em> 3:46&ndash;54.",
