@@ -495,8 +495,9 @@ class NormalQuantileCaption:
     def __init__(self):
         # self.upper_limit = None
         self.prediction_limit = None
-        self.horizontal_mean = None
-        self.vertical_mean = None
+        # self.horizontal_mean = None
+        # self.vertical_mean = None
+        self.means = None
         self.regression = None
         self.regression_scatter = None
 
@@ -686,12 +687,9 @@ class FunnelPlotCaption:
         self.y_label = ""
         self.mean_effect = None
         self.pseudo_ci = None
-        self.contour_99_upper = None
-        self.contour_99_lower = None
-        self.contour_95_upper = None
-        self.contour_95_lower = None
-        self.contour_90_upper = None
-        self.contour_90_lower = None
+        self.zone99 = None
+        self.zone95 = None
+        self.zone90 = None
 
     def __str__(self):
         mean_text = self.mean_effect.style_text()
@@ -701,22 +699,13 @@ class FunnelPlotCaption:
         else:
             cite_text = get_citation("Sterne_Egger_2001")
             pseudo_text = get_text("funnel_pseudo_ci_style").format(self.pseudo_ci.style_text(), cite_text)
-        if self.contour_99_upper is None:
+        if self.zone99 is None:
             contour_text = ""
         else:
             cite_text = get_citation("Peters_et_2008")
             citations.append("Peters_et_2008")
-            upper_99 = self.contour_99_upper.style_text()
-            lower_99 = self.contour_99_lower.style_text()
-            # if upper_99 == lower_99:
-            #     text_99 = get_text("contour_ci_style")
-            # else:
-            #     text_99 =
-            upper_95 = self.contour_95_upper.style_text()
-            lower_95 = self.contour_95_lower.style_text()
-            upper_90 = self.contour_90_upper.style_text()
-            lower_90 = self.contour_90_lower.style_text()
-
+            contour_text = get_text("funnel_contour_style").format(self.zone99.style_text(), self.zone95.style_text(),
+                                                                   self.zone90.style_text(), cite_text)
 
         return get_text("funnel_plot_caption").format(self.x_label, self.y_label, mean_text) + pseudo_text + \
             contour_text + create_reference_list(citations, True)
@@ -873,7 +862,6 @@ class ChartData:
         self.data.append(new_annotation)
         return new_annotation
 
-
     def add_fill_area_x(self, name, x1, x2, y, zorder=0, color="red", alpha=0.5):
         new_fill = FillDataX()
         new_fill.name = name
@@ -885,8 +873,6 @@ class ChartData:
         new_fill.alpha = alpha
         self.data.append(new_fill)
         return new_fill
-
-
 
     def export_to_list(self):
         outlist = ["X-axis label\t{}\n".format(self.x_label),
@@ -952,7 +938,6 @@ def create_figure(chart_data, figure_canvas):
                 faxes.fill_betweenx(data.y_values, data.x1_values, data.x2_values, color=data.color,
                                     edgecolor="none", zorder=data.zorder,
                                     alpha=data.alpha)
-
 
     if chart_data.suppress_y:
         faxes.spines["left"].set_visible(False)
@@ -1094,11 +1079,15 @@ def add_quantile_axes_to_chart(x_data, y_data, slope: float, intercept: float, c
     chart_data.caption.prediction_limit.link_style(upper_limit)
 
     # draw center lines
-    chart_data.caption.horizontal_mean = chart_data.add_line(get_text("Horizontal Axis Mean Line"), 0,
-                                                             min(y_min, min(y_lower)), 0, max(y_max, max(y_upper)),
-                                                             linestyle="dotted", color="silver")
-    chart_data.caption.vertical_mean = chart_data.add_line(get_text("Vertical Axis Mean Line"), x_min, y_mean, x_max,
-                                                           y_mean, linestyle="dotted", color="silver")
+    # chart_data.caption.horizontal_mean = chart_data.add_line(get_text("Horizontal Axis Mean Line"), 0,
+    #                                                          min(y_min, min(y_lower)), 0, max(y_max, max(y_upper)),
+    #                                                          linestyle="dotted", color="silver")
+    # chart_data.caption.vertical_mean = chart_data.add_line(get_text("Vertical Axis Mean Line"), x_min, y_mean, x_max,
+    #                                                        y_mean, linestyle="dotted", color="silver")
+    chart_data.caption.means = chart_data.add_line(get_text("Axes Means"), 0, min(y_min, min(y_lower)), 0,
+                                                   max(y_max, max(y_upper)), linestyle="dotted", color="silver")
+    vertical_mean = chart_data.add_line("", x_min, y_mean, x_max, y_mean, linestyle="dotted", color="silver")
+    chart_data.caption.means.link_style(vertical_mean)
 
 
 def chart_normal_quantile(x_name, y_name, x_data, y_data, slope, intercept,
@@ -1403,20 +1392,20 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
             curve_90_min, curve_90_max = scipy.stats.norm.interval(alpha=0.90, loc=0, scale=sey)
             x_min = min(numpy.min(curve_99_min), x_min)
             x_max = max(numpy.max(curve_99_max), x_max)
-            low_fill = chart_data.add_fill_area_x("P <0.01% zone", x_min, curve_99_min, curve_y, color="#eeeeee",
-                                                  zorder=1)
+            chart_data.caption.zone99 = chart_data.add_fill_area_x("P <0.01% zone", x_min, curve_99_min, curve_y,
+                                                                   color="#eeeeee", zorder=1)
             up_fill = chart_data.add_fill_area_x("", x_max, curve_99_max, curve_y, color="#eeeeee", zorder=1)
-            low_fill.link_style(up_fill)
+            chart_data.caption.zone99.link_style(up_fill)
 
-            low_fill = chart_data.add_fill_area_x("P 0.01-0.05% zone", curve_99_min, curve_95_min, curve_y,
-                                                  color="#cccccc", zorder=1)
+            chart_data.caption.zone95 = chart_data.add_fill_area_x("P 0.01-0.05% zone", curve_99_min, curve_95_min,
+                                                                   curve_y, color="#cccccc", zorder=1)
             up_fill = chart_data.add_fill_area_x("", curve_99_max, curve_95_max, curve_y, color="#cccccc", zorder=1)
-            low_fill.link_style(up_fill)
+            chart_data.caption.zone95.link_style(up_fill)
 
-            low_fill = chart_data.add_fill_area_x("p 0.05-0.1% zone", curve_95_min, curve_90_min, curve_y,
-                                                  color="#a3a3a3", zorder=1)
+            chart_data.caption.zone90 = chart_data.add_fill_area_x("p 0.05-0.1% zone", curve_95_min, curve_90_min,
+                                                                   curve_y, color="#a3a3a3", zorder=1)
             up_fill = chart_data.add_fill_area_x("", curve_95_max, curve_90_max, curve_y, color="#a3a3a3", zorder=1)
-            low_fill.link_style(up_fill)
+            chart_data.caption.zone90.link_style(up_fill)
 
     return chart_data
 

@@ -158,6 +158,9 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "funnel_plot_caption": "Funnel plot of {} vs. {}. The {} represents the mean effect size.",
                       "funnel_pseudo_ci_style": " The {} represents the 95% pseudo-confidence interval of the funnel, "
                                                 "after {}.",
+                      "funnel_contour_style": " The {} zone represents the area where effect sizes would have a "
+                                              "probability of less than 1%, the {} zone a probability between 1 and 5%,"
+                                              " and the {} zone a probability between 5 and 10%, after {}.",
                       "group_forest_plot":
                           "Forest plot of effect sizes for the mean of all studies, as well as subgroups of studies "
                           "designated by {}.",
@@ -185,7 +188,8 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Hide Phylogeny Tab": "Hide Phylogeny Tab",
                       "Histogram of {} from individual studies.": "Histogram of {} from individual studies.",
                       "Horizontal Axis": "Horizontal Axis",
-                      "Horizontal Axis Mean Line": "Horizontal Axis Mean Line",
+                      # "Horizontal Axis Mean Line": "Horizontal Axis Mean Line",
+                      "Axes Means": "Axes' Means",
                       "HTML": "HTML",
                       "Import Error": "Import Error",
                       "Import Text Options": "Import Text Options",
@@ -394,7 +398,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Variance": "Variance",
                       "Version": "Version",
                       "Vertical Axis": "Vertical Axis",
-                      "Vertical Axis Mean Line": "Vertical Axis Mean Line",
+                      # "Vertical Axis Mean Line": "Vertical Axis Mean Line",
                       "Vertical Axis Tick Labels": "Vertical Axis Tick Labels",
                       "Vertical Axis Zero Line": "Vertical Axis Zero Line",
                       "Warning": "Warning",
