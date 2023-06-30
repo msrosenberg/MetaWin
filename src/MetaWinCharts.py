@@ -492,9 +492,10 @@ class StndRegressionCaption:
     def __init__(self):
         self.x_label = ""
         self.y_label = ""
+        self.model = ""
 
     def __str__(self):
-        return get_text("stndregression_caption").format(self.y_label, self.x_label)
+        return get_text("stndregression_caption").format(self.y_label, self.x_label, self.model)
 
 
 class TrimAndFillCaption:
@@ -1283,12 +1284,13 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
     return chart_data
 
 
-def chart_stnd_regression(x_name, y_name, x_data, y_data, slope, intercept, y_marker=None) -> ChartData:
+def chart_stnd_regression(x_name, y_name, x_data, y_data, slope, intercept, model, y_marker=None) -> ChartData:
     x_min = min(0, numpy.min(x_data))
     x_max = max(0, numpy.max(x_data))
     chart_data = ChartData("standard regression")
     chart_data.caption.y_label = y_name
     chart_data.caption.x_label = x_name
+    chart_data.caption.model = model
 
     add_regression_to_chart(x_name, y_name, x_data, y_data, slope, intercept, x_min, x_max, chart_data)
 

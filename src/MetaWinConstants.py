@@ -230,6 +230,9 @@ references = {
     "Light_Pillemer_1984": ["Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing "
                             "Research</em>. Harvard University Press: Cambridge.", "Light and Pillemer (1984)", ""],
 
+    "Lin_Chu_2018": ["Lin, L., and H. Chu (2018) Quantifying publication bias in meta-analysis. <em>Biometrics</em> "
+                     "74(3):785-794.", "Lin and Chu (2018)", "10.1111/biom.12817"],
+
     "Mantel_and_Haenszel_1959": ["Mantel, N., and W. Haenszel (1959) Statistical aspects of the analysis of data "
                                  "from retrospective studies of disease. <em>Journal of the National Cancer "
                                  "Institute</em> 22:719&ndash;748.", "Mantel and Haenszel (1959)",

@@ -444,17 +444,28 @@ def egger_regression(data, options, decimal_places: int = 4, alpha: float = 0.05
             filtered.append(row.label)
     e_data = numpy.array(e_data)
     w_data = numpy.array(w_data)
-    # v_data = numpy.array(v_data)
+    v_data = numpy.array(v_data)
 
     output_blocks = output_filtered_bad(filtered, bad_data)
 
     chart_data = None
     n = len(e_data)
 
+    citations = []
     if n > 2:
         output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
-        x_data = numpy.sqrt(w_data)
+
+        if options.random_effects:
+            _, _, qt, sum_w, sum_w2, _ = mean_effect_var_and_q(e_data, w_data)
+            pooled_var = pooled_var_no_structure(qt, sum_w, sum_w2, n - 1)
+            x_data = numpy.sqrt(numpy.reciprocal(v_data + pooled_var))
+            citations.append("Lin_Chu_2018")
+        else:
+            x_data = numpy.sqrt(w_data)
         y_data = e_data*x_data
+
+        # x_data = numpy.sqrt(w_data)
+        # y_data = e_data*x_data
         slope, intercept, s2slope, s2intercept = calculate_regression(x_data, y_data)
         se_slope = math.sqrt(s2slope)
         se_intercept = math.sqrt(s2intercept)
@@ -476,9 +487,13 @@ def egger_regression(data, options, decimal_places: int = 4, alpha: float = 0.05
         output_blocks.append(output)
 
         if options.create_graph:
+            if options.random_effects:
+                model = get_text("random effects")
+            else:
+                model = get_text("fixed effects")
             chart_data = MetaWinCharts.chart_stnd_regression("precision", "standardized effect size", x_data,
-                                                             y_data, slope, intercept, 0)
+                                                             y_data, slope, intercept, model, 0)
     else:
         output_blocks.append([get_text("Fewer than three studies were valid for analysis")])
 
-    return output_blocks, chart_data
+    return output_blocks, chart_data, citations

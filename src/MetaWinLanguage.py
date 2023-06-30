@@ -315,7 +315,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Regression Results": "Regression Results",
                       "metaregression_caption": "Plot of {} vs. {}, with a {} meta-analytic linear regression "
                                                 "following the methods of {}.",
-                      "stndregression_caption": "Plot of {} vs. {}.",
+                      "stndregression_caption": "Plot of {} vs. {}, under a {} model.",
                       "Regression Line": "Regression Line",
                       "Resampling Procedures": "Resampling Procedures",
                       "Response": "Response",

@@ -69,6 +69,11 @@ class PubBiasOptions:
                 output.append(get_text("Egger Regression"))
                 output.append("→ {}: ".format(get_text("Citations")) + get_citation("Egger_et_1997"))
                 citations.append("Egger_et_1997")
+            if self.pub_bias_test in (TRIM_FILL, EGGER):
+                if self.random_effects:
+                    output.append("→ {}".format(get_text("Random Effects Model")))
+                else:
+                    output.append("→ {}".format(get_text("Fixed Effects Model")))
 
             output_blocks.append(output)
 
@@ -477,6 +482,7 @@ class PubBiasEggerDialog(QDialog):
         self.variance_box = None
         self.columns = None
         self.graph_checkbox = None
+        self.random_effects_checkbox = None
         self.init_ui(data, last_effect, last_var)
 
     def init_ui(self, data: MetaWinData, last_effect, last_var):
@@ -486,12 +492,14 @@ class PubBiasEggerDialog(QDialog):
         analysis_label.setStyleSheet(MetaWinConstants.title_label_style)
 
         effect_size_label, variance_label = add_effect_choice_to_dialog(self, data, last_effect, last_var)
+        self.random_effects_checkbox = QCheckBox(get_text("Include Random Effects Variance?"))
 
         options_layout = QVBoxLayout()
         options_layout.addWidget(effect_size_label)
         options_layout.addWidget(self.effect_size_box)
         options_layout.addWidget(variance_label)
         options_layout.addWidget(self.variance_box)
+        options_layout.addWidget(self.random_effects_checkbox)
 
         self.graph_checkbox = QCheckBox(get_text("Graph Regression"))
 
@@ -516,6 +524,7 @@ class PubBiasEggerDialog(QDialog):
     def set_options(self, options: PubBiasOptions):
         options.effect_data = self.columns[self.effect_size_box.currentIndex()]
         options.effect_vars = self.columns[self.variance_box.currentIndex()]
+        options.random_effects = self.random_effects_checkbox.isChecked()
         options.create_graph = self.graph_checkbox.isChecked()
 
 
@@ -542,8 +551,8 @@ def do_pub_bias(data, options, decimal_places: int = 4, alpha: float = 0.05,  no
         output, chart_data, citations = MetaWinPubBiasFunctions.funnel_plot_setup(data, options)
         analysis_values = None
     elif options.pub_bias_test == EGGER:
-        output, chart_data = MetaWinPubBiasFunctions.egger_regression(data, options, decimal_places, alpha, norm_ci)
-        citations = []
+        output, chart_data, citations = MetaWinPubBiasFunctions.egger_regression(data, options, decimal_places, alpha,
+                                                                                 norm_ci)
         analysis_values = None
     else:
         output = []
@@ -573,16 +582,6 @@ def publication_bias(sender, data, last_effect, last_var, decimal_places: int = 
             sender.pub_bias_test_dialog = pub_test_dialogs[pub_bias_options.pub_bias_test](data, last_effect, last_var)
         else:
             pub_bias_options.pub_bias_test = None
-        # if pub_bias_options.pub_bias_test == TRIM_FILL:
-        #     sender.pub_bias_test_dialog = PubBiasTrimFillDialog(data, last_effect, last_var)
-        # elif pub_bias_options.pub_bias_test == RANKCOR:
-        #     sender.pub_bias_test_dialog = PubBiasRankCorrelationDialog(data, last_effect, last_var)
-        # elif pub_bias_options.pub_bias_test == FUNNEL:
-        #     sender.pub_bias_test_dialog = PubBiasFunnelPlotDialog(data, last_effect, last_var)
-        # elif pub_bias_options.pub_bias_test == EGGER:
-        #     sender.pub_bias_stru
-        # else:
-        #     pub_bias_options.pub_bias_test = None
 
         if pub_bias_options.pub_bias_test is not None:
             if sender.pub_bias_test_dialog.exec():
