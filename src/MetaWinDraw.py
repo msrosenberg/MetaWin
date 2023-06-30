@@ -342,11 +342,13 @@ class MetaAnalysisEditFigure(QDialog):
         if not self.chart_data.suppress_y:
             self.chart_data.y_label = self.y_box.text()
         for edit_panel in self.panel_list:
-            if edit_panel.isChecked():
-                edit_panel.data.visible = True
-                edit_panel.data.update_style()
-            else:
-                edit_panel.data.visible = False
+            edit_panel.data.visible = edit_panel.isChecked()
+            edit_panel.data.update_style()
+            # if edit_panel.isChecked():
+            #     edit_panel.data.visible = True
+            #     edit_panel.data.update_style()
+            # else:
+            #     edit_panel.data.visible = False
         self.accept()
 
 

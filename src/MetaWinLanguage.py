@@ -156,9 +156,8 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "forest_plot_median_caption": " Medians are represented by {}.",
                       "Funnel Plot": "Funnel Plot",
                       "funnel_plot_caption": "Funnel plot of {} vs. {}. The {} represents the mean effect size.",
-                      "funnel_limit_style1": " The {} represents the 95% confidence interval of the funnel, after {}.",
-                      "funnel_limit_style2": " The {} and {} represent the upper and lower limits of the 95% "
-                                             "confidence interval of the funnel, respectively, after {}.",
+                      "funnel_pseudo_ci_style": " The {} represents the 95% pseudo-confidence interval of the funnel, "
+                                                "after {}.",
                       "group_forest_plot":
                           "Forest plot of effect sizes for the mean of all studies, as well as subgroups of studies "
                           "designated by {}.",
@@ -194,6 +193,8 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Imported phylogeny contains {} tips": "Imported phylogeny contains {} tips",
                       "Include Independent Variables": "Include Independent Variables",
                       "Include Random Effects Variance?": "Include Random Effects Variance?",
+                      "Include Pseudo-Confidence Limits": "Include Pseudo-Confidence Limits",
+                      "Include Contour Confidence Limits": "Include Contour Confidence Limits",
                       "Independent Variable": "Independent Variable",
                       "Independent Variables": "Independent Variables",
                       "Indicate Polarity": "Indicate Polarity",
@@ -216,7 +217,9 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Loaded data from {}": "Loaded data from {}",
                       "Load Phylogeny": "Load Phylogeny",
                       "Log Transformed Measure": "Log Transformed Measure",
-                      "Lower Prediction Limit": "Lower Prediction Limit",
+                      "Prediction Limits": "Prediction Limits",
+                      # "Lower Prediction Limit": "Lower Prediction Limit",
+                      "Pseudo-Confidence Limits": "Pseudo-Confidence Limits",
                       "Markdown": "Markdown",
                       "marker_style_text": "{} {}{} with a {} border",
                       "marker_style_open_text": "open {}{} with a {} border",
@@ -252,10 +255,12 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "normal_quantile_caption": "Normal Quantile plot following {}. The "
                                                  "standardized effect size is the effect size divided by the "
                                                  "square-root of its variance. ",
-                      "normal_quantile_style1": "The {} represents the regression and the {}s the 95% prediction "
-                                                "envelope.",
-                      "normal_quantile_style2": "The {} represents the regression and the {} and {} the upper and "
-                                                "lower limits of the 95% prediction envelope, respectively.",
+                      "normal_quantile_style": "The {} represents the regression and the {}s the 95% prediction "
+                                               "envelope.",
+                      # "normal_quantile_style1": "The {} represents the regression and the {}s the 95% prediction "
+                      #                           "envelope.",
+                      # "normal_quantile_style2": "The {} represents the regression and the {} and {} the upper and "
+                      #                           "lower limits of the 95% prediction envelope, respectively.",
                       # "note_funnel_plot": "Note: A funnel plot is just a scatter plot of a metric (such as a<br/>"
                       #                     "mean or effect size) vs. it\'s variance or sample size.",
                       "nothing (marker is invisible)": "nothing (marker is invisible)",
@@ -379,7 +384,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Two x Two Contingency Table": "Two x Two Contingency Table",
                       "Unable to write to ": "Unable to write to ",
                       "Unused": "Unused",
-                      "Upper Prediction Limit": "Upper Prediction Limit",
+                      # "Upper Prediction Limit": "Upper Prediction Limit",
                       "Use bootstrap for confidence intervals around means":
                           "Use bootstrap for confidence intervals around means",
                       "Use randomization to test model structure": "Use randomization to test model structure",

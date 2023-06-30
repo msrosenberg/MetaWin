@@ -840,8 +840,9 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
           <h2 id="funnel_plot">Funnel Plot</h2>
             <p>
                 A funnel plot is a special type of scatter plot where a metric (in meta-analysis, usually an effect
-                size) is plotted against sample size or an estimate of variance. The idea of a funnel plot is that if
-                there is a single true value being estimated by all of the studies, those with high variance
+                size) is plotted against sample size or an estimate of variance
+                (<a href="#light_pillemer_1984">Light and Pillemer 1984</a>). The idea of a funnel plot is that if
+                there is a single true value being estimated from all of the studies, those with high variance
                 (or low sample size) will tend to vary a lot around the true value, while those with low variance
                 (or high sample size) will tend to vary only a little around the true value. With a large number of
                 studies you would expect the scatter to be funnel-shaped and symmetric around the true value. If the
@@ -849,8 +850,12 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
             </p>
             <p>
                 If plotting effects size against variance or a derivative (rather than sample size), it is possible to
-                build a 95% pseudo-confidence interval for the funnel by assuming 1.96&plusmn;SE around the mean
-                (<a href="#sterne_egger_2001">Sterne and Egger, 2001</a>).
+                build various forms of confidence intervals around the funnel, based on the standard error and a
+                Normal distribution. Options include the (1) pseudo-confidence interval
+                (<a href="#sterne_egger_2001">Sterne and Egger 2001</a>), which creates a 95% envelope
+                around the mean effect size (under a fixed-effects model), and (2) contour confidence intervals
+                (<a href="#peters_et_2008">Peters <em>et al.</em> 2008</a>), which create zones of statistical
+                significance (<90%, 90-95%, 95-99%, >99%) around a null effect size of zero.
             </p>
 
             <figure><img src="images/xxxx"></figure>
@@ -863,15 +868,15 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
                 (1) sample size, (2) variance, (3) inverse variance (=weight), (4) standard error (the square-root
                 of variance in this formulation), and (5) precision (1/SE). All options require specification of
                 effect size and variance data (in order to calcualte the mean effect). The first also requires
-                one to specify sample size.
-            </p>
-            <p>
-                In addition to the scattered points, the plot will include a vertical line for the mean effect size
-                (assuming  a simple weighted, fixed-effects model) and (for options 2-5), the 95% pseudo-confidence
-                interval for the scatter. When variance or standard error is chosen as an option, the
+                one to specify sample size. When variance or standard error is chosen as an option, the
                 y-axis is automatically reversed (smallest numbers at top of axis rather than bottom) so that the
                 expected funnel direction will be consistent across all choices (<em>i.e.</em>, widest at the bottom
                 of the figure, narrowest at the top).
+            </p>
+            <p>
+                In addition to the scattered points, the plot will include a vertical line for the mean effect size
+                (assuming  a simple weighted, fixed-effects model). For options 2-5, one can also choose to plot
+                the 95% pseudo-confidence interval and/or the contour confidence intervals.
             </p>
             <p>
                 This method is intrinsically graphical, so it always produces a figure and the related text output is
@@ -2777,6 +2782,10 @@ ratio = 2.8047
                 <li><span id="orwin_1983">Orwin, R.G. (1983) A fail-safe <em>N</em> for effect size in
                     meta-analysis. <em>Journal of Educational Statistics</em> 8(2):157&ndash;159.</span>
                     DOI: <a href="https://doi.org/10.2307/1164923">10.2307/1164923</a></li>
+                <li><span id="peters_et_2008">Peters, J.L., A.J. Sutton, D.R. Jones, K.R. Abrams, and L. Rushton (2008)
+                    Contour-enhanced meta-analysis funnel plots help distinguish publication bias from other causes of
+                    asymmetry. <em>Journal of Clinical Epidemiology</em> 61(10):991&ndash;996.</span>
+                       <a href="https://10.1016/j.jclinepi.2007.11.010">10.1016/j.jclinepi.2007.11.010</a></li>
                 <li><span id="rosenberg_2005">Rosenberg, M.S. (2005) The file-drawer problem revisited: A general
                     weighted method for calculating fail-safe numbers in meta-analysis. <em>Evolution</em>
                     59(2):464&ndash;468.</span>

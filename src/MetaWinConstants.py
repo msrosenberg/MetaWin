@@ -256,6 +256,11 @@ references = {
     "Orwin_1983": ["Orwin, R.G. (1983) A fail-safe <em>N</em> for effect size in meta-analysis. <em>Journal of "
                    "Educational Statistics</em> 8(2):157&ndash;159.", "Orwin (1983)", "10.2307/1164923"],
 
+    "Peters_et_2008": ["Peters, J.L., A.J. Sutton, D.R. Jones, K.R. Abrams, and L. Rushton (2008) Contour-enhanced "
+                       "meta-analysis funnel plots help distinguish publication bias from other causes of asymmetry. "
+                       "<em>Journal of Clinical Epidemiology</em> 61(10):991&ndash;996.",
+                       "Peters <em>et al.</em> 2008", "10.1016/j.jclinepi.2007.11.010"],
+
     "Rosenberg_et_2000": ["Rosenberg, M.S., D.C. Adams, and J. Gurevitch (2000) <em>MetaWin: Statistical Software "
                           "for Meta-analysis</em>. Sinauer Associates, Sunderland, MA.",
                           "Rosenberg <em>et al.</em> (2000)", ""],

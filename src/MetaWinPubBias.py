@@ -41,6 +41,8 @@ class PubBiasOptions:
         self.cor_test = "tau"
         self.norm_ci = True
         self.funnel_y = None
+        self.pseudo_ci = False
+        self.contour_ci = False
 
     def report_choices(self):
         output_blocks = []
@@ -61,10 +63,11 @@ class PubBiasOptions:
                 citations.append("Begg_Mazumdar_1994")
             elif self.pub_bias_test == FUNNEL:
                 output.append(get_text("Funnel Plot"))
-                output.append("→ {}: ".format(get_text("Citations")) + get_citation("Light_Pillemer_1984") + ", " +
-                              get_citation("Sterne_Egger_2001"))
+                output.append("→ {}: ".format(get_text("Citations")) + get_citation("Light_Pillemer_1984"))
+                # output.append("→ {}: ".format(get_text("Citations")) + get_citation("Light_Pillemer_1984") + ", " +
+                #               get_citation("Sterne_Egger_2001"))
                 citations.append("Light_Pillemer_1984")
-                citations.append("Sterne_Egger_2001")
+                # citations.append("Sterne_Egger_2001")
             elif self.pub_bias_test == EGGER:
                 output.append(get_text("Egger Regression"))
                 output.append("→ {}: ".format(get_text("Citations")) + get_citation("Egger_et_1997"))
@@ -381,6 +384,8 @@ class PubBiasFunnelPlotDialog(QDialog):
         self.se_button = None
         self.prec_button = None
         self.sample_size_label = None
+        self.pseudo_ci_box = None
+        self.contour_box = None
         self.init_ui(data, last_effect, last_var)
 
     def init_ui(self, data: MetaWinData, last_effect, last_var):
@@ -425,6 +430,9 @@ class PubBiasFunnelPlotDialog(QDialog):
         y_layout.addWidget(self.prec_button)
         y_box.setLayout(y_layout)
         self.n_button.setChecked(True)
+
+        self.pseudo_ci_box = QCheckBox(get_text("Include Pseudo-Confidence Limits"))
+        self.contour_box = QCheckBox(get_text("Include Contour Confidence Limits"))
         self.click_y_variable()
 
         main_frame = QFrame()
@@ -436,6 +444,8 @@ class PubBiasFunnelPlotDialog(QDialog):
         main_layout.addWidget(analysis_label)
         main_layout.addWidget(main_frame)
         main_layout.addWidget(y_box)
+        main_layout.addWidget(self.pseudo_ci_box)
+        main_layout.addWidget(self.contour_box)
         main_layout.addLayout(button_layout)
 
         self.setLayout(main_layout)
@@ -449,9 +459,13 @@ class PubBiasFunnelPlotDialog(QDialog):
         if self.n_button.isChecked():
             self.sample_size_box.setEnabled(True)
             self.sample_size_label.setEnabled(True)
+            self.pseudo_ci_box.setEnabled(False)
+            self.contour_box.setEnabled(False)
         else:
             self.sample_size_box.setEnabled(False)
             self.sample_size_label.setEnabled(False)
+            self.pseudo_ci_box.setEnabled(True)
+            self.contour_box.setEnabled(True)
 
     def set_options(self, options: PubBiasOptions):
         options.effect_data = self.columns[self.effect_size_box.currentIndex()]
@@ -459,6 +473,8 @@ class PubBiasFunnelPlotDialog(QDialog):
         if self.n_button.isChecked():
             options.sample_size = self.columns[self.sample_size_box.currentIndex()]
             options.funnel_y = "sample size"
+            options.pseudo_ci = False
+            options.contour_ci = False
         else:
             options.sample_size = None
             if self.v_button.isChecked():
@@ -469,6 +485,8 @@ class PubBiasFunnelPlotDialog(QDialog):
                 options.funnel_y = "standard error"
             elif self.prec_button.isChecked():
                 options.funnel_y = "precision"
+            options.pseudo_ci = self.pseudo_ci_box.isChecked()
+            options.contour_ci = self.contour_box.isChecked()
 
 
 class PubBiasEggerDialog(QDialog):

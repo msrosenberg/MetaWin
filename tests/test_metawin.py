@@ -1588,6 +1588,8 @@ def test_funnel_plots():
 
     # variance funnel
     options.sample_size = None
+    options.pseudo_ci = True
+    options.contour_ci = True
     options.funnel_y = "variance"
 
     output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
