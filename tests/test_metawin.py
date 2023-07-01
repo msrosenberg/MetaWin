@@ -20,6 +20,7 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import numpy
 import scipy
+import matplotlib.pyplot as pyplot
 
 # note these may be marked by the IDE as unknown modules, but pytest.ini will resolve the errors when tests
 # are actually executed
@@ -1658,3 +1659,19 @@ def test_linear_regression():
     print("Intercept CI: {} - {}".format(lower, upper))
     assert round(lower, 1) == -45.4
     assert round(upper, 1) == -32.7
+
+    # print(scipy.stats.norm.ppf(0.025))
+    curve_y = numpy.linspace(2, 26, 25)
+    se = 1/curve_y
+    z = scipy.stats.norm.ppf(0.975)
+    power = 1 - scipy.stats.norm.cdf(z - 0.2/se) + scipy.stats.norm.cdf(-z - 0.2/se)
+    x = [-1, 1]
+    xc, yc = numpy.meshgrid(x, curve_y)
+    zc = numpy.array([power for _ in x])
+    print(xc)
+    print(yc)
+    print(zc)
+    pyplot.pcolormesh(xc, yc, zc.transpose(), shading="nearest")
+
+    pyplot.show()
+

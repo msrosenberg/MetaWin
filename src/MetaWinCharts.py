@@ -450,7 +450,6 @@ class FillDataX(BaseChartData):
         self.color = "silver"
         self.zorder = 0
         self.alpha = 0.5
-        self.edit_panel = None
         self.color_button = None
         self.linked_style = None
         self.is_linked = False
@@ -488,6 +487,63 @@ class FillDataX(BaseChartData):
 
     def style_text(self) -> str:
         return find_color_name(self.color)
+
+
+class ColorGrid(BaseChartData):
+    """
+    an object to contain area fills that run between two values on the x-axis
+    """
+    def __init__(self):
+        super().__init__()
+        self.x_values = None
+        self.y_values = None
+        self.z_values = None
+        self.edit_panel = None
+        # style
+        self.colormap = "RdYlGn"
+        # self.color = "silver"
+        # self.zorder = 0
+        # self.alpha = 0.5
+        # self.color_button = None
+        # self.linked_style = None
+        # self.is_linked = False
+
+    # def link_style(self, other_fill):
+    #     self.linked_style = other_fill
+    #     other_fill.is_linked = True
+
+    def export_to_list(self) -> list:
+        # outlist = ["Line Data\n",
+        #            "Name\t{}\n".format(self.name),
+        #            "x\ty\n"]
+        # for i in range(len(self.x_values)):
+        #     outlist.append("{}\t{}\n".format(self.x_values[i], self.y_values[i]))
+        # return outlist
+        return []
+
+    def create_edit_panel(self):
+        # if self.is_linked:
+        #     return self.edit_panel
+        # else:
+        #     self.edit_panel, edit_layout = MetaWinWidgets.add_figure_edit_panel(self)
+        #     self.color_button, color_label, _ = MetaWinWidgets.add_chart_color_button(get_text("Color"), self.color)
+        #
+        #     edit_layout.addWidget(color_label, 0, 0)
+        #     edit_layout.addWidget(self.color_button, 1, 0)
+        #     for i in range(edit_layout.columnCount()):
+        #         edit_layout.setColumnStretch(i, 1)
+        #     return self.edit_panel
+        return self.edit_panel
+
+    def update_style(self):
+        # self.color = self.color_button.color
+        # if self.linked_style is not None:
+        #     self.linked_style.color = self.color
+        pass
+
+    def style_text(self) -> str:
+        # return find_color_name(self.color)
+        return ""
 
 
 # ---------- Chart Caption Classes ---------- #
@@ -874,6 +930,16 @@ class ChartData:
         self.data.append(new_fill)
         return new_fill
 
+    def add_color_grid(self, name, x, y, z, colormap: str = "inferno"):
+        new_grid = ColorGrid()
+        new_grid.name = name
+        new_grid.x_values = x
+        new_grid.y_values = y
+        new_grid.z_values = z
+        new_grid.colormap = colormap
+        self.data.append(new_grid)
+        return new_grid
+
     def export_to_list(self):
         outlist = ["X-axis label\t{}\n".format(self.x_label),
                    "Y-axis label\t{}\n\n\n".format(self.y_label)]
@@ -938,6 +1004,9 @@ def create_figure(chart_data, figure_canvas):
                 faxes.fill_betweenx(data.y_values, data.x1_values, data.x2_values, color=data.color,
                                     edgecolor="none", zorder=data.zorder,
                                     alpha=data.alpha)
+            elif isinstance(data, ColorGrid):
+                faxes.pcolormesh(data.x_values, data.y_values, data.z_values, shading="gouraud",
+                                 cmap=data.colormap)
 
     if chart_data.suppress_y:
         faxes.spines["left"].set_visible(False)
@@ -1347,7 +1416,7 @@ def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> Char
 
 
 def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str = "sample size",
-                      do_pseudo: bool = False, do_contour: bool = False) -> ChartData:
+                      do_pseudo: bool = False, do_contour: bool = False, do_power: False = False) -> ChartData:
     chart_data = ChartData("funnel plot")
     chart_data.caption.x_label = x_label
     chart_data.caption.y_label = y_label
@@ -1364,7 +1433,7 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
     if y_label in ("standard error", "variance"):
         chart_data.invert_y = True
 
-    if (y_label != "sample size") and (do_pseudo or do_contour):
+    if (y_label != "sample size") and (do_pseudo or do_contour or do_power):
         curve_y = numpy.linspace(y_min, y_max, 50)  # 50 points for a nice curve
         if y_label == "standard error":
             sey = curve_y
@@ -1406,6 +1475,16 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
                                                                    curve_y, color="#a3a3a3", zorder=1)
             up_fill = chart_data.add_fill_area_x("", curve_95_max, curve_90_max, curve_y, color="#a3a3a3", zorder=1)
             chart_data.caption.zone90.link_style(up_fill)
+
+        # if do_power:
+        if True:
+            z = scipy.stats.norm.ppf(0.975)
+            power = 1 - scipy.stats.norm.cdf(z - mean_e/sey) + scipy.stats.norm.cdf(-z - mean_e/sey)
+            # x = numpy.linspace(x_min, x_max, 50)
+            x = [x_min, x_max]
+            xc, yc = numpy.meshgrid(x, curve_y)
+            zc = numpy.array([power for _ in x]).transpose()
+            chart_data.add_color_grid("", xc, yc, zc, colormap="RdYlGn")
 
     return chart_data
 
