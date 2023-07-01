@@ -199,6 +199,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Include Random Effects Variance?": "Include Random Effects Variance?",
                       "Include Pseudo-Confidence Limits": "Include Pseudo-Confidence Limits",
                       "Include Contour Confidence Limits": "Include Contour Confidence Limits",
+                      "Include Power/Sunset Coloration": "Include Power/Sunset Coloration",
                       "Independent Variable": "Independent Variable",
                       "Independent Variables": "Independent Variables",
                       "Indicate Polarity": "Indicate Polarity",

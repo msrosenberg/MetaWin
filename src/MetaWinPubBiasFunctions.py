@@ -413,7 +413,7 @@ def funnel_plot_setup(data, options):
         if options.contour_ci:
             citations.append("Peters_et_2008")
         chart_data = MetaWinCharts.chart_funnel_plot(e_data, y_data, mean_e, effect_sizes.label, options.funnel_y,
-                                                     options.pseudo_ci, options.contour_ci)
+                                                     options.pseudo_ci, options.contour_ci, options.sunset_power)
     else:
         output_blocks.append([get_text("Fewer than two studies were valid for analysis")])
         chart_data = None

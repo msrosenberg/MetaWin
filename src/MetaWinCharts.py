@@ -1005,8 +1005,17 @@ def create_figure(chart_data, figure_canvas):
                                     edgecolor="none", zorder=data.zorder,
                                     alpha=data.alpha)
             elif isinstance(data, ColorGrid):
-                faxes.pcolormesh(data.x_values, data.y_values, data.z_values, shading="gouraud",
-                                 cmap=data.colormap)
+                # ax2 = faxes.twinx()
+                # max_z = numpy.max(data.z_values)
+                # min_z = numpy.min(data.z_values)
+                # ax2.set_ylim(min_z, max_z)
+                # if chart_data.invert_y:
+                #     ax2.invert_yaxis()
+                # faxes.set_zorder(ax2.get_zorder()+1)
+                # faxes.set_frame_on(False)
+                cm = faxes.pcolormesh(data.x_values, data.y_values, data.z_values, shading="gouraud",
+                                 cmap=data.colormap, zorder=0, vmin=0, vmax=100)
+                figure_canvas.figure.colorbar(cm, ax=faxes, label="Power")
 
     if chart_data.suppress_y:
         faxes.spines["left"].set_visible(False)
@@ -1426,6 +1435,13 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
 
     y_min = numpy.min(y_data)
     y_max = numpy.max(y_data)
+
+    if y_label in ("standard error", "variance"):
+        y_min = min(y_min, 0.001)
+    else:
+        y_min = y_min*0.85
+    y_max = y_max*1.15
+
     x_min = numpy.min(x_data)
     x_max = numpy.max(x_data)
     chart_data.caption.mean_effect = chart_data.add_line(get_text("Mean Effect Size"), mean_e, y_min, mean_e, y_max,
@@ -1435,6 +1451,10 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
 
     if (y_label != "sample size") and (do_pseudo or do_contour or do_power):
         curve_y = numpy.linspace(y_min, y_max, 50)  # 50 points for a nice curve
+        # if y_label in ("standard error", "variance"):
+        #     curve_y = numpy.linspace(min(y_min, 0.001), y_max*1.15, 50)  # 50 points for a nice curve
+        # else:
+        #     curve_y = numpy.linspace(y_min*0.85, y_max*1.15, 50)  # 50 points for a nice curve
         if y_label == "standard error":
             sey = curve_y
         elif y_label == "precision":
@@ -1476,10 +1496,9 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
             up_fill = chart_data.add_fill_area_x("", curve_95_max, curve_90_max, curve_y, color="#a3a3a3", zorder=1)
             chart_data.caption.zone90.link_style(up_fill)
 
-        # if do_power:
-        if True:
+        if do_power:
             z = scipy.stats.norm.ppf(0.975)
-            power = 1 - scipy.stats.norm.cdf(z - mean_e/sey) + scipy.stats.norm.cdf(-z - mean_e/sey)
+            power = 100*(1 - scipy.stats.norm.cdf(z - mean_e/sey) + scipy.stats.norm.cdf(-z - mean_e/sey))
             # x = numpy.linspace(x_min, x_max, 50)
             x = [x_min, x_max]
             xc, yc = numpy.meshgrid(x, curve_y)

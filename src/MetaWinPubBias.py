@@ -43,6 +43,7 @@ class PubBiasOptions:
         self.funnel_y = None
         self.pseudo_ci = False
         self.contour_ci = False
+        self.sunset_power = False
 
     def report_choices(self):
         output_blocks = []
@@ -386,6 +387,7 @@ class PubBiasFunnelPlotDialog(QDialog):
         self.sample_size_label = None
         self.pseudo_ci_box = None
         self.contour_box = None
+        self.sunset_box = None
         self.init_ui(data, last_effect, last_var)
 
     def init_ui(self, data: MetaWinData, last_effect, last_var):
@@ -429,10 +431,11 @@ class PubBiasFunnelPlotDialog(QDialog):
         y_layout.addWidget(self.se_button)
         y_layout.addWidget(self.prec_button)
         y_box.setLayout(y_layout)
-        self.n_button.setChecked(True)
+        self.se_button.setChecked(True)
 
         self.pseudo_ci_box = QCheckBox(get_text("Include Pseudo-Confidence Limits"))
         self.contour_box = QCheckBox(get_text("Include Contour Confidence Limits"))
+        self.sunset_box = QCheckBox(get_text("Include Power/Sunset Coloration"))
         self.click_y_variable()
 
         main_frame = QFrame()
@@ -446,6 +449,7 @@ class PubBiasFunnelPlotDialog(QDialog):
         main_layout.addWidget(y_box)
         main_layout.addWidget(self.pseudo_ci_box)
         main_layout.addWidget(self.contour_box)
+        main_layout.addWidget(self.sunset_box)
         main_layout.addLayout(button_layout)
 
         self.setLayout(main_layout)
@@ -461,11 +465,13 @@ class PubBiasFunnelPlotDialog(QDialog):
             self.sample_size_label.setEnabled(True)
             self.pseudo_ci_box.setEnabled(False)
             self.contour_box.setEnabled(False)
+            self.sunset_box.setEnabled(False)
         else:
             self.sample_size_box.setEnabled(False)
             self.sample_size_label.setEnabled(False)
             self.pseudo_ci_box.setEnabled(True)
             self.contour_box.setEnabled(True)
+            self.sunset_box.setEnabled(True)
 
     def set_options(self, options: PubBiasOptions):
         options.effect_data = self.columns[self.effect_size_box.currentIndex()]
@@ -487,6 +493,7 @@ class PubBiasFunnelPlotDialog(QDialog):
                 options.funnel_y = "precision"
             options.pseudo_ci = self.pseudo_ci_box.isChecked()
             options.contour_ci = self.contour_box.isChecked()
+            options.sunset_power = self.sunset_box.isChecked()
 
 
 class PubBiasEggerDialog(QDialog):
