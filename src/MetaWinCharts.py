@@ -484,6 +484,7 @@ class FillDataX(BaseChartData):
         self.color = self.color_button.color
         if self.linked_style is not None:
             self.linked_style.color = self.color
+            self.linked_style.visible = self.visible
 
     def style_text(self) -> str:
         return find_color_name(self.color)
@@ -746,6 +747,7 @@ class FunnelPlotCaption:
         self.zone99 = None
         self.zone95 = None
         self.zone90 = None
+        self.colorgrid = None
 
     def __str__(self):
         mean_text = self.mean_effect.style_text()
@@ -754,6 +756,7 @@ class FunnelPlotCaption:
             pseudo_text = ""
         else:
             cite_text = get_citation("Sterne_Egger_2001")
+            citations.append("Sterne_Egger_2001")
             pseudo_text = get_text("funnel_pseudo_ci_style").format(self.pseudo_ci.style_text(), cite_text)
         if self.zone99 is None:
             contour_text = ""
@@ -762,9 +765,15 @@ class FunnelPlotCaption:
             citations.append("Peters_et_2008")
             contour_text = get_text("funnel_contour_style").format(self.zone99.style_text(), self.zone95.style_text(),
                                                                    self.zone90.style_text(), cite_text)
+        if self.colorgrid is None:
+            sunset_text = ""
+        else:
+            cite_text = get_citation("Kossmeier_et_2020")
+            citations.append("Kossmeier_et_2020")
+            sunset_text = get_text("funnel_sunset_style").format(cite_text)
 
         return get_text("funnel_plot_caption").format(self.x_label, self.y_label, mean_text) + pseudo_text + \
-            contour_text + create_reference_list(citations, True)
+            contour_text + sunset_text + create_reference_list(citations, True)
 
 
 # ---------- Main Chart Data Class ---------- #
@@ -1503,7 +1512,7 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
             x = [x_min, x_max]
             xc, yc = numpy.meshgrid(x, curve_y)
             zc = numpy.array([power for _ in x]).transpose()
-            chart_data.add_color_grid("", xc, yc, zc, colormap="RdYlGn")
+            chart_data.caption.colormap = chart_data.add_color_grid("", xc, yc, zc, colormap="RdYlGn")
 
     return chart_data
 

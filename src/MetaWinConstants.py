@@ -214,6 +214,10 @@ references = {
     "Kendall_1938": ["Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>. "
                      "30(1&ndash;2):81&ndash;89.", "Kendall (1938)", "10.1093/biomet/30.1-2.81"],
 
+    "Kossmeier_et_2020": ["Kossmeier, M., U.S. Tran, and M. Voracek (2020) Power-enhanced funnel plots for "
+                          "meta-analysis: The sunset funnel plot. <em>Zeitschrift für Psychologie</em> "
+                          "228(1):43&ndash;49.", "Kossmeier <em>et al.</em> (2020)", "10.1027/2151-2604/a000392"],
+
     "LAbbe_et_1987": ["L&rsquo;Abbé, K.A., A.S. Detsky, and K. O&rsquo;Rourke (1987) Meta-analysis in clinical "
                       "research. <em>Annals of Internal Medicine</em> 107:224&ndash;233.",
                       "L&rsquo;Abbé <em>et al.</em> (1987)", "10.7326/0003-4819-107-2-224"],

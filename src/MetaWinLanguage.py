@@ -161,6 +161,8 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "funnel_contour_style": " The {} zone represents the area where effect sizes would have a "
                                               "probability of less than 1%, the {} zone a probability between 1 and 5%,"
                                               " and the {} zone a probability between 5 and 10%, after {}.",
+                      "funnel_sunset_style": " The background colors indicate the power of an individual study to "
+                                             "detect an underlying true effect equal to the mean, after {}.",
                       "group_forest_plot":
                           "Forest plot of effect sizes for the mean of all studies, as well as subgroups of studies "
                           "designated by {}.",

@@ -412,6 +412,8 @@ def funnel_plot_setup(data, options):
             citations.append("Sterne_Egger_2001")
         if options.contour_ci:
             citations.append("Peters_et_2008")
+        if options.sunset_power:
+            citations.append("Kossmeier_et_2020")
         chart_data = MetaWinCharts.chart_funnel_plot(e_data, y_data, mean_e, effect_sizes.label, options.funnel_y,
                                                      options.pseudo_ci, options.contour_ci, options.sunset_power)
     else:
