@@ -252,6 +252,26 @@ def add_chart_line_edits(color_text, color, width_text, width, style_text, style
     return color_label, color_button, width_label, width_box, style_label, style_box
 
 
+def add_chart_colormap_edits(colormap: str, options, labelstr: str):
+    rev_map_box = QCheckBox(get_text("Reverse"))
+    if colormap.endswith("_r"):
+        rev_map_box.setChecked(True)
+        colormap = colormap[:-2]
+    else:
+        rev_map_box.setChecked(False)
+    map_box = QComboBox()
+    for c in options:
+        map_box.addItem(c)
+    index = list(options.values()).index(colormap)
+    map_box.setCurrentIndex(index)
+
+    label = QLabel(get_text("Color Scheme Label"))
+    label_box = QLineEdit()
+    label_box.setText(labelstr)
+
+    return map_box, rev_map_box, label, label_box
+
+
 def progress_bar(sender, title: str, text: str, max_val: int):
     pb = QProgressDialog(sender)
     pb.setWindowModality(QtCore.Qt.WindowModality.WindowModal)

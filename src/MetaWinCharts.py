@@ -48,6 +48,98 @@ UNFILLED_MARKERS = {"point", "plus", "X", "vertical line", "horizontal line", "t
                     "tick down", "upward caret", "downward caret", "left caret", "right caret",
                     "centered upward caret", "centered downward caret", "centered left caret", "centered right caret"}
 
+COLORMAPS = {  # perceptually uniform
+             "viridis (uniform)": "viridis",
+             "plasma (uniform)": "plasma",
+             "inferno (uniform)": "inferno",
+             "magma (uniform)": "magma",
+             "cividis (uniform)": "cividis",
+             # sequential
+             "greys (sequential light-to-dark)": "Greys",
+             "purples (sequential light-to-dark)": "Purples",
+             "blues (sequential light-to-dark)": "Blues",
+             "greens (sequential light-to-dark)": "Greens",
+             "oranges (sequential light-to-dark)": "Oranges",
+             "reds (sequential light-to-dark)": "Reds",
+             "yellow-orange-brown (sequentia light-to-dark)": "YlOrBr",
+             "yellow-orange-red (sequential light-to-dark)": "YlOrRd",
+             "orange-red (sequential light-to-dark)": "OrRd",
+             "purple-red (sequential light-to-dark)": "PuRd",
+             "red-purple (sequential light-to-dark)": "RdPu",
+             "blue-purple (sequential light-to-dark)": "BuPu",
+             "green-blue (sequential light-to-dark)": "GnBu",
+             "purple-blue (sequential light-to-dark)": "PuBu",
+             "yellow-green-blue (sequential light-to-dark)": "YlGnBu",
+             "purple-blue-green (sequential light-to-dark)": "PuBuGn",
+             "blue-green (sequential light-to-dark)": "BuGn",
+             "yellow-green (sequential light-to-dark)": "YlGn",
+             # sequential 2
+             # # "binary": "binary",  # identical to gray_r
+             # # "gist_yarg": "gist_yarg",  # identical to gray_r
+             # # "gist_gray": "gist_gray",  # identical to gray
+             "gray (sequential)": "gray",
+             "bone (sequential)": "bone",
+             "pink (sequential)": "pink",
+             "spring (sequential)": "spring",
+             "summer (sequential)": "summer",
+             "autumn (sequential)": "autumn",
+             "winter (sequential)": "winter",
+             "cool (sequential)": "cool",
+             "wistia (sequential)": "Wistia",
+             "hot (black-red-yellow-white) (sequential)": "hot",
+             "hot (black-orange-white) (sequential)": "afmhot",
+             "Yorick heat (sequential)": "gist_heat",
+             "copper (sequential)": "copper",
+             # diverging
+             "pink-white-green (diverging)": "PiYG",
+             "purple-white-green (diverging)": "PRGn",
+             "brown-white-green (diverging)": "BrBG",
+             "orange-white-purple (diverging)": "PuOr",
+             "red-white-gray (diverging)": "RdGy",
+             "red-white-blue (diverging)": "RdBu",
+             "red-yellow-blue (diverging)": "RdYlBu",
+             "red-yellow-green (diverging)": "RdYlGn",
+             "spectral (diverging)": "Spectral",
+             "cool-warm (diverging)": "coolwarm",
+             "blue-white-red (diverging)": "bwr",
+             "seismic (diverging)": "seismic",
+             # cyclic
+             "twilight (cyclic)": "twilight",
+             "twilight (shifted) (cyclic)": "twilight_shifted",
+             "hsv wheel (cyclic)": "hsv",
+             # qualitative
+             "ColorBrewer pastel 1 (qualitative)": "Pastel1",
+             "ColorBrewer pastel 2 (qualitative)": "Pastel2",
+             "ColorBrewer paired (qualitative)": "Paired",
+             "ColorBrewer accent (qualitative)": "Accent",
+             "ColorBrewer dark 2 (qualitative)": "Dark2",
+             "ColorBrewer set 1 (qualitative)": "Set1",
+             "ColorBrewer set 2 (qualitative)": "Set2",
+             "ColorBrewer set 3 (qualitative)": "Set3",
+             "Vega 10 color (qualitative)": "tab10",
+             "Vega 20 color, v1 (qualitative)": "tab20",
+             "Vega 20 color, v2 (qualitative)": "tab20b",
+             "Vega 20 color, v3 (qualitative)": "tab20c",
+             # miscellaneous
+             # # "flag": "flag",  # repeating pattern
+             # # "prism": "prism",  # repeating pattern
+             "ocean": "ocean",
+             "Yorick earth": "gist_earth",
+             "terrain": "terrain",
+             "Yorick stern": "gist_stern",
+             "gnuplot": "gnuplot",
+             "gnuplot2": "gnuplot2",
+             "CMR map": "CMRmap",
+             "cubehelix": "cubehelix",
+             "blue-red-green": "brg",
+             "Yorick rainbow": "gist_rainbow",
+             "rainbow": "rainbow",
+             "jet": "jet",
+             "turbo": "turbo",
+             "NiPy spectral": "nipy_spectral",
+             # # "gist_ncar": "gist_ncar"
+            }
+
 
 # ---------- Chart Data Classes ---------- #
 class BaseChartData:
@@ -500,18 +592,12 @@ class ColorGrid(BaseChartData):
         self.y_values = None
         self.z_values = None
         self.edit_panel = None
+        self.label_name = ""
         # style
         self.colormap = "RdYlGn"
-        # self.color = "silver"
-        # self.zorder = 0
-        # self.alpha = 0.5
-        # self.color_button = None
-        # self.linked_style = None
-        # self.is_linked = False
-
-    # def link_style(self, other_fill):
-    #     self.linked_style = other_fill
-    #     other_fill.is_linked = True
+        self.map_box = None
+        self.rev_map_box = None
+        self.label_box = None
 
     def export_to_list(self) -> list:
         # outlist = ["Line Data\n",
@@ -523,24 +609,23 @@ class ColorGrid(BaseChartData):
         return []
 
     def create_edit_panel(self):
-        # if self.is_linked:
-        #     return self.edit_panel
-        # else:
-        #     self.edit_panel, edit_layout = MetaWinWidgets.add_figure_edit_panel(self)
-        #     self.color_button, color_label, _ = MetaWinWidgets.add_chart_color_button(get_text("Color"), self.color)
-        #
-        #     edit_layout.addWidget(color_label, 0, 0)
-        #     edit_layout.addWidget(self.color_button, 1, 0)
-        #     for i in range(edit_layout.columnCount()):
-        #         edit_layout.setColumnStretch(i, 1)
-        #     return self.edit_panel
+        self.edit_panel, edit_layout = MetaWinWidgets.add_figure_edit_panel(self)
+        self.map_box, self.rev_map_box, label, self.label_box = MetaWinWidgets.add_chart_colormap_edits(self.colormap,
+                                                                                                        COLORMAPS,
+                                                                                                        self.label_name)
+        edit_layout.addWidget(self.rev_map_box, 0, 0)
+        edit_layout.addWidget(self.map_box, 1, 0)
+        edit_layout.addWidget(label, 0, 1)
+        edit_layout.addWidget(self.label_box, 1, 1)
+        for i in range(edit_layout.columnCount()):
+            edit_layout.setColumnStretch(i, 1)
         return self.edit_panel
 
     def update_style(self):
-        # self.color = self.color_button.color
-        # if self.linked_style is not None:
-        #     self.linked_style.color = self.color
-        pass
+        self.colormap = COLORMAPS[self.map_box.currentText()]
+        if self.rev_map_box.isChecked():
+            self.colormap += "_r"
+        self.label_name = self.label_box.text()
 
     def style_text(self) -> str:
         # return find_color_name(self.color)
@@ -939,13 +1024,14 @@ class ChartData:
         self.data.append(new_fill)
         return new_fill
 
-    def add_color_grid(self, name, x, y, z, colormap: str = "inferno"):
+    def add_color_grid(self, name, x, y, z, colormap: str = "inferno", grid_label: str = ""):
         new_grid = ColorGrid()
         new_grid.name = name
         new_grid.x_values = x
         new_grid.y_values = y
         new_grid.z_values = z
         new_grid.colormap = colormap
+        new_grid.label_name = grid_label
         self.data.append(new_grid)
         return new_grid
 
@@ -1024,7 +1110,7 @@ def create_figure(chart_data, figure_canvas):
                 # faxes.set_frame_on(False)
                 cm = faxes.pcolormesh(data.x_values, data.y_values, data.z_values, shading="gouraud",
                                  cmap=data.colormap, zorder=0, vmin=0, vmax=100)
-                figure_canvas.figure.colorbar(cm, ax=faxes, label="Power")
+                figure_canvas.figure.colorbar(cm, ax=faxes, label=data.label_name)
 
     if chart_data.suppress_y:
         faxes.spines["left"].set_visible(False)
@@ -1512,7 +1598,8 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
             x = [x_min, x_max]
             xc, yc = numpy.meshgrid(x, curve_y)
             zc = numpy.array([power for _ in x]).transpose()
-            chart_data.caption.colormap = chart_data.add_color_grid("", xc, yc, zc, colormap="RdYlGn")
+            chart_data.caption.colorgrid = chart_data.add_color_grid(get_text("Power Color Scheme"), xc, yc, zc,
+                                                                     colormap="RdYlGn", grid_label=get_text("Power"))
 
     return chart_data
 
