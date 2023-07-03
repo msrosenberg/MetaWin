@@ -6,16 +6,14 @@ Module controlling choice selection for publication bias tests
 # from typing import Optional
 import webbrowser
 
-from PyQt6.QtWidgets import QDialog, QPushButton, QLabel, QVBoxLayout, QGridLayout, QFrame, QComboBox, QGroupBox, \
-    QCheckBox, QLineEdit, QRadioButton, QHBoxLayout
-from PyQt6.QtGui import QIcon, QIntValidator, QDoubleValidator
+from PyQt6.QtWidgets import QDialog, QPushButton, QLabel, QVBoxLayout, QFrame, QComboBox, QGroupBox, QLineEdit, \
+    QRadioButton, QHBoxLayout, QCheckBox
+from PyQt6.QtGui import QIcon, QIntValidator
 
 from MetaWinData import MetaWinData
 import MetaWinConstants
 import MetaWinPubBiasFunctions
-# from MetaWinMessages import report_warning
-from MetaWinWidgets import add_ok_cancel_help_button_layout, add_cancel_help_button_layout, add_drag_drop_list, \
-    create_list_item, add_effect_choice_to_dialog
+from MetaWinWidgets import add_ok_cancel_help_button_layout, add_cancel_help_button_layout, add_effect_choice_to_dialog
 from MetaWinUtils import get_citation, create_reference_list
 from MetaWinLanguage import get_text
 
@@ -65,10 +63,7 @@ class PubBiasOptions:
             elif self.pub_bias_test == FUNNEL:
                 output.append(get_text("Funnel Plot"))
                 output.append("→ {}: ".format(get_text("Citations")) + get_citation("Light_Pillemer_1984"))
-                # output.append("→ {}: ".format(get_text("Citations")) + get_citation("Light_Pillemer_1984") + ", " +
-                #               get_citation("Sterne_Egger_2001"))
                 citations.append("Light_Pillemer_1984")
-                # citations.append("Sterne_Egger_2001")
             elif self.pub_bias_test == EGGER:
                 output.append(get_text("Egger Regression"))
                 output.append("→ {}: ".format(get_text("Citations")) + get_citation("Egger_et_1997"))
