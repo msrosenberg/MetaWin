@@ -88,7 +88,7 @@ COLORMAPS = {  # perceptually uniform
              "wistia (sequential)": "Wistia",
              "hot (black-red-yellow-white) (sequential)": "hot",
              "hot (black-orange-white) (sequential)": "afmhot",
-             "Yorick heat (sequential)": "gist_heat",
+             "GIST/Yorick heat (sequential)": "gist_heat",
              "copper (sequential)": "copper",
              # diverging
              "pink-white-green (diverging)": "PiYG",
@@ -106,7 +106,7 @@ COLORMAPS = {  # perceptually uniform
              # cyclic
              "twilight (cyclic)": "twilight",
              "twilight (shifted) (cyclic)": "twilight_shifted",
-             "hsv wheel (cyclic)": "hsv",
+             "HSV wheel (cyclic)": "hsv",
              # qualitative
              "ColorBrewer pastel 1 (qualitative)": "Pastel1",
              "ColorBrewer pastel 2 (qualitative)": "Pastel2",
@@ -124,15 +124,15 @@ COLORMAPS = {  # perceptually uniform
              # # "flag": "flag",  # repeating pattern
              # # "prism": "prism",  # repeating pattern
              "ocean": "ocean",
-             "Yorick earth": "gist_earth",
+             "GIST/Yorick earth": "gist_earth",
              "terrain": "terrain",
-             "Yorick stern": "gist_stern",
+             "GIST/Yorick stern": "gist_stern",
              "gnuplot": "gnuplot",
              "gnuplot2": "gnuplot2",
              "CMR map": "CMRmap",
              "cubehelix": "cubehelix",
              "blue-red-green": "brg",
-             "Yorick rainbow": "gist_rainbow",
+             "GIST/Yorick rainbow": "gist_rainbow",
              "rainbow": "rainbow",
              "jet": "jet",
              "turbo": "turbo",
