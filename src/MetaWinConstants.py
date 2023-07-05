@@ -13,7 +13,7 @@ mean_data_tuple = namedtuple("mean_data_tuple", ["name", "order", "n", "mean", "
 
 MAJOR_VERSION = 3
 MINOR_VERSION = 0
-PATCH_VERSION = 13
+PATCH_VERSION = 14
 
 # validity check when fetching value from data matrix
 VALUE_NUMBER = 0
@@ -87,8 +87,7 @@ hide_toolbar_icon = resource_path(icon_path + "toolbar-position-left-cancel-fill
 english_icon = resource_path(icon_path + "flag-united-states@256px.png")
 spanish_icon = resource_path(icon_path + "flag-spain@256px.png")
 color_swatch_icon = resource_path(icon_path + "color-swatches@256px.png")
-# in anticipation of a new section
-# pub_bias_icon = resource_path(icon_path + "waste-bin-full-filled-browse@256px.png")
+pub_bias_icon = resource_path(icon_path + "waste-bin-full-filled-browse@256px.png")
 
 metawin_icon = resource_path(icon_path + "metawin3toolbar_icon.png")
 metawin_splash = resource_path(icon_path + "metawin3splash_square.png")
@@ -103,8 +102,10 @@ help_index = {
     "basic_analysis": resource_path(doc_path + "metawin_help.html#basic_analysis", True),
     "cumulative_analysis": resource_path(doc_path + "metawin_help.html#cumulative_analysis", True),
     "effect_sizes": resource_path(doc_path + "metawin_help.html#effect_sizes", True),
+    "egger_regression": resource_path(doc_path + "metawin_help.html#egger_regression", True),
     "filtering_data": resource_path(doc_path + "metawin_help.html#filtering_data", True),
     "forest_plot": resource_path(doc_path + "metawin_help.html#forest_plot", True),
+    "funnel_plot": resource_path(doc_path + "metawin_help.html#funnel_plot", True),
     "galbraith_plot": resource_path(doc_path + "metawin_help.html#galbraith_plot", True),
     "glm_analysis": resource_path(doc_path + "metawin_help.html#glm_analysis", True),
     "graph_edit": resource_path(doc_path + "metawin_help.html#graph_edit", True),
@@ -213,6 +214,10 @@ references = {
     "Kendall_1938": ["Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>. "
                      "30(1&ndash;2):81&ndash;89.", "Kendall (1938)", "10.1093/biomet/30.1-2.81"],
 
+    "Kossmeier_et_2020": ["Kossmeier, M., U.S. Tran, and M. Voracek (2020) Power-enhanced funnel plots for "
+                          "meta-analysis: The sunset funnel plot. <em>Zeitschrift für Psychologie</em> "
+                          "228(1):43&ndash;49.", "Kossmeier <em>et al.</em> (2020)", "10.1027/2151-2604/a000392"],
+
     "LAbbe_et_1987": ["L&rsquo;Abbé, K.A., A.S. Detsky, and K. O&rsquo;Rourke (1987) Meta-analysis in clinical "
                       "research. <em>Annals of Internal Medicine</em> 107:224&ndash;233.",
                       "L&rsquo;Abbé <em>et al.</em> (1987)", "10.7326/0003-4819-107-2-224"],
@@ -226,6 +231,12 @@ references = {
                            "Press: Princeton, NJ.</span></li>", "Lajeunesse <em>et al.</em> (2013)",
                            "10.23943/princeton/9780691137285.003.0017"],
 
+    "Light_Pillemer_1984": ["Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing "
+                            "Research</em>. Harvard University Press: Cambridge.", "Light and Pillemer (1984)", ""],
+
+    "Lin_Chu_2018": ["Lin, L., and H. Chu (2018) Quantifying publication bias in meta-analysis. <em>Biometrics</em> "
+                     "74(3):785&ndash;794.", "Lin and Chu (2018)", "10.1111/biom.12817"],
+
     "Mantel_and_Haenszel_1959": ["Mantel, N., and W. Haenszel (1959) Statistical aspects of the analysis of data "
                                  "from retrospective studies of disease. <em>Journal of the National Cancer "
                                  "Institute</em> 22:719&ndash;748.", "Mantel and Haenszel (1959)",
@@ -237,12 +248,22 @@ references = {
                                  "Princeton University Press: Princeton, NJ.", "Mengersen and Gurevitch (2013)",
                                  "10.23943/princeton/9780691137285.003.0007"],
 
+    "Nakagawa_et_2022": ["Nakagawa, S., M. Lagisz, M.D. Jennions, J. Koricheva, D.W.A. Noble, T.H. Parker, A. "
+                         "Sánchez-Tójar, Y. Yang, and R.E. O'Dea (2022) Methods for testing publication bias in "
+                         "ecological and evolutionary meta-analyses. <em>Methods in Ecology and Evolution</em> "
+                         "13(1):4&ndash;21.", "Nakagawa <em>et al.</em> (2022)", "10.1111/2041-210X.13724"],
+
     "Normand_1999": ["Normand, S.-L.T. (1999) Meta-analysis: Formulating, evaluating, combining, and reporting. "
                      "<em>Statistics in Medicine</em> 18:321&mdash;359.", "Normand (1999)",
                      "10.1002/(SICI)1097-0258(19990215)18:3<321::AID-SIM28>3.0.CO;2-P"],
 
     "Orwin_1983": ["Orwin, R.G. (1983) A fail-safe <em>N</em> for effect size in meta-analysis. <em>Journal of "
                    "Educational Statistics</em> 8(2):157&ndash;159.", "Orwin (1983)", "10.2307/1164923"],
+
+    "Peters_et_2008": ["Peters, J.L., A.J. Sutton, D.R. Jones, K.R. Abrams, and L. Rushton (2008) Contour-enhanced "
+                       "meta-analysis funnel plots help distinguish publication bias from other causes of asymmetry. "
+                       "<em>Journal of Clinical Epidemiology</em> 61(10):991&ndash;996.",
+                       "Peters <em>et al.</em> (2008)", "10.1016/j.jclinepi.2007.11.010"],
 
     "Rosenberg_et_2000": ["Rosenberg, M.S., D.C. Adams, and J. Gurevitch (2000) <em>MetaWin: Statistical Software "
                           "for Meta-analysis</em>. Sinauer Associates, Sunderland, MA.",
@@ -269,6 +290,10 @@ references = {
 
     "Spearman_1904": ["Spearman C. (1904) The proof and measurement of association between two things. <em>American "
                       "Journal of Psychology</em>. 15(1):72&ndash;101.", "Spearman (1904)", "10.2307/1412159"],
+
+    "Sterne_Egger_2001": ["Sterne, J.A.C., and M. Egger (2001) Funnel plots for detecting bias in meta-analysis: "
+                          "Guidelines on choice of axis. <em>Journal of Clinical Epidemiology</em> "
+                          "54(10):1045&ndash;1055.", "Sterne and Egger (2001)", "10.1016/S0895-4356(01)00377-8"],
 
     "Wang_and_Bushman_1998": ["Wang, M.C., and B.J. Bushman (1998) Using the normal quantile plot to explore "
                               "meta-analytic data sets. <em>Psychological Methods</em> 3:46&ndash;54.",

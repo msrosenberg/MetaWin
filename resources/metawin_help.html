@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -91,11 +91,17 @@
                     </li>
                 </ul>
               </li>
-              <li><a href="#analsyses">Analyses</a>
+              <li><a href="#pub_bias">Publication Bias</a>
                 <ul>
-                    <li><a href="#basic_analysis">Basic Meta-Analysis</a></li>
+                    <li><a href="#funnel_plot">Funnel Plot</a></li>
+                    <li><a href="#egger_regression">Egger Regression</a></li>
                     <li><a href="#rank_correlation">Rank Correlation Analysis</a></li>
                     <li><a href="#trim_fill">Trim and Fill Analysis</a></li>
+                </ul>
+              </li>
+              <li><a href="#analyses">Analyses</a>
+                <ul>
+                    <li><a href="#basic_analysis">Basic Meta-Analysis</a></li>
                     <li><a href="#jackknife_analysis">Jackknife Meta-Analysis</a></li>
                     <li><a href="#cumulative_analysis">Cumulative Meta-Analysis</a></li>
                     <li><a href="#grouped_analysis">Grouped Meta-Analysis</a></li>
@@ -107,7 +113,7 @@
               </li>
               <li><a href="#graphs">Graphs and Figures</a>
                 <ul>
-                    <li><a href="#scatter_plot">Scatter/Funnel Plot</a></li>
+                    <li><a href="#scatter_plot">Scatter Plot</a></li>
                     <li><a href="#weighted_histogram">Weighted Histogram</a></li>
                     <li><a href="#forest_plot">Forest Plot</a></li>
                     <li><a href="#normal_quantile_plot">Normal Quantile Plot</a></li>
@@ -127,7 +133,7 @@
                 <span class="metawin">MetaWin</span> 3 is free, open source software for conducting the quantitative
                 meta-analysis portion of research synthesis. It has been rewritten from scratch relative
                 to earlier versions (see <a href="#history">history</a>). The new version is written entirely
-                in Python, and the code is available on Github at
+                in Python, and the code is available on GitHub at
                 <a href="https://github.com/msrosenberg/MetaWin">https://github.com/msrosenberg/MetaWin</a>. Single
                 file executable versions of the software for Windows and Mac operating systems can be downloaded from
                 <a href="https://www.metawinsoft.com">https://www.metawinsoft.com</a>.
@@ -185,7 +191,7 @@
 
           <h2 id="suggestions">Suggestions and Bugs</h2>
           <p>
-            Suggestions and bug reports can be submitted either through the Github site
+            Suggestions and bug reports can be submitted either through the GitHub site
               (<a href="https://github.com/msrosenberg/MetaWin/issues">https://github.com/msrosenberg/MetaWin/issues</a>),
               which allows public and formal tracking of feedback.
           </p>
@@ -588,7 +594,7 @@
                 when not all experimental conditions were conducted in the same direction. As an example, if some
                 studies were based on the addition of CO<sub>2</sub> to a system while others were based on the
                 removal of CO<sub>2</sub> from a system, the expectation is that a positive effect for one would be
-                equivalent to a negative for the other. The polarity indicator let's a user specify which studies
+                equivalent to a negative for the other. The polarity indicator lets a user specify which studies
                 were measured in the same "direction" and will automatically reverse signs of those in the opposite
                 so that all calculated effect sizes represent the same thing.
             </p>
@@ -788,7 +794,7 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
 
           <h2 id="es_corr">Correlation Coefficients</h2>
             <p>When association between two continuous variables is of interest, Pearson's correlation coefficient
-                <em>r</em>, combined with it's sample size, is commonly used as an effect-size measure. </p>
+                <em>r</em>, combined with its sample size, is commonly used as an effect-size measure. </p>
             <figure><img src="images/effects_r.png"></figure>
             <h3 id="es_fisher_z">Fisher's <em>Z</em>-transform</h3>
             <p>
@@ -819,6 +825,364 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
 
 
         </div>
+
+
+        <div class="major_div">
+          <h1 id="pub_bias">Publication Bias</h1>
+            <p>
+                Publication bias analysis can be accessed by choosing
+                <span class="menu">Publication Bias</span> from the
+              <span class="menu">Computation</span> menu or
+              <img class="toolbar-button" src="images/waste-bin-full-filled-browse@256px.png"/> from the toolbar. Doing
+                so will bring up a dialog where you can choose the type of analysis you want to perform.
+            </p>
+
+          <h2 id="funnel_plot">Funnel Plot</h2>
+            <p>
+                A funnel plot is a special type of scatter plot where a metric (in meta-analysis, usually an effect
+                size) is plotted against sample size or an estimate of variance
+                (<a href="#light_pillemer_1984">Light and Pillemer 1984</a>). The idea of a funnel plot is that if
+                there is a single true value being estimated from all of the studies, those with high variance
+                (or low sample size) will tend to vary a lot around the true value, while those with low variance
+                (or high sample size) will tend to vary only a little around the true value. With a large number of
+                studies you would expect the scatter to be funnel-shaped and symmetric around the true value. If the
+                funnel is asymmetric, this may be an indication of publication bias.
+            </p>
+            <p>
+                If plotting effects size against variance or a derivative (rather than sample size), it is possible to
+                various forms of confidence intervals or power information around the funnel, based on the standard
+                error and a Normal distribution. Options include:</p>
+                <ul>
+            <li>pseudo-confidence interval
+                (<a href="#sterne_egger_2001">Sterne and Egger 2001</a>), which creates a 95% envelope
+                around the mean effect size (under a fixed-effects model)</li>
+            <li>contour confidence intervals (<a href="#peters_et_2008">Peters <em>et al.</em> 2008</a>), which create
+                zones of statistical
+                significance (<90%, 90-95%, 95-99%, >99%) around a null effect size of zero</li>
+            <li>power-enhancement (sunset) plot (<a href="#kossmeier_et_2020">Kossmeier <em>et al.</em>
+                2020</a>) which uses color shading of the background to indicate the power of a particular study to
+                indicate a significant effect of interest</li>
+        </ul>
+
+           <h3>Drawing a Funnel Plot</h3>
+            <p>
+                Funnel Plot creation is found as part of the <span class="menu">Publication Bias</span> /
+                <img class="toolbar-button" src="images/waste-bin-full-filled-browse@256px.png"/> analyses. In
+                these figures, the effect size will be plotted on the x-axis, with five options for the y-axis:
+                (1) sample size, (2) variance, (3) inverse variance (=weight), (4) standard error (the square-root
+                of variance in this formulation), and (5) precision (1/SE). All options require specification of
+                effect size and variance data (in order to calcualte the mean effect). The first also requires
+                one to specify sample size. When variance or standard error is chosen as an option, the
+                y-axis is automatically reversed (smallest numbers at top of axis rather than bottom) so that the
+                expected funnel direction will be consistent across all choices (<em>i.e.</em>, widest at the bottom
+                of the figure, narrowest at the top).
+            </p>
+            <p>
+                In addition to the scattered points, the plot will include a vertical line for the mean effect size
+                (assuming  a simple weighted, fixed-effects model). For options other than sample size, one can also
+                choose to plot the 95% pseudo-confidence interval, the contour confidence intervals, and/or the
+                power-enhancement (sunset) background colors.
+            </p>
+
+            <figure><img src="images/pubbias_funnel.png"></figure>
+
+            <p>
+                These methods are intrinsically graphical, so always produces a figure and the related text output is
+                fairly minimal.
+            </p>
+
+           <h3>Output Examples</h3>
+            <figure><img src="images/example_funnel1.png"></figure>
+            <blockquote class="output-example">
+                <p>Funnel plot of effect vs. standard error. The dotted silver line represents the mean effect size.
+                The dashed silver line represents the 95% pseudo-confidence interval of the funnel, after Sterne and Egger (2001).</p>
+                <p>
+                    <strong>References</strong>
+                </p>
+                <p>Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing Research</em>.
+                    Harvard University Press: Cambridge.</p>
+                <p>Sterne, J.A.C., and M. Egger (2001) Funnel plots for detecting bias in meta-analysis: Guidelines on
+                    choice of axis. <em>Journal of Clinical Epidemiology</em> 54(10):1045–1055.
+                DOI: 10.1016/S0895-4356(01)00377-8</p>
+            </blockquote>
+
+            <figure><img src="images/example_funnel2.png"></figure>
+            <blockquote class="output-example">
+                <p>Funnel plot of effect vs. standard error. The dotted silver line represents the mean effect size.
+                The very light pink zone represents the area where effect sizes would have a probability of less than
+                1%, the silver zone a probability between 1 and 5%, and the cool grey zone a probability between 5 and
+                10%, after Peters et al. (2008).</p>
+                <p>
+                    <strong>References</strong>
+                </p>
+                <p>Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing Research</em>.
+                    Harvard University Press: Cambridge.</p>
+                <p>Peters, J.L., A.J. Sutton, D.R. Jones, K.R. Abrams, and L. Rushton (2008) Contour-enhanced
+                    meta-analysis funnel plots help distinguish publication bias from other causes of asymmetry.
+                    <em>Journal of Clinical Epidemiology</em> 61(10):991–996. DOI: 10.1016/j.jclinepi.2007.11.010</p>
+            </blockquote>
+
+            <figure><img src="images/example_funnel3.png"></figure>
+            <blockquote class="output-example">
+                <p>Funnel plot of effect vs. precision. The dotted silver line represents the mean effect size. The
+                    dashed silver line represents the 95% pseudo-confidence interval of the funnel, after Sterne
+                    and Egger (2001). The background colors indicate the power of an individual study to detect an
+                    underlying true effect equal to the mean, after Kossmeier et al. (2020).</p>
+                <p>
+                    <strong>References</strong>
+                </p>
+                <p>Kossmeier, M., U.S. Tran, and M. Voracek (2020) Power-enhanced funnel plots for meta-analysis:
+                    The sunset funnel plot. <em>Zeitschrift für Psychologie</em> 228(1):43–49.
+                    DOI: 10.1027/2151-2604/a000392</p>
+                <p>Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing Research</em>.
+                    Harvard University Press: Cambridge.</p>
+                <p>Sterne, J.A.C., and M. Egger (2001) Funnel plots for detecting bias in meta-analysis: Guidelines on
+                    choice of axis. <em>Journal of Clinical Epidemiology</em> 54(10):1045–1055.
+                    DOI: 10.1016/S0895-4356(01)00377-8</p>
+            </blockquote>
+
+
+          <h2 id="egger_regression">Egger Regression</h2>
+            <p>
+                Egger Regression (<a href="#egger_et_1997">Egger <em>et al.</em> 1997</a>) is a simple analysis designed
+                to formally test for the symmetry desired from a <a href="#funnel_plot">funnel plot</a>. In this
+                test one performs a simple linear regression of a standardized effect size (the effect size &times; precision)
+                against the precision (the square-root of the variance). Unlike most linear regressions, the focus
+                of this test is on the intercept rather than the slope: In an unbiased, symmetric data set the
+                intercept is expected to be zero. If the intercept is not zero, the data is thought to deviate from
+                this symmetric expectation.
+            </p>
+            <p>
+                The structure of this test is almost identical to the regression from a
+                <a href="#galbraith_plot">Galbraith (Radial) Plot</a>, except in that plot the slope is forced through
+                the origin while the Egger test actually examines if it goes through the origin on its own.
+            </p>
+           <h3>Running an Egger Regression</h3>
+            <p>
+                The Egger Regression only uses a single dialog where you can specify the data sources, whether you
+                want the analysis performed assuming a fixed (default) or random-effects model, and whether
+                you want the resulting regression graphed. The results are simply a table with the intercept and slope
+                of the regression, their standard errors, confidence intervals and significance
+                (based on Student's t-distribution).
+            </p>
+
+                        <figure><img src="images/pubbias_egger.png"></figure>
+
+            <h3>Output</h3>
+            <p>
+                The following is an example of the output from an Egger Regression.
+            </p>
+
+<blockquote class="output-example">
+<p><span style="font-weight: bold; font-size: 1.5em">Publication Bias</span></p>
+<p>Egger Regression<br/>
+→ Citations: Egger et al. (1997)<br/>
+→ Random Effects Model
+</p><p>
+→ Effect Sizes: Hedges' d<br/>
+→ Effect Size Variances: Var (d)
+</p><p>
+25 studies will be included in this analysis</p>
+<pre><code>
+Predictor    Value      SE     df        95% CI          P(t)
+--------------------------------------------------------------
+Intercept   -0.0236   1.0387   23   -2.1723 to 2.1251   0.9821
+Slope        0.3385   0.3468   23   -0.3789 to 1.0560   0.3392
+</code></pre>
+<p>
+<strong>References</strong>
+</p>
+<p>Egger, M., G.D. Smith, M. Schneider, and C. Minder (1997) Bias in meta-analysis detected by a simple, graphical
+    test. <em>BMJ</em> 315:629–634. DOI: 10.1136/bmj.315.7109.629</p>
+<p>Lin, L., and H. Chu (2018) Quantifying publication bias in meta-analysis. <em>Biometrics</em> 74(3):785–794.
+    DOI: 10.1111/biom.12817</p>
+</blockquote>
+
+<figure><img src="images/example_egger.png"></figure>
+<blockquote class="output-example">
+Plot of standardized effect size vs. precision, under a random effects model.
+</blockquote>
+
+
+          <h2 id="rank_correlation">Rank Correlation Analysis</h2>
+            <p>
+                Rank Correlation Analysis (<a href="#begg_1994">Begg 1994</a>; <a href="#begg_mazumdar_1994">Begg and
+                Mazumdar 1994</a>) is a simple test for publication bias, which uses a correlation of ranks to
+                look for a relationship between a standardized effect size and either sample size or a standardized
+                variance. The test is considered a statistical analogue of a funnel plot. For each study, the
+                standardized variance is calculated as:
+            </p>
+            <p>$$v_i^* = v_i - 1/{\sum{w}} ,$$</p>
+            <p>
+                and the standardized effect size of each study is calculated as
+            <p>$$\theta_i^* = \frac{\theta_i - \bar{\theta}}{\sqrt{v_i^*}}.$$</p>
+            <p>
+                This standardized effect size is then compared to either the individual study sample sizes or the
+                standardized variance using a rank correlation test (<a href="sokal_rohlf_1995">Sokal and Rohlf
+                1995</a>). A significant correlation may indicate a
+                publication bias where larger effect sizes (in one direction, <em>e.g.</em>, positive) are more likely
+                to be published than smaller ones.
+            </p>
+
+           <h3>Running a Rank Correlation Analysis</h3>
+            <p>
+                The Rank Correlation Analysis only uses a single dialog. Other than choosing the data sources, the
+                dialog asks whether the user wants the correlation to be vs. standardized variance or sample size,
+                where the latter choice then also requires the user to input the column containing sample sizes.
+            </p>
+            <p>
+                Additionally, there is an option to perform the rank correlation using Kendall's &tau;
+                (<a href="#kendall_1938">Kendall 1938</a>) or Spearman's &rho; (<a href="#spearman_1904">Spearman
+                1904</a>). Because the distribution of these metrics can be complicated, particularly when the
+                number of studies is low, <span class="metawin">MetaWin</span> automatically uses a randomization
+                procedure to thest their significance, with the number of iterations user-specifiable.
+            </p>
+
+            <figure><img src="images/analysis_rank_cor_dialog.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The following is an example of the output from a Rank Correlation Analysis.
+            </p>
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Rank Correlation Analysis<br/>
+→ Citations: Begg (1994), Begg and Mazumdar (1994)
+</p>
+<p>
+→ Effect Sizes: effect<br/>
+→ Effect Size Variances: variance<br/>
+→ Rank Correlation Method: Kendall's τ<br/>
+→ Citation: Kendall (1938)<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Randomization to test correlation: 999 iterations
+</p>
+<p>
+85 studies will be included in this analysis
+</p>
+<p>
+<span style="font-weight: bold; font-size: 1.25em">Rank Correlation Results</span>
+</p>
+<p>
+Kendall's τ = 0.2826<br/>
+Probability = 0.0010
+<p>
+<strong>References</strong>
+</p>
+<p>Begg, C.B. (1994) Publication bias. Pp. 399-409 in <em>The Handbook of Research Synthesis</em>, H. Cooper and
+    L.V. Hedges, eds. Sage, New York.</p>
+<p>Begg, C.B., and M. Mazumdar (1994) Operating characteristics of a rank correlation test for publication bias.
+    <em>Biometrics</em> 50:1088–1101.</p>
+<p>Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>. 30(1–2):81–89.</p>
+<p>Sokal, R.R., and F.J. Rohlf (1995) <em>Biometry</em> (3rd edition). Freeman, San Francisco.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+          <h2 id="trim_fill">Trim and Fill Analysis</h2>
+            <p>
+                "Trim and Fill" is a simple method to adjust for funnel plot asymmetry. It analyzes the distribution
+                of points and estimates "missing" studies in order to create the expected symmetry of an unbiased
+                funnel plot (<a href="#duval_tweedie_2000a">Duval and Tweedie 2000a</a>,
+                <a href="#duval_tweedie_2000b">2000b</a>).
+            </p>
+            <p>
+                Fundamentally the analysis works by iteratively estimating the asymmetry of the data around the mean,
+                and then removing a number of studies until symmetry is achieved. At this point the removed studies
+                are added back into the dataset, along with imputed "missing" studies that are the mirror image
+                (reflected across the mean) of those same re-added studies. The mean (and median) pre- and
+                post-addition of the imputed studies are reported.
+            </p>
+            <p>
+                Three different estimators of the number of missing studies are described by
+                <a href="#duval_tweedie_2000a">Duval and Tweedie (2000a)</a>, all of which are options within
+                <span class="metawin">MetaWin</span>.
+            </p>
+
+           <h3>Running a Trim and Fill analysis</h3>
+            <p>
+                The Trim and Fill analysis only uses a single dialog. Other than choosing the data sources and
+                whether you want a graph of the results, the one additional option is which of the three
+                estimators you wish to use for the analysis:
+                <em>R</em><sub>0</sub>, <em>L</em><sub>0</sub>, or <em>Q</em><sub>0</sub>.
+            </p>
+
+            <figure><img src="images/analysis_trim_fill_dialog.png"></figure>
+
+           <h3>Output</h3>
+            <p>
+                The following is an example of the output from a trim and fill analysis. It includes the estimated
+                number of missing studies and the mean and median before and after imputation of these missing
+                studies.
+            </p>
+<blockquote class="output-example">
+<p>
+<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
+</p>
+<p>
+Trim and Fill Analysis<br/>
+→ Citations: Duval and Tweedie (2000a), Duval and Tweedie (2000b)
+</p>
+<p>
+→ Effect Sizes: effect<br/>
+→ Effect Size Variances: variance<br/>
+→ Estimator of Missing Studies: L0<br/>
+→ Fixed Effects Model
+</p>
+<p>
+→ Standard confidence intervals around means based on Normal distribution
+</p>
+<p>
+85 studies will be included in this analysis
+</p>
+<p>
+Trim and Fill Analysis estimated 19 missing studies.
+</p>
+<strong>Mean Effect Sizes</strong>
+<pre><code>
+                             n     Mean    Median        95% CI
+--------------------------------------------------------------------
+Original Mean effect         85   5.0777   4.9119   4.9019 to 5.2534
+Trim and Fill Mean effect   104   4.9453   4.8298   4.7747 to 5.1159
+</code></pre>
+<p>
+<strong>References</strong>
+</p>
+<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
+    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
+<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
+    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
+</blockquote>
+
+<figure><img src="images/analysis_trim_fill_fig.png"></figure>
+<blockquote class="output-example">
+Funnel plot of effect vs. precision, showing the results of a Trim and Fill Analysis (Duval and Tweedie 2000a, b).
+    Solid black circles represent the original data; open red circles represent inferred "missing" data.
+    The dashed line represents the mean effect size of the original data, the dotted line the mean effect size
+    including the inferred data.
+<p>
+<strong>References</strong>
+</p>
+<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
+    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
+<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
+    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
+</blockquote>
+
+
+
+        </div>
+
 
         <div class="major_div">
           <h1 id="analyses">Analyses</h1>
@@ -1055,182 +1419,6 @@ Fail-safe n = 19.8523
     <p><strong>References</strong></p>
 Adams, D.C., J. Gurevitch, and M.S. Rosenberg (1997) Resampling tests for meta-analysis of ecological data.
     <em>Ecology</em> 78:1277–1283.
-</blockquote>
-
-
-          <h2 id="rank_correlation">Rank Correlation Analysis</h2>
-            <p>
-                Rank Correlation Analysis (<a href="#begg_1994">Begg 1994</a>; <a href="#begg_mazumdar_1994">Begg and
-                Mazumdar 1994</a>) is a simple test for publication bias, which uses a correlation of ranks to
-                look for a relationship between a standardized effect size and either sample size or a standardized
-                variance. The test is considered a statistical analogue of a funnel plot. For each study, the
-                standardized variance is calculated as:
-            </p>
-            <p>$$v_i^* = v_i - 1/{\sum{w}} ,$$</p>
-            <p>
-                and the standardized effect size of each study is calculated as
-            <p>$$\theta_i^* = \frac{\theta_i - \bar{\theta}}{\sqrt{v_i^*}}.$$</p>
-            <p>
-                This standardized effect size is then compared to either the individual study sample sizes or the
-                standardized variance using a rank correlation test (<a href="sokal_rohlf_1995">Sokal and Rohlf
-                1995</a>). A significant correlation may indicate a
-                publication bias where larger effect sizes (in one direction, <em>e.g.</em>, positive) are more likely
-                to be published than smaller ones.
-            </p>
-
-           <h3>Running a Rank Correlation Analysis</h3>
-            <p>
-                The Rank Correlation Analysis only uses a single dialog. Other than choosing the data sources, the
-                dialog asks whether the user wants the correlation to be vs. standardized variance or sample size,
-                where the latter choice then also requires the user to input the column containing sample sizes.
-            </p>
-            <p>
-                Additionally, there is an option to perform the rank correlation using Kendall's &tau;
-                (<a href="#kendall_1938">Kendall 1938</a>) or Spearman's &rho; (<a href="#spearman_1904">Spearman
-                1904</a>). Because the distribution of these metrics can be complicated, particularly when the
-                number of studies is low, <span class="metawin">MetaWin</span> automatically uses a randomization
-                procedure to thest their significance, with the number of iterations user-specifiable.
-            </p>
-
-            <figure><img src="images/analysis_rank_cor_dialog.png"></figure>
-
-           <h3>Output</h3>
-            <p>
-                The following is an example of the output from a Rank Correlation Analysis.
-            </p>
-<blockquote class="output-example">
-<p>
-<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
-</p>
-<p>
-Rank Correlation Analysis<br/>
-→ Citations: Begg (1994), Begg and Mazumdar (1994)
-</p>
-<p>
-→ Effect Sizes: effect<br/>
-→ Effect Size Variances: variance<br/>
-→ Rank Correlation Method: Kendall's τ<br/>
-→ Citation: Kendall (1938)<br/>
-→ Fixed Effects Model
-</p>
-<p>
-→ Randomization to test correlation: 999 iterations
-</p>
-<p>
-85 studies will be included in this analysis
-</p>
-<p>
-<span style="font-weight: bold; font-size: 1.25em">Rank Correlation Results</span>
-</p>
-<p>
-Kendall's τ = 0.2826<br/>
-Probability = 0.0010
-<p>
-<strong>References</strong>
-</p>
-<p>Begg, C.B. (1994) Publication bias. Pp. 399-409 in <em>The Handbook of Research Synthesis</em>, H. Cooper and
-    L.V. Hedges, eds. Sage, New York.</p>
-<p>Begg, C.B., and M. Mazumdar (1994) Operating characteristics of a rank correlation test for publication bias.
-    <em>Biometrics</em> 50:1088–1101.</p>
-<p>Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>. 30(1–2):81–89.</p>
-<p>Sokal, R.R., and F.J. Rohlf (1995) <em>Biometry</em> (3rd edition). Freeman, San Francisco.</p>
-</blockquote>
-
-
-
-
-
-
-
-
-          <h2 id="trim_fill">Trim and Fill Analysis</h2>
-            <p>
-                "Trim and Fill" is a simple method to adjust for funnel plot asymmetry. It analyzes the distribution
-                of points and estimates "missing" studies in order to create the expected symmetry of an unbiased
-                funnel plot (<a href="#duval_tweedie_2000a">Duval and Tweedie 2000a</a>,
-                <a href="#duval_tweedie_2000b">2000b</a>).
-            </p>
-            <p>
-                Fundamentally the analysis works by iteratively estimating the asymmetry of the data around the mean,
-                and then removing a number of studies until symmetry is achieved. At this point the removed studies
-                are added back into the dataset, along with imputed "missing" studies that are the mirror image
-                (reflected across the mean) of those same re-added studies. The mean (and median) pre- and
-                post-addition of the imputed studies are reported.
-            </p>
-            <p>
-                Three different estimators of the number of missing studies are described by
-                <a href="#duval_tweedie_2000a">Duval and Tweedie (2000a)</a>, all of which are options within
-                <span class="metawin">MetaWin</span>.
-            </p>
-
-           <h3>Running a Trim and Fill analysis</h3>
-            <p>
-                The Trim and Fill analysis only uses a single dialog. Other than choosing the data sources and
-                whether you want a graph of the results, the one additional option is which of the three
-                estimators you wish to use for the analysis:
-                <em>R</em><sub>0</sub>, <em>L</em><sub>0</sub>, or <em>Q</em><sub>0</sub>.
-            </p>
-
-            <figure><img src="images/analysis_trim_fill_dialog.png"></figure>
-
-           <h3>Output</h3>
-            <p>
-                The following is an example of the output from a trim and fill analysis. It includes the estimated
-                number of missing studies and the mean and median before and after imputation of these missing
-                studies.
-            </p>
-<blockquote class="output-example">
-<p>
-<span style="font-weight: bold; font-size: 1.5em">Analysis</span>
-</p>
-<p>
-Trim and Fill Analysis<br/>
-→ Citations: Duval and Tweedie (2000a), Duval and Tweedie (2000b)
-</p>
-<p>
-→ Effect Sizes: effect<br/>
-→ Effect Size Variances: variance<br/>
-→ Estimator of Missing Studies: L0<br/>
-→ Fixed Effects Model
-</p>
-<p>
-→ Standard confidence intervals around means based on Normal distribution
-</p>
-<p>
-85 studies will be included in this analysis
-</p>
-<p>
-Trim and Fill Analysis estimated 19 missing studies.
-</p>
-<strong>Mean Effect Sizes</strong>
-<pre><code>
-                             n     Mean    Median        95% CI
---------------------------------------------------------------------
-Original Mean effect         85   5.0777   4.9119   4.9019 to 5.2534
-Trim and Fill Mean effect   104   4.9453   4.8298   4.7747 to 5.1159
-</code></pre>
-<p>
-<strong>References</strong>
-</p>
-<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
-    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
-<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
-    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
-</blockquote>
-
-<figure><img src="images/analysis_trim_fill_fig.png"></figure>
-<blockquote class="output-example">
-Funnel plot of effect vs. precision, showing the results of a Trim and Fill Analysis (Duval and Tweedie 2000a, b).
-    Solid black circles represent the original data; open red circles represent inferred "missing" data.
-    The dashed line represents the mean effect size of the original data, the dotted line the mean effect size
-    including the inferred data.
-<p>
-<strong>References</strong>
-</p>
-<p>Duval, S. and R. Tweedie (2000a) A nonparametric "trim and fill" method of accounting for publication bias in
-    meta-analysis. <em>Journal of the American Statistical Association</em> 95(449):89–98.</p>
-<p>Duval, S. and R. Tweedie (2000b) Trim and fill: A simple funnel-plot-based method of testing and adjusting for
-    publication bias in meta-analysis. <em>Biometrics</em> 56:455–463.</p>
 </blockquote>
 
 
@@ -1797,7 +1985,7 @@ Forest plot of effect sizes for the mean of all studies, as well as subgroups of
             </p>
 
            <h3>Running a Nested Group Meta-Analysis</h3>
-            <p>The dialog for a Nested Grouped Meta-Analysis is a bit different than those already described. While
+            <p>The dialog for a Nested Grouped Meta-Analysis is a bit different from those already described. While
                 the basic options are the same (except for the absence of the random effects model), the bottom of
                 the first dialog window contains two boxes, starting with the one on the left listing all columns and
                 the one on the right blank. The right box will contain the nesting structure, with the top level
@@ -2264,7 +2452,7 @@ Plot of Hedges' d vs. %Polyandry, with a fixed effects meta-analytic linear regr
             <p>The options for a Complex/GLM Meta-Analysis are a bit more complex, as one can include any number
                 of independent variables to the analysis. Beneath the standard options are three boxes, one
                 indicating unused variables, one for categorical (grouping) variables, and one for continuous
-                variables. The user can drag an drop variables among these categories to create the model structure
+                variables. The user can drag and drop variables among these categories to create the model structure
                 they wish to conduct the meta-analysis under.
             </p>
             <figure><img src="images/analysis_glm1.png"></figure>
@@ -2425,20 +2613,15 @@ ratio = 2.8047
                 automatically be excluded from figures.
             </p>
 
-          <h2 id="scatter_plot">Scatter/Funnel Plot</h2>
+          <h2 id="scatter_plot">Scatter Plot</h2>
             <p>
-                A scatter plot is simply a point plot of two continuous variables. A funnel plot is a special type
-                of scatter plot where a metric (in meta-analysis, usually an effect size) is plotted against an
-                estimate of variance (or sample size). The idea of a funnel plot is that if there is a single true
-                value being estimated by all of the studies, those with high variance (or low sample size) will tend
-                to vary a lot around the true value, while those with low variance (or high sample size) will tend
-                to vary only a little around the true value. With a large number of studies you would expect the
-                scatter to be funnel-shaped and symmetric around the true value. If the funnel is asymmetric, this
-                may be an indication of publication bias.
+                A scatter plot is simply a point plot of two continuous variables. One can use this plotting
+                function to create funnel plots, although a more advanced <a href="#funnel_plot">funnel plot</a> figure
+                can be found under <a href="#pub_bias">publication bias analyses</a>.
             </p>
             <figure><img src="images/draw_scatter.png"></figure>
             <p>
-                To draw a scatter or funnel plot, simply choose <span class="menu">Scatter/Funnel Plot</span> from
+                To draw a scatter plot, simply choose <span class="menu">Scatter Plot</span> from
                 the <span class="menu">Draw</span> menu. From here you can choose the two variables to contrast and
                 the figure will show up in the <a href="#graph_tab">Graph Tab</a>.
             </p>
@@ -2620,6 +2803,9 @@ ratio = 2.8047
                     <em>Biometrics</em> 56:455–463.</span>
                     DOI: <a href="https://doi.org/10.1111/j.0006-341X.2000.00455.x">
                         10.1111/j.0006-341X.2000.00455.x</a></li>
+                <li><span id="egger_et_1997">Egger, M., G.D. Smith, M. Schneider, and C. Minder (1997) Bias in
+                    meta-analysis detected by a simple, graphical test. <em>BMJ</em> 315:629&ndash;634.</span>
+                    DOI: <a href="https://10.1136/bmj.315.7109.629">10.1136/bmj.315.7109.629</a></li>
                 <li><span id="fisher_1928">Fisher, R.A. (1928) <em>Statistical methods for research workers</em>
                     (2nd edition). Oliver and Boyd, London.</span></li>
                 <li><span id="galbraith_1988">Galbraith, R.F. (1988) A note on graphical presentation of estimated
@@ -2650,6 +2836,10 @@ ratio = 2.8047
                 <li><span id="kendall_1938">Kendall, M. (1938) A new measure of rank correlation. <em>Biometrika</em>.
                     30(1&ndash;2):81&ndash;89.</span>
                     DOI: <a href="https://doi.org/10.1093/biomet/30.1-2.81">10.1093/biomet/30.1-2.81</a></li>
+                <li><span id="kossmeier_et_2020">Kossmeier, M., U.S. Tran, and M. Voracek (2020) Power-enhanced funnel
+                    plots for meta-analysis: The sunset funnel plot. <em>Zeitschrift für Psychologie</em>
+                    228(1):43&ndash;49.</span>
+                    DOI: <a href="https://doi.org/10.1027/2151-2604/a000392">10.1027/2151-2604/a000392</a></li>
                 <li><span id="labbe_et_1987">L&rsquo;Abbé, K.A., A.S. Detsky, and K. O&rsquo;Rourke (1987)
                     Meta-analysis in clinical research. <em>Annals of Internal Medicine</em> 107:224&ndash;233.</span>
                     DOI: <a href="https://doi.org/10.7326/0003-4819-107-2-224">10.7326/0003-4819-107-2-224</a></li>
@@ -2662,6 +2852,8 @@ ratio = 2.8047
                     Princeton University Press: Princeton, NJ.</span>
                     DOI: <a href="https://doi.org/10.23943/princeton/9780691137285.003.0017">
                         10.23943/princeton/9780691137285.003.0017</a></li>
+                <li><span id="light_pillemer_1984">Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science
+                    of Reviewing Research</em>. Harvard University Press: Cambridge.</span></li>
                 <li><span id="mantel_haenszel_1959">Mantel, N., and W. Haenszel (1959) Statistical aspects of the
                     analysis of data from retrospective studies of disease. <em>Journal of the National Cancer
                         Institute</em> 22:719&ndash;748.</span>
@@ -2672,6 +2864,11 @@ ratio = 2.8047
                     Princeton University Press: Princeton, NJ.</span>
                     DOI: <a href="https://doi.org/10.23943/princeton/9780691137285.003.0007">
                         10.23943/princeton/9780691137285.003.0007</a></li>
+                <li><span id="nakagawa_et_2022">Nakagawa, S., M. Lagisz, M.D. Jennions, J. Koricheva, D.W.A. Noble,
+                    T.H. Parker, A. Sánchez-Tójar, Y. Yang, and R.E. O'Dea (2022) Methods for testing publication bias
+                    in ecological and evolutionary meta-analyses. <em>Methods in Ecology and Evolution</em>
+                    13(1):4&ndash;21.</span> DOI:
+                    <a href="https://10.1111/2041-210X.13724">10.1111/2041-210X.13724</a></li>
                 <li><span id="normand_1999">Normand, S.-L.T. (1999) Meta-analysis: Formulating, evaluating, combining,
                     and reporting. <em>Statistics in Medicine</em> 18:321&mdash;359.</span>
                     DOI: <a href="https://doi.org/10.1002/(sici)1097-0258(19990215)18:3<321::aid-sim28>3.0.co;2-p">
@@ -2679,6 +2876,10 @@ ratio = 2.8047
                 <li><span id="orwin_1983">Orwin, R.G. (1983) A fail-safe <em>N</em> for effect size in
                     meta-analysis. <em>Journal of Educational Statistics</em> 8(2):157&ndash;159.</span>
                     DOI: <a href="https://doi.org/10.2307/1164923">10.2307/1164923</a></li>
+                <li><span id="peters_et_2008">Peters, J.L., A.J. Sutton, D.R. Jones, K.R. Abrams, and L. Rushton (2008)
+                    Contour-enhanced meta-analysis funnel plots help distinguish publication bias from other causes of
+                    asymmetry. <em>Journal of Clinical Epidemiology</em> 61(10):991&ndash;996.</span>
+                       <a href="https://10.1016/j.jclinepi.2007.11.010">10.1016/j.jclinepi.2007.11.010</a></li>
                 <li><span id="rosenberg_2005">Rosenberg, M.S. (2005) The file-drawer problem revisited: A general
                     weighted method for calculating fail-safe numbers in meta-analysis. <em>Evolution</em>
                     59(2):464&ndash;468.</span>
@@ -2703,6 +2904,10 @@ ratio = 2.8047
                 <li><span id="spearman_1904">Spearman C. (1904) The proof and measurement of association between two
                     things. <em>American Journal of Psychology</em>. 15(1):72&ndash;101.</span>
                     DOI: <a href="https://doi.org/10.2307/1412159">10.2307/1412159</a></li>
+                <li><span id="sterne_egger_2001">Sterne, J.A.C., and M. Egger (2001) Funnel plots for detecting bias
+                    in meta-analysis: Guidelines on choice of axis. <em>Journal of Clinical Epidemiology</em>
+                    54(10):1045&ndash;1055.</span>
+                    DOI: <a href="https://doi.org/10.1016/S0895-4356(01)00377-8">10.1016/S0895-4356(01)00377-8</a></li>
                 <li><span id="wang_bushman_1998">Wang, M.C., and B.J. Bushman (1998) Using the normal quantile
                     plot to explore meta-analytic data sets. <em>Psychological Methods</em> 3:46&ndash;54.</span>
                     DOI: <a href="https://doi.org/10.1037/1082-989X.3.1.46">10.1037/1082-989X.3.1.46</a></li>

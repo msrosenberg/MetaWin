@@ -18,6 +18,9 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QFrame, QPushButton, QTextEdit
 import matplotlib.colors as mcolors
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+import numpy
+import scipy
+import matplotlib.pyplot as pyplot
 
 # note these may be marked by the IDE as unknown modules, but pytest.ini will resolve the errors when tests
 # are actually executed
@@ -27,11 +30,13 @@ from MetaWinEffects import EffectSizeOptions, do_effect_calculations
 from MetaWinData import MetaWinData
 import MetaWinEffectFunctions
 import MetaWinAnalysis
+import MetaWinPubBias
 import MetaWinTree
 import MetaWinDraw
+import MetaWinUtils
 
 
-TEST_FIGURES = False
+TEST_FIGURES = True
 # if the following line is not present, the tests with figures all crash for no obvious
 # reason. The call must be preloading something
 FIGURE_CANVAS = FigureCanvasQTAgg(Figure(figsize=(8, 6)))
@@ -1317,14 +1322,14 @@ def test_trim_and_fill_analysis():
         data = split_text_data(indata, import_options)
         convert_strings_to_numbers(data)
 
-    options = MetaWinAnalysis.MetaAnalysisOptions()
-    options.structure = MetaWinAnalysis.TRIM_FILL
+    options = MetaWinPubBias.PubBiasOptions()
+    options.pub_bias_test = MetaWinPubBias.TRIM_FILL
     options.effect_data = data.cols[1]
     options.effect_vars = data.cols[0]
     options.create_graph = True
     options.k_estimator = "L"
 
-    output, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
@@ -1346,14 +1351,14 @@ def test_trim_and_fill_analysis_negative_mean():
 
     for r in range(data.nrows()):
         data.replace_value(r, 1, -data.value(r, 1).value)
-    options = MetaWinAnalysis.MetaAnalysisOptions()
-    options.structure = MetaWinAnalysis.TRIM_FILL
+    options = MetaWinPubBias.PubBiasOptions()
+    options.pub_bias_test = MetaWinPubBias.TRIM_FILL
     options.effect_data = data.cols[1]
     options.effect_vars = data.cols[0]
     options.create_graph = True
     options.k_estimator = "R"
 
-    output, chart_data, analysis_values = MetaWinAnalysis.do_meta_analysis(data, options, 4)
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
     print_test_output(output)
 
     if TEST_FIGURES:
@@ -1550,4 +1555,123 @@ def test_match_color_to_name():
     print(cmatch, math.sqrt(cdist))
     print(xmatch, math.sqrt(xdist))
     print(len(cnames), len(xnames))
+
+
+def test_funnel_plots():
+    """
+    funnel_test2.txt contains a simulated data set copied from Nakagawa et al (2022)
+
+    this test runs through all 5 variants of a funnel plot
+    """
+    filename = "funnel_test2.txt"
+    with open(filename, "r") as infile:
+        indata = infile.readlines()
+        import_options = ImportTextOptions()
+        import_options.col_headers = True
+        data = split_text_data(indata, import_options)
+        convert_strings_to_numbers(data)
+
+    options = MetaWinPubBias.PubBiasOptions()
+    options.pub_bias_test = MetaWinPubBias.FUNNEL
+    options.effect_data = data.cols[0]
+    options.effect_vars = data.cols[1]
+
+    # sample size funnel
+    options.sample_size = data.cols[4]
+    options.funnel_y = "sample size"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+    # variance funnel
+    options.sample_size = None
+    options.pseudo_ci = True
+    options.contour_ci = True
+    options.funnel_y = "variance"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+    # inverse variance funnel
+    options.funnel_y = "inverse variance"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+    # standard error funnel
+    options.funnel_y = "standard error"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+    # precision funnel
+    options.funnel_y = "precision"
+
+    output, chart_data, analysis_values = MetaWinPubBias.do_pub_bias(data, options, 4)
+    print_test_output(output)
+
+    if TEST_FIGURES:
+        test_win = TestFigureDialog(chart_data)
+        test_win.exec()
+
+
+def test_linear_regression():
+    """
+    a test for the basic linear regression function, including standard errors
+
+    data and test values from wikipedia: https://en.wikipedia.org/wiki/Simple_linear_regression
+    """
+    x = [1.47, 1.50, 1.52, 1.55, 1.57, 1.60, 1.63, 1.65, 1.68, 1.70, 1.73, 1.75, 1.78, 1.80, 1.83]
+    y = [52.21, 53.12, 54.48, 55.84, 57.20, 58.57, 59.93, 61.29, 63.11, 64.47, 66.28, 68.10, 69.92, 72.19, 74.46]
+    x = numpy.array(x)
+    y = numpy.array(y)
+    slope, intercept, s2slope, s2intercept = MetaWinUtils.calculate_regression(x, y)
+    print("Regression Test")
+    print("Slope: {}".format(slope))
+    print("Intercept: {}".format(intercept))
+    print("S2 Slope: {}".format(s2slope))
+    print("S2 Intercept: {}".format(s2intercept))
+    assert round(slope, 3) == 61.272
+    assert round(intercept, 3) == -39.062
+    assert round(s2slope, 4) == 3.1539
+    assert round(s2intercept, 5) == 8.63185
+    lower, upper = scipy.stats.t.interval(alpha=0.95, df=13, loc=slope, scale=math.sqrt(s2slope))
+    print("Slope CI: {} - {}".format(lower, upper))
+    assert round(lower, 1) == 57.4
+    assert round(upper, 1) == 65.1
+    lower, upper = scipy.stats.t.interval(alpha=0.95, df=13, loc=intercept, scale=math.sqrt(s2intercept))
+    print("Intercept CI: {} - {}".format(lower, upper))
+    assert round(lower, 1) == -45.4
+    assert round(upper, 1) == -32.7
+
+    # print(scipy.stats.norm.ppf(0.025))
+    curve_y = numpy.linspace(2, 26, 25)
+    se = 1/curve_y
+    z = scipy.stats.norm.ppf(0.975)
+    power = 1 - scipy.stats.norm.cdf(z - 0.2/se) + scipy.stats.norm.cdf(-z - 0.2/se)
+    x = [-1, 1]
+    xc, yc = numpy.meshgrid(x, curve_y)
+    zc = numpy.array([power for _ in x])
+    print(xc)
+    print(yc)
+    print(zc)
+    pyplot.pcolormesh(xc, yc, zc.transpose(), shading="nearest")
+
+    pyplot.show()
 

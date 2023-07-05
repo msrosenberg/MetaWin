@@ -18,7 +18,7 @@ from MetaWinUtils import exponential_label, get_citation, create_reference_list
 from MetaWinLanguage import get_text
 import MetaWinWidgets
 
-color_name_space = XKCD_COLORS
+color_name_space = "xkcd"
 
 
 # weighting options for the histograms
@@ -47,6 +47,98 @@ MARKER_STYLES = {"point": ".", "circle": "o", "downward triangle": "v", "upward 
 UNFILLED_MARKERS = {"point", "plus", "X", "vertical line", "horizontal line", "tick left", "tick right", "tick up",
                     "tick down", "upward caret", "downward caret", "left caret", "right caret",
                     "centered upward caret", "centered downward caret", "centered left caret", "centered right caret"}
+
+COLORMAPS = {  # perceptually uniform
+             "viridis (uniform)": "viridis",
+             "plasma (uniform)": "plasma",
+             "inferno (uniform)": "inferno",
+             "magma (uniform)": "magma",
+             "cividis (uniform)": "cividis",
+             # sequential
+             "greys (sequential light-to-dark)": "Greys",
+             "purples (sequential light-to-dark)": "Purples",
+             "blues (sequential light-to-dark)": "Blues",
+             "greens (sequential light-to-dark)": "Greens",
+             "oranges (sequential light-to-dark)": "Oranges",
+             "reds (sequential light-to-dark)": "Reds",
+             "yellow-orange-brown (sequentia light-to-dark)": "YlOrBr",
+             "yellow-orange-red (sequential light-to-dark)": "YlOrRd",
+             "orange-red (sequential light-to-dark)": "OrRd",
+             "purple-red (sequential light-to-dark)": "PuRd",
+             "red-purple (sequential light-to-dark)": "RdPu",
+             "blue-purple (sequential light-to-dark)": "BuPu",
+             "green-blue (sequential light-to-dark)": "GnBu",
+             "purple-blue (sequential light-to-dark)": "PuBu",
+             "yellow-green-blue (sequential light-to-dark)": "YlGnBu",
+             "purple-blue-green (sequential light-to-dark)": "PuBuGn",
+             "blue-green (sequential light-to-dark)": "BuGn",
+             "yellow-green (sequential light-to-dark)": "YlGn",
+             # sequential 2
+             # # "binary": "binary",  # identical to gray_r
+             # # "gist_yarg": "gist_yarg",  # identical to gray_r
+             # # "gist_gray": "gist_gray",  # identical to gray
+             "gray (sequential)": "gray",
+             "bone (sequential)": "bone",
+             "pink (sequential)": "pink",
+             "spring (sequential)": "spring",
+             "summer (sequential)": "summer",
+             "autumn (sequential)": "autumn",
+             "winter (sequential)": "winter",
+             "cool (sequential)": "cool",
+             "wistia (sequential)": "Wistia",
+             "hot (black-red-yellow-white) (sequential)": "hot",
+             "hot (black-orange-white) (sequential)": "afmhot",
+             "GIST/Yorick heat (sequential)": "gist_heat",
+             "copper (sequential)": "copper",
+             # diverging
+             "pink-white-green (diverging)": "PiYG",
+             "purple-white-green (diverging)": "PRGn",
+             "brown-white-green (diverging)": "BrBG",
+             "orange-white-purple (diverging)": "PuOr",
+             "red-white-gray (diverging)": "RdGy",
+             "red-white-blue (diverging)": "RdBu",
+             "red-yellow-blue (diverging)": "RdYlBu",
+             "red-yellow-green (diverging)": "RdYlGn",
+             "spectral (diverging)": "Spectral",
+             "cool-warm (diverging)": "coolwarm",
+             "blue-white-red (diverging)": "bwr",
+             "seismic (diverging)": "seismic",
+             # cyclic
+             "twilight (cyclic)": "twilight",
+             "twilight (shifted) (cyclic)": "twilight_shifted",
+             "HSV wheel (cyclic)": "hsv",
+             # qualitative
+             "ColorBrewer pastel 1 (qualitative)": "Pastel1",
+             "ColorBrewer pastel 2 (qualitative)": "Pastel2",
+             "ColorBrewer paired (qualitative)": "Paired",
+             "ColorBrewer accent (qualitative)": "Accent",
+             "ColorBrewer dark 2 (qualitative)": "Dark2",
+             "ColorBrewer set 1 (qualitative)": "Set1",
+             "ColorBrewer set 2 (qualitative)": "Set2",
+             "ColorBrewer set 3 (qualitative)": "Set3",
+             "Vega 10 color (qualitative)": "tab10",
+             "Vega 20 color, v1 (qualitative)": "tab20",
+             "Vega 20 color, v2 (qualitative)": "tab20b",
+             "Vega 20 color, v3 (qualitative)": "tab20c",
+             # miscellaneous
+             # # "flag": "flag",  # repeating pattern
+             # # "prism": "prism",  # repeating pattern
+             "ocean": "ocean",
+             "GIST/Yorick earth": "gist_earth",
+             "terrain": "terrain",
+             "GIST/Yorick stern": "gist_stern",
+             "gnuplot": "gnuplot",
+             "gnuplot2": "gnuplot2",
+             "CMR map": "CMRmap",
+             "cubehelix": "cubehelix",
+             "blue-red-green": "brg",
+             "GIST/Yorick rainbow": "gist_rainbow",
+             "rainbow": "rainbow",
+             "jet": "jet",
+             "turbo": "turbo",
+             "NiPy spectral": "nipy_spectral",
+             # # "gist_ncar": "gist_ncar"
+            }
 
 
 # ---------- Chart Data Classes ---------- #
@@ -311,6 +403,12 @@ class LineData(BaseChartData):
         self.color_button = None
         self.linewidth_box = None
         self.linestyle_box = None
+        self.linked_style = None
+        self.is_linked = False
+
+    def link_style(self, other_line):
+        self.linked_style = other_line
+        other_line.is_linked = True
 
     def export_to_list(self) -> list:
         outlist = ["Line Data\n",
@@ -321,26 +419,34 @@ class LineData(BaseChartData):
         return outlist
 
     def create_edit_panel(self):
-        self.edit_panel, edit_layout = MetaWinWidgets.add_figure_edit_panel(self)
-        (self.color_button, color_label, self.linewidth_box, width_label,
-         self.linestyle_box, style_label) = MetaWinWidgets.add_chart_line_edits(get_text("Color"), self.color,
-                                                                                get_text("Width"), self.linewidth,
-                                                                                get_text("Style"), self.linestyle,
-                                                                                LINE_STYLES)
-        edit_layout.addWidget(color_label, 0, 0)
-        edit_layout.addWidget(self.color_button, 1, 0)
-        edit_layout.addWidget(width_label, 0, 1)
-        edit_layout.addWidget(self.linewidth_box, 1, 1)
-        edit_layout.addWidget(style_label, 0, 2)
-        edit_layout.addWidget(self.linestyle_box, 1, 2)
-        for i in range(edit_layout.columnCount()):
-            edit_layout.setColumnStretch(i, 1)
-        return self.edit_panel
+        if self.is_linked:
+            return self.edit_panel
+        else:
+            self.edit_panel, edit_layout = MetaWinWidgets.add_figure_edit_panel(self)
+            (self.color_button, color_label, self.linewidth_box, width_label,
+             self.linestyle_box, style_label) = MetaWinWidgets.add_chart_line_edits(get_text("Color"), self.color,
+                                                                                    get_text("Width"), self.linewidth,
+                                                                                    get_text("Style"), self.linestyle,
+                                                                                    LINE_STYLES)
+            edit_layout.addWidget(color_label, 0, 0)
+            edit_layout.addWidget(self.color_button, 1, 0)
+            edit_layout.addWidget(width_label, 0, 1)
+            edit_layout.addWidget(self.linewidth_box, 1, 1)
+            edit_layout.addWidget(style_label, 0, 2)
+            edit_layout.addWidget(self.linestyle_box, 1, 2)
+            for i in range(edit_layout.columnCount()):
+                edit_layout.setColumnStretch(i, 1)
+            return self.edit_panel
 
     def update_style(self):
         self.linestyle = self.linestyle_box.currentText()
         self.linewidth = float(self.linewidth_box.text())
         self.color = self.color_button.color
+        if self.linked_style is not None:
+            self.linked_style.linestyle = self.linestyle
+            self.linked_style.linewidth = self.linewidth
+            self.linked_style.color = self.color
+            self.linked_style.visible = self.visible
 
     def style_text(self) -> str:
         return self.linestyle + " " + find_color_name(self.color) + " line"
@@ -422,26 +528,132 @@ class AnnotationData(BaseChartData):
         return self.edit_panel
 
 
+class FillDataX(BaseChartData):
+    """
+    an object to contain area fills that run between two values on the x-axis
+    """
+    def __init__(self):
+        super().__init__()
+        self.x1_values = None
+        self.x2_values = None
+        self.y_values = None
+        self.edit_panel = None
+        # style
+        self.color = "silver"
+        self.zorder = 0
+        self.alpha = 0.5
+        self.color_button = None
+        self.linked_style = None
+        self.is_linked = False
+
+    def link_style(self, other_fill):
+        self.linked_style = other_fill
+        other_fill.is_linked = True
+
+    def export_to_list(self) -> list:
+        # outlist = ["Line Data\n",
+        #            "Name\t{}\n".format(self.name),
+        #            "x\ty\n"]
+        # for i in range(len(self.x_values)):
+        #     outlist.append("{}\t{}\n".format(self.x_values[i], self.y_values[i]))
+        # return outlist
+        return []
+
+    def create_edit_panel(self):
+        if self.is_linked:
+            return self.edit_panel
+        else:
+            self.edit_panel, edit_layout = MetaWinWidgets.add_figure_edit_panel(self)
+            self.color_button, color_label, _ = MetaWinWidgets.add_chart_color_button(get_text("Color"), self.color)
+
+            edit_layout.addWidget(color_label, 0, 0)
+            edit_layout.addWidget(self.color_button, 1, 0)
+            for i in range(edit_layout.columnCount()):
+                edit_layout.setColumnStretch(i, 1)
+            return self.edit_panel
+
+    def update_style(self):
+        self.color = self.color_button.color
+        if self.linked_style is not None:
+            self.linked_style.color = self.color
+            self.linked_style.visible = self.visible
+
+    def style_text(self) -> str:
+        return find_color_name(self.color)
+
+
+class ColorGrid(BaseChartData):
+    """
+    an object to contain area fills that run between two values on the x-axis
+    """
+    def __init__(self):
+        super().__init__()
+        self.x_values = None
+        self.y_values = None
+        self.z_values = None
+        self.edit_panel = None
+        self.label_name = ""
+        # style
+        self.colormap = "RdYlGn"
+        self.map_box = None
+        self.rev_map_box = None
+        self.label_box = None
+
+    def export_to_list(self) -> list:
+        # outlist = ["Line Data\n",
+        #            "Name\t{}\n".format(self.name),
+        #            "x\ty\n"]
+        # for i in range(len(self.x_values)):
+        #     outlist.append("{}\t{}\n".format(self.x_values[i], self.y_values[i]))
+        # return outlist
+        return []
+
+    def create_edit_panel(self):
+        self.edit_panel, edit_layout = MetaWinWidgets.add_figure_edit_panel(self)
+        self.map_box, self.rev_map_box, label, self.label_box = MetaWinWidgets.add_chart_colormap_edits(self.colormap,
+                                                                                                        COLORMAPS,
+                                                                                                        self.label_name)
+        edit_layout.addWidget(self.rev_map_box, 0, 0)
+        edit_layout.addWidget(self.map_box, 1, 0)
+        edit_layout.addWidget(label, 0, 1)
+        edit_layout.addWidget(self.label_box, 1, 1)
+        for i in range(edit_layout.columnCount()):
+            edit_layout.setColumnStretch(i, 1)
+        return self.edit_panel
+
+    def update_style(self):
+        self.colormap = COLORMAPS[self.map_box.currentText()]
+        if self.rev_map_box.isChecked():
+            self.colormap += "_r"
+        self.label_name = self.label_box.text()
+
+    def style_text(self) -> str:
+        # return find_color_name(self.color)
+        return ""
+
+
 # ---------- Chart Caption Classes ---------- #
 class NormalQuantileCaption:
     def __init__(self):
-        self.upper_limit = None
-        self.lower_limit = None
-        self.horizontal_mean = None
-        self.vertical_mean = None
+        # self.upper_limit = None
+        self.prediction_limit = None
+        # self.horizontal_mean = None
+        # self.vertical_mean = None
+        self.means = None
         self.regression = None
         self.regression_scatter = None
 
     def __str__(self):
         regression_text = self.regression.style_text()
-        upper_text = self.upper_limit.style_text()
-        lower_text = self.lower_limit.style_text()
-        if upper_text == lower_text:
-            style_text = get_text("normal_quantile_style1").format(regression_text, upper_text)
-        else:
-            style_text = get_text("normal_quantile_style2").format(regression_text, upper_text, lower_text)
+        # upper_text = self.upper_limit.style_text()
+        # lower_text = self.lower_limit.style_text()
+        style_text = get_text("normal_quantile_style").format(regression_text, self.prediction_limit.style_text())
+        # if upper_text == lower_text:
+        #     style_text = get_text("normal_quantile_style1").format(regression_text, upper_text)
+        # else:
+        #     style_text = get_text("normal_quantile_style2").format(regression_text, upper_text, lower_text)
         return get_text("normal_quantile_caption").format(get_citation("Wang_and_Bushman_1998")) + style_text + \
-               create_reference_list(["Wang_and_Bushman_1998"], True)
+            create_reference_list(["Wang_and_Bushman_1998"], True)
 
 
 class ScatterCaption:
@@ -475,7 +687,7 @@ class RadialCaption:
         return get_text("Radial_chart_caption").format(self.e_label)
 
 
-class RegressionCaption:
+class MetaRegressionCaption:
     def __init__(self):
         self.e_label = ""
         self.i_label = ""
@@ -484,8 +696,18 @@ class RegressionCaption:
         self.citations = []
 
     def __str__(self):
-        return get_text("regression_caption").format(self.e_label, self.i_label, self.model, self.ref_list) + \
+        return get_text("metaregression_caption").format(self.e_label, self.i_label, self.model, self.ref_list) + \
                 create_reference_list(self.citations, True)
+
+
+class StndRegressionCaption:
+    def __init__(self):
+        self.x_label = ""
+        self.y_label = ""
+        self.model = ""
+
+    def __str__(self):
+        return get_text("stndregression_caption").format(self.y_label, self.x_label, self.model)
 
 
 class TrimAndFillCaption:
@@ -601,6 +823,44 @@ class JackknifeAnalysisCaption(ForestPlotBaseCaption):
                self.extra_forest_plot_caption()
 
 
+class FunnelPlotCaption:
+    def __init__(self):
+        self.x_label = ""
+        self.y_label = ""
+        self.mean_effect = None
+        self.pseudo_ci = None
+        self.zone99 = None
+        self.zone95 = None
+        self.zone90 = None
+        self.colorgrid = None
+
+    def __str__(self):
+        mean_text = self.mean_effect.style_text()
+        citations = ["Light_Pillemer_1984"]
+        if self.pseudo_ci is None:
+            pseudo_text = ""
+        else:
+            cite_text = get_citation("Sterne_Egger_2001")
+            citations.append("Sterne_Egger_2001")
+            pseudo_text = get_text("funnel_pseudo_ci_style").format(self.pseudo_ci.style_text(), cite_text)
+        if self.zone99 is None:
+            contour_text = ""
+        else:
+            cite_text = get_citation("Peters_et_2008")
+            citations.append("Peters_et_2008")
+            contour_text = get_text("funnel_contour_style").format(self.zone99.style_text(), self.zone95.style_text(),
+                                                                   self.zone90.style_text(), cite_text)
+        if self.colorgrid is None:
+            sunset_text = ""
+        else:
+            cite_text = get_citation("Kossmeier_et_2020")
+            citations.append("Kossmeier_et_2020")
+            sunset_text = get_text("funnel_sunset_style").format(cite_text)
+
+        return get_text("funnel_plot_caption").format(self.x_label, self.y_label, mean_text) + pseudo_text + \
+            contour_text + sunset_text + create_reference_list(citations, True)
+
+
 # ---------- Main Chart Data Class ---------- #
 class ChartData:
     """
@@ -615,6 +875,7 @@ class ChartData:
         # special adjustments
         self.suppress_y = False
         self.rescale_x = None
+        self.invert_y = False
         # caption
         if caption_type == "normal quantile":
             self.caption = NormalQuantileCaption()
@@ -625,7 +886,9 @@ class ChartData:
         elif caption_type == "radial":
             self.caption = RadialCaption()
         elif caption_type == "regression":
-            self.caption = RegressionCaption()
+            self.caption = MetaRegressionCaption()
+        elif caption_type == "standard regression":
+            self.caption = StndRegressionCaption()
         elif caption_type == "trim and fill":
             self.caption = TrimAndFillCaption()
         elif caption_type == "basic analysis":
@@ -640,6 +903,8 @@ class ChartData:
             self.caption = JackknifeAnalysisCaption()
         elif caption_type == "forest plot":
             self.caption = ForestPlotCaption()
+        elif caption_type == "funnel plot":
+            self.caption = FunnelPlotCaption()
         else:
             self.caption = ""
 
@@ -747,6 +1012,29 @@ class ChartData:
         self.data.append(new_annotation)
         return new_annotation
 
+    def add_fill_area_x(self, name, x1, x2, y, zorder=0, color="red", alpha=0.5):
+        new_fill = FillDataX()
+        new_fill.name = name
+        new_fill.x1_values = x1
+        new_fill.x2_values = x2
+        new_fill.y_values = y
+        new_fill.color = color
+        new_fill.zorder = zorder
+        new_fill.alpha = alpha
+        self.data.append(new_fill)
+        return new_fill
+
+    def add_color_grid(self, name, x, y, z, colormap: str = "inferno", grid_label: str = ""):
+        new_grid = ColorGrid()
+        new_grid.name = name
+        new_grid.x_values = x
+        new_grid.y_values = y
+        new_grid.z_values = z
+        new_grid.colormap = colormap
+        new_grid.label_name = grid_label
+        self.data.append(new_grid)
+        return new_grid
+
     def export_to_list(self):
         outlist = ["X-axis label\t{}\n".format(self.x_label),
                    "Y-axis label\t{}\n\n\n".format(self.y_label)]
@@ -807,11 +1095,29 @@ def create_figure(chart_data, figure_canvas):
             elif isinstance(data, HistogramData):
                 faxes.hist(data.bins[:-1], data.bins, weights=data.counts, edgecolor=data.edgecolor, color=data.color,
                            linewidth=data.linewidth, linestyle=data.linestyle)
+            elif isinstance(data, FillDataX):
+                faxes.fill_betweenx(data.y_values, data.x1_values, data.x2_values, color=data.color,
+                                    edgecolor="none", zorder=data.zorder,
+                                    alpha=data.alpha)
+            elif isinstance(data, ColorGrid):
+                # ax2 = faxes.twinx()
+                # max_z = numpy.max(data.z_values)
+                # min_z = numpy.min(data.z_values)
+                # ax2.set_ylim(min_z, max_z)
+                # if chart_data.invert_y:
+                #     ax2.invert_yaxis()
+                # faxes.set_zorder(ax2.get_zorder()+1)
+                # faxes.set_frame_on(False)
+                cm = faxes.pcolormesh(data.x_values, data.y_values, data.z_values, shading="gouraud",
+                                 cmap=data.colormap, zorder=0, vmin=0, vmax=100)
+                figure_canvas.figure.colorbar(cm, ax=faxes, label=data.label_name)
 
     if chart_data.suppress_y:
         faxes.spines["left"].set_visible(False)
     if chart_data.rescale_x is not None:
         faxes.set_xlim(chart_data.rescale_x[0], chart_data.rescale_x[1])
+    if chart_data.invert_y:
+        faxes.invert_yaxis()
 
 
 def chart_forest_plot(analysis_type: str, effect_name, forest_data, alpha: float = 0.05,
@@ -899,8 +1205,8 @@ def add_regression_to_chart(x_name: str, y_name: str, x_data, y_data, slope: flo
                                                         zorder=8, color="silver")
 
 
-def chart_regression(x_name, y_name, x_data, y_data, slope, intercept, model, ref_list,
-                     citations) -> ChartData:
+def chart_meta_regression(x_name, y_name, x_data, y_data, slope, intercept, model, ref_list,
+                          citations) -> ChartData:
     x_min = numpy.min(x_data)
     x_max = numpy.max(x_data)
     chart_data = ChartData("regression")
@@ -936,17 +1242,25 @@ def add_quantile_axes_to_chart(x_data, y_data, slope: float, intercept: float, c
     y_lower = [y_pos[i] - t_score*math.sqrt(mse*(1 + 1/n + ((x_pos[i] - x_mean)**2)/ss_x)) for i in range(nsteps)]
     y_upper = [y_pos[i] + t_score*math.sqrt(mse*(1 + 1/n + ((x_pos[i] - x_mean)**2)/ss_x)) for i in range(nsteps)]
 
-    chart_data.caption.lower_limit = chart_data.add_multi_line(get_text("Lower Prediction Limit"), x_pos, y_lower,
-                                                               linestyle="dashed", color="silver", zorder=3)
-    chart_data.caption.upper_limit = chart_data.add_multi_line(get_text("Upper Prediction Limit"), x_pos, y_upper,
-                                                               linestyle="dashed", color="silver", zorder=3)
+    # chart_data.caption.lower_limit = chart_data.add_multi_line(get_text("Lower Prediction Limit"), x_pos, y_lower,
+    #                                                            linestyle="dashed", color="silver", zorder=3)
+    # chart_data.caption.upper_limit = chart_data.add_multi_line(get_text("Upper Prediction Limit"), x_pos, y_upper,
+    #                                                            linestyle="dashed", color="silver", zorder=3)
+    chart_data.caption.prediction_limit = chart_data.add_multi_line(get_text("Prediction Limits"), x_pos, y_lower,
+                                                                    linestyle="dashed", color="silver", zorder=3)
+    upper_limit = chart_data.add_multi_line("", x_pos, y_upper, linestyle="dashed", color="silver", zorder=3)
+    chart_data.caption.prediction_limit.link_style(upper_limit)
 
     # draw center lines
-    chart_data.caption.horizontal_mean = chart_data.add_line(get_text("Horizontal Axis Mean Line"), 0,
-                                                             min(y_min, min(y_lower)), 0, max(y_max, max(y_upper)),
-                                                             linestyle="dotted", color="silver")
-    chart_data.caption.vertical_mean = chart_data.add_line(get_text("Vertical Axis Mean Line"), x_min, y_mean, x_max,
-                                                           y_mean, linestyle="dotted", color="silver")
+    # chart_data.caption.horizontal_mean = chart_data.add_line(get_text("Horizontal Axis Mean Line"), 0,
+    #                                                          min(y_min, min(y_lower)), 0, max(y_max, max(y_upper)),
+    #                                                          linestyle="dotted", color="silver")
+    # chart_data.caption.vertical_mean = chart_data.add_line(get_text("Vertical Axis Mean Line"), x_min, y_mean, x_max,
+    #                                                        y_mean, linestyle="dotted", color="silver")
+    chart_data.caption.means = chart_data.add_line(get_text("Axes Means"), 0, min(y_min, min(y_lower)), 0,
+                                                   max(y_max, max(y_upper)), linestyle="dotted", color="silver")
+    vertical_mean = chart_data.add_line("", x_min, y_mean, x_max, y_mean, linestyle="dotted", color="silver")
+    chart_data.caption.means.link_style(vertical_mean)
 
 
 def chart_normal_quantile(x_name, y_name, x_data, y_data, slope, intercept,
@@ -1201,6 +1515,108 @@ def chart_trim_fill_plot(effect_label, data, n, original_mean, new_mean) -> Char
                                                            zorder=1)
     chart_data.caption.inferred_mean = chart_data.add_line(get_text("Inferred Mean"), new_mean, y_min, new_mean, y_max,
                                                            color="red", linestyle="dashed", zorder=1)
+
+    return chart_data
+
+
+def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str = "sample size",
+                      do_pseudo: bool = False, do_contour: bool = False, do_power: False = False) -> ChartData:
+    chart_data = ChartData("funnel plot")
+    chart_data.caption.x_label = x_label
+    chart_data.caption.y_label = y_label
+    chart_data.x_label = x_label
+    chart_data.y_label = y_label
+    chart_data.add_scatter(get_text("Point Data"), x_data, y_data, zorder=10)
+
+    y_min = numpy.min(y_data)
+    y_max = numpy.max(y_data)
+
+    if y_label in ("standard error", "variance"):
+        y_min = min(y_min, 0.001)
+    else:
+        y_min = y_min*0.85
+    y_max = y_max*1.15
+
+    x_min = numpy.min(x_data)
+    x_max = numpy.max(x_data)
+    chart_data.caption.mean_effect = chart_data.add_line(get_text("Mean Effect Size"), mean_e, y_min, mean_e, y_max,
+                                                         color="silver", linestyle="dotted", zorder=5)
+    if y_label in ("standard error", "variance"):
+        chart_data.invert_y = True
+
+    if (y_label != "sample size") and (do_pseudo or do_contour or do_power):
+        curve_y = numpy.linspace(y_min, y_max, 50)  # 50 points for a nice curve
+        # if y_label in ("standard error", "variance"):
+        #     curve_y = numpy.linspace(min(y_min, 0.001), y_max*1.15, 50)  # 50 points for a nice curve
+        # else:
+        #     curve_y = numpy.linspace(y_min*0.85, y_max*1.15, 50)  # 50 points for a nice curve
+        if y_label == "standard error":
+            sey = curve_y
+        elif y_label == "precision":
+            sey = 1/curve_y
+        elif y_label == "variance":
+            sey = numpy.sqrt(curve_y)
+        else:
+            sey = 1/numpy.sqrt(curve_y)
+
+        if do_pseudo:
+            curve_x_min, curve_x_max = scipy.stats.norm.interval(alpha=0.95, loc=mean_e, scale=sey)
+            chart_data.caption.pseudo_ci = chart_data.add_multi_line(get_text("Pseudo-Confidence Limits"),
+                                                                     curve_x_min, curve_y, linestyle="dashed",
+                                                                     color="silver", zorder=3)
+            pseudo_upper = chart_data.add_multi_line("", curve_x_max, curve_y, linestyle="dashed", color="silver",
+                                                     zorder=3)
+            chart_data.caption.pseudo_ci.link_style(pseudo_upper)
+            x_min = min(numpy.min(curve_x_min), x_min)
+            x_max = max(numpy.max(curve_x_max), x_max)
+
+        if do_contour:
+            curve_99_min, curve_99_max = scipy.stats.norm.interval(alpha=0.99, loc=0, scale=sey)
+            curve_95_min, curve_95_max = scipy.stats.norm.interval(alpha=0.95, loc=0, scale=sey)
+            curve_90_min, curve_90_max = scipy.stats.norm.interval(alpha=0.90, loc=0, scale=sey)
+            x_min = min(numpy.min(curve_99_min), x_min)
+            x_max = max(numpy.max(curve_99_max), x_max)
+            chart_data.caption.zone99 = chart_data.add_fill_area_x("P <0.01% zone", x_min, curve_99_min, curve_y,
+                                                                   color="#eeeeee", zorder=1)
+            up_fill = chart_data.add_fill_area_x("", x_max, curve_99_max, curve_y, color="#eeeeee", zorder=1)
+            chart_data.caption.zone99.link_style(up_fill)
+
+            chart_data.caption.zone95 = chart_data.add_fill_area_x("P 0.01-0.05% zone", curve_99_min, curve_95_min,
+                                                                   curve_y, color="#cccccc", zorder=1)
+            up_fill = chart_data.add_fill_area_x("", curve_99_max, curve_95_max, curve_y, color="#cccccc", zorder=1)
+            chart_data.caption.zone95.link_style(up_fill)
+
+            chart_data.caption.zone90 = chart_data.add_fill_area_x("p 0.05-0.1% zone", curve_95_min, curve_90_min,
+                                                                   curve_y, color="#a3a3a3", zorder=1)
+            up_fill = chart_data.add_fill_area_x("", curve_95_max, curve_90_max, curve_y, color="#a3a3a3", zorder=1)
+            chart_data.caption.zone90.link_style(up_fill)
+
+        if do_power:
+            z = scipy.stats.norm.ppf(0.975)
+            power = 100*(1 - scipy.stats.norm.cdf(z - mean_e/sey) + scipy.stats.norm.cdf(-z - mean_e/sey))
+            # x = numpy.linspace(x_min, x_max, 50)
+            x = [x_min, x_max]
+            xc, yc = numpy.meshgrid(x, curve_y)
+            zc = numpy.array([power for _ in x]).transpose()
+            chart_data.caption.colorgrid = chart_data.add_color_grid(get_text("Power Color Scheme"), xc, yc, zc,
+                                                                     colormap="RdYlGn", grid_label=get_text("Power"))
+
+    return chart_data
+
+
+def chart_stnd_regression(x_name, y_name, x_data, y_data, slope, intercept, model, y_marker=None) -> ChartData:
+    x_min = min(0, numpy.min(x_data))
+    x_max = max(0, numpy.max(x_data))
+    chart_data = ChartData("standard regression")
+    chart_data.caption.y_label = y_name
+    chart_data.caption.x_label = x_name
+    chart_data.caption.model = model
+
+    add_regression_to_chart(x_name, y_name, x_data, y_data, slope, intercept, x_min, x_max, chart_data)
+
+    if y_marker is not None:
+        chart_data.add_line(get_text("Line of No Effect"), x_min, y_marker, x_max, y_marker, color="silver",
+                            linestyle="dotted", zorder=1)
 
     return chart_data
 

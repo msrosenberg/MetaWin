@@ -9,7 +9,6 @@ The actual plotting of the figures is done by the MetaWinCharts module
 """
 import webbrowser
 import math
-from typing import Tuple
 
 from PyQt6.QtWidgets import QDialog, QLabel, QVBoxLayout, QFrame, QComboBox, QGroupBox, QLineEdit, QRadioButton, \
     QGridLayout
@@ -24,6 +23,7 @@ from MetaWinConstants import mean_data_tuple
 from MetaWinWidgets import add_ok_cancel_help_button_layout, add_effect_choice_to_dialog
 import MetaWinCharts
 from MetaWinLanguage import get_text
+from MetaWinUtils import calculate_regression
 
 
 class MetaAnalysisDrawScatterDialog(QDialog):
@@ -38,7 +38,7 @@ class MetaAnalysisDrawScatterDialog(QDialog):
     def init_ui(self, data: MetaWinData):
         button_layout, _ = add_ok_cancel_help_button_layout(self)
 
-        draw_label = QLabel(get_text("Scatter/Funnel Plot"))
+        draw_label = QLabel(get_text("Scatter Plot"))
         draw_label.setStyleSheet(MetaWinConstants.title_label_style)
 
         self.columns = data.cols
@@ -50,7 +50,7 @@ class MetaAnalysisDrawScatterDialog(QDialog):
             self.y_box.addItem(col.label)
         x_label = QLabel(get_text("Data for X-axis"))
         y_label = QLabel(get_text("Data for Y-axis"))
-        info_label = QLabel(get_text("note_funnel_plot"))
+        # info_label = QLabel(get_text("note_funnel_plot"))
 
         options_layout = QVBoxLayout()
         options_layout.addWidget(x_label)
@@ -66,12 +66,12 @@ class MetaAnalysisDrawScatterDialog(QDialog):
         main_layout = QVBoxLayout()
         main_layout.addWidget(draw_label)
         main_layout.addWidget(main_frame)
-        main_layout.addWidget(info_label)
+        # main_layout.addWidget(info_label)
         main_layout.addLayout(button_layout)
 
         self.setLayout(main_layout)
         self.setWindowIcon(QIcon(MetaWinConstants.metawin_icon))
-        self.setWindowTitle(get_text("Scatter/Funnel Plot"))
+        self.setWindowTitle(get_text("Scatter Plot"))
 
     def show_help(self):
         webbrowser.open(self.help)
@@ -342,11 +342,13 @@ class MetaAnalysisEditFigure(QDialog):
         if not self.chart_data.suppress_y:
             self.chart_data.y_label = self.y_box.text()
         for edit_panel in self.panel_list:
-            if edit_panel.isChecked():
-                edit_panel.data.visible = True
-                edit_panel.data.update_style()
-            else:
-                edit_panel.data.visible = False
+            edit_panel.data.visible = edit_panel.isChecked()
+            edit_panel.data.update_style()
+            # if edit_panel.isChecked():
+            #     edit_panel.data.visible = True
+            #     edit_panel.data.update_style()
+            # else:
+            #     edit_panel.data.visible = False
         self.accept()
 
 
@@ -387,20 +389,20 @@ def draw_scatter_dialog(sender, data):
     return None
 
 
-def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float]:
-    """
-    Basic linear regression of y vs x, returning slope and intercept
-    """
-    n = len(x)
-    sum_y = numpy.sum(y)
-    sum_x = numpy.sum(x)
-    mean_y = sum_y/n
-    mean_x = sum_x/n
-    sum_x2 = numpy.sum(numpy.square(x))
-    sum_xy = numpy.sum(x*y)
-    slope = (n*sum_xy - sum_x*sum_y)/(n*sum_x2 - sum_x**2)
-    intercept = mean_y - slope*mean_x
-    return slope, intercept
+# def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float]:
+#     """
+#     Basic linear regression of y vs x, returning slope and intercept
+#     """
+#     n = len(x)
+#     sum_y = numpy.sum(y)
+#     sum_x = numpy.sum(x)
+#     mean_y = sum_y/n
+#     mean_x = sum_x/n
+#     sum_x2 = numpy.sum(numpy.square(x))
+#     sum_xy = numpy.sum(x*y)
+#     slope = (n*sum_xy - sum_x*sum_y)/(n*sum_x2 - sum_x**2)
+#     intercept = mean_y - slope*mean_x
+#     return slope, intercept
 
 
 def draw_normal_quantile_plot(data, e_data_col, v_data_col, alpha: float = 0.05):
@@ -425,7 +427,7 @@ def draw_normal_quantile_plot(data, e_data_col, v_data_col, alpha: float = 0.05)
 
         x_data = numpy.array(x_data)
         y_data = numpy.array(y_data)
-        slope, intercept = calculate_regression(x_data, y_data)
+        slope, intercept, _, _ = calculate_regression(x_data, y_data)
 
         return MetaWinCharts.chart_normal_quantile(get_text("Normal Quantile"), get_text("Standardized Effect Size"),
                                                    x_data, y_data, slope, intercept, alpha)

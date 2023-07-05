@@ -24,6 +24,7 @@ import MetaWinSave
 import MetaWinEffects
 import MetaWinMessages
 import MetaWinAnalysis
+import MetaWinPubBias
 import MetaWinDraw
 import MetaWinFilter
 import MetaWinLanguage
@@ -118,6 +119,9 @@ class MainWindow(QMainWindow):
         effect_action = QAction(QIcon(MetaWinConstants.measure_icon), get_text("Effect Sizes"), self)
         effect_action.triggered.connect(self.calculate_effect_sizes)
         analysis_menu.addAction(effect_action)
+        pub_bias_action = QAction(QIcon(MetaWinConstants.pub_bias_icon), get_text("Publication Bias"), self)
+        pub_bias_action.triggered.connect(self.publication_bias_test)
+        analysis_menu.addAction(pub_bias_action)
         meta_analysis_action = QAction(QIcon(MetaWinConstants.analysis_icon), get_text("Analysis"), self)
         meta_analysis_action.triggered.connect(self.meta_analysis)
         analysis_menu.addAction(meta_analysis_action)
@@ -128,7 +132,7 @@ class MainWindow(QMainWindow):
 
         # draw menu
         draw_menu = menubar.addMenu(get_text("Draw"))
-        draw_scatter_action = QAction(QIcon(MetaWinConstants.scatter_icon), get_text("Scatter/Funnel Plot"), self)
+        draw_scatter_action = QAction(QIcon(MetaWinConstants.scatter_icon), get_text("Scatter Plot"), self)
         draw_scatter_action.triggered.connect(self.draw_scatter_plot)
         draw_menu.addAction(draw_scatter_action)
         draw_histogram_action = QAction(QIcon(MetaWinConstants.histogram_icon), get_text("Weighted Histogram"), self)
@@ -282,6 +286,7 @@ class MainWindow(QMainWindow):
         main_toolbar.setFloatable(False)
         main_toolbar.setMovable(False)
         main_toolbar.addAction(effect_action)
+        main_toolbar.addAction(pub_bias_action)
         main_toolbar.addAction(meta_analysis_action)
         main_toolbar.addSeparator()
         main_toolbar.addAction(help_action)
@@ -544,7 +549,7 @@ class MainWindow(QMainWindow):
         current_position = self.output_area.textCursor().position()
         for block in output:
             self.write_output_block(block)
-        self.write_output("<p></p>")
+        # self.write_output("<p></p>")
         # reset cursor position to end, then set it back to end of previous block
         # this causes viewpane to scroll so that new output is near top of view (if possible)
         self.output_area.moveCursor(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
@@ -557,7 +562,7 @@ class MainWindow(QMainWindow):
         Add a list of strings to the output area as a single string, separated by the html break
         tag <br>. This adds them to the text edit without extra spacing/blank lines in between them
         """
-        self.write_output("<br>".join(output))
+        self.write_output("<p>" + "<br>".join(output) + "</p>")
 
     def write_output(self, output: str) -> None:
         """
@@ -741,6 +746,22 @@ class MainWindow(QMainWindow):
             output, chart_data = MetaWinAnalysis.meta_analysis(self, self.data, self.last_effect, self.last_var,
                                                                self.output_decimals, self.alpha, self.phylogeny,
                                                                norm_ci)
+            if output is not None:
+                self.write_multi_output_blocks(output)
+                self.main_area.setCurrentIndex(1)
+                if chart_data is not None:
+                    self.show_figure(chart_data)
+        else:
+            MetaWinMessages.report_warning(self, get_text("Warning"), get_text("No data has been loaded."))
+
+    def publication_bias_test(self) -> None:
+        if self.data is not None:
+            if self.confidence_interval_dist == "Students t":
+                norm_ci = False
+            else:
+                norm_ci = True
+            output, chart_data = MetaWinPubBias.publication_bias(self, self.data, self.last_effect, self.last_var,
+                                                                 self.output_decimals, self.alpha, norm_ci)
             if output is not None:
                 self.write_multi_output_blocks(output)
                 self.main_area.setCurrentIndex(1)

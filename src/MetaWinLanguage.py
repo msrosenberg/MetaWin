@@ -41,6 +41,8 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Clear Filters": "Clear Filters",
                       "Color": "Color",
                       "Color Name Space": "Color Name Space",
+                      "Power Color Scheme": "Power Color Scheme",
+                      "Color Scheme Label": "Color Scheme Label",
                       "Column": "Column",
                       "Column Delimiters": "Column Delimiters",
                       "Column headers in first row": "Column headers in first row",
@@ -98,6 +100,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Effect Size Variance": "Effect Size Variance",
                       "Effect Size Variances": "Effect Size Variances",
                       "Effect Sizes": "Effect Sizes",
+                      "Egger Regression": "Egger Regression",
                       "Error": "Error",
                       "Error reading file {}": "Error reading file {}",
                       "Error writing to file": "Error writing to file",
@@ -153,6 +156,15 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                                                      "indicated by {}, with the corresponding line the {:0.0%} "
                                                      "confidence interval.",
                       "forest_plot_median_caption": " Medians are represented by {}.",
+                      "Funnel Plot": "Funnel Plot",
+                      "funnel_plot_caption": "Funnel plot of {} vs. {}. The {} represents the mean effect size.",
+                      "funnel_pseudo_ci_style": " The {} represents the 95% pseudo-confidence interval of the funnel, "
+                                                "after {}.",
+                      "funnel_contour_style": " The {} zone represents the area where effect sizes would have a "
+                                              "probability of less than 1%, the {} zone a probability between 1 and 5%,"
+                                              " and the {} zone a probability between 5 and 10%, after {}.",
+                      "funnel_sunset_style": " The background colors indicate the power of an individual study to "
+                                             "detect an underlying true effect equal to the mean, after {}.",
                       "group_forest_plot":
                           "Forest plot of effect sizes for the mean of all studies, as well as subgroups of studies "
                           "designated by {}.",
@@ -180,7 +192,8 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Hide Phylogeny Tab": "Hide Phylogeny Tab",
                       "Histogram of {} from individual studies.": "Histogram of {} from individual studies.",
                       "Horizontal Axis": "Horizontal Axis",
-                      "Horizontal Axis Mean Line": "Horizontal Axis Mean Line",
+                      # "Horizontal Axis Mean Line": "Horizontal Axis Mean Line",
+                      "Axes Means": "Axes' Means",
                       "HTML": "HTML",
                       "Import Error": "Import Error",
                       "Import Text Options": "Import Text Options",
@@ -188,6 +201,9 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Imported phylogeny contains {} tips": "Imported phylogeny contains {} tips",
                       "Include Independent Variables": "Include Independent Variables",
                       "Include Random Effects Variance?": "Include Random Effects Variance?",
+                      "Include Pseudo-Confidence Limits": "Include Pseudo-Confidence Limits",
+                      "Include Contour Confidence Limits": "Include Contour Confidence Limits",
+                      "Include Power/Sunset Coloration": "Include Power/Sunset Coloration",
                       "Independent Variable": "Independent Variable",
                       "Independent Variables": "Independent Variables",
                       "Indicate Polarity": "Indicate Polarity",
@@ -210,13 +226,16 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Loaded data from {}": "Loaded data from {}",
                       "Load Phylogeny": "Load Phylogeny",
                       "Log Transformed Measure": "Log Transformed Measure",
-                      "Lower Prediction Limit": "Lower Prediction Limit",
+                      "Prediction Limits": "Prediction Limits",
+                      # "Lower Prediction Limit": "Lower Prediction Limit",
+                      "Pseudo-Confidence Limits": "Pseudo-Confidence Limits",
                       "Markdown": "Markdown",
                       "marker_style_text": "{} {}{} with a {} border",
                       "marker_style_open_text": "open {}{} with a {} border",
                       "Mean": "Mean",
                       "Means": "Means",
                       "Means and Standard Deviations": "Means and Standard Deviations",
+                      "Mean Effect Size": "Mean Effect Size",
                       "Mean Effect Sizes": "Mean Effect Sizes",
                       "Median": "Median",
                       "Medians": "Medians",
@@ -245,12 +264,14 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "normal_quantile_caption": "Normal Quantile plot following {}. The "
                                                  "standardized effect size is the effect size divided by the "
                                                  "square-root of its variance. ",
-                      "normal_quantile_style1": "The {} represents the regression and the {}s the 95% prediction "
-                                                "envelope.",
-                      "normal_quantile_style2": "The {} represents the regression and the {} and {} the upper and "
-                                                "lower limits of the 95% prediction envelope, respectively.",
-                      "note_funnel_plot": "Note: A funnel plot is just a scatter plot of a metric (such as a<br/>"
-                                          "mean or effect size) vs. it\'s variance or sample size.",
+                      "normal_quantile_style": "The {} represents the regression and the {}s the 95% prediction "
+                                               "envelope.",
+                      # "normal_quantile_style1": "The {} represents the regression and the {}s the 95% prediction "
+                      #                           "envelope.",
+                      # "normal_quantile_style2": "The {} represents the regression and the {} and {} the upper and "
+                      #                           "lower limits of the 95% prediction envelope, respectively.",
+                      # "note_funnel_plot": "Note: A funnel plot is just a scatter plot of a metric (such as a<br/>"
+                      #                     "mean or effect size) vs. it\'s variance or sample size.",
                       "nothing (marker is invisible)": "nothing (marker is invisible)",
                       "Number of Bins": "Number of Bins",
                       "Number of decimal places": "Number of decimal places",
@@ -277,6 +298,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Plain Text": "Plain Text",
                       "Please filter problematic data to continue": "Please filter problematic data to continue",
                       "Point Data": "Point Data",
+                      "Power": "Power",
                       "Precision": "Precision",
                       "Pre-filtered studies excluded from analysis": "Pre-filtered studies excluded from analysis",
                       "Predictor": "Predictor",
@@ -286,6 +308,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "prompt_data_save_clear": "Do you want to save the data before clearing it?",
                       "prompt_data_save_quit": "Do you want to save the data before quitting?",
                       "prompt_output_save_quit": "Do you want to save the output before quitting?",
+                      "Publication Bias": "Publication Bias",
                       "Radial Arc": "Radial Arc",
                       "Radial Arc Labels": "Radial Arc Labels",
                       "Radial_chart_caption": "Radial chart (Galbraith 1988, 1994) of standardized {} vs. precision. "
@@ -306,8 +329,10 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Correlate Effect Size with": "Correlate Effect Size with",
                       "References": "References",
                       "Regression Results": "Regression Results",
-                      "regression_caption": "Plot of {} vs. {}, with a {} meta-analytic linear regression following "
-                                            "the methods of {}.",
+                      "Reverse": "Reverse",
+                      "metaregression_caption": "Plot of {} vs. {}, with a {} meta-analytic linear regression "
+                                                "following the methods of {}.",
+                      "stndregression_caption": "Plot of {} vs. {}, under a {} model.",
                       "Regression Line": "Regression Line",
                       "Resampling Procedures": "Resampling Procedures",
                       "Response": "Response",
@@ -320,11 +345,12 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Row labels in first column": "Row labels in first column",
                       "Running most current version available": "Running most current version available",
                       "Sample Size": "Sample Size",
+                      "Sample Sizes": "Sample Sizes",
                       "Save Data": "Save Data",
                       "Save Output": "Save Output",
                       "Save Figure": "Save Figure",
                       "Scatter plot of {} vs. {}.": "Scatter plot of {} vs. {}.",
-                      "Scatter/Funnel Plot": "Scatter/Funnel Plot",
+                      "Scatter Plot": "Scatter Plot",
                       "Select All": "Select All",
                       "Select Groups to Include in Analyses": "Select Groups to Include in Analyses",
                       "Shape": "Shape",
@@ -337,6 +363,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Source": "Source",
                       "Spaces": "Spaces",
                       "Standard Deviation": "Standard Deviation",
+                      "Standard Error": "Standard Error",
                       "Standardized": "Standardized",
                       "Standardized Effect Size": "Standardized Effect Size",
                       "Started at ": "Started at ",
@@ -368,7 +395,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Two x Two Contingency Table": "Two x Two Contingency Table",
                       "Unable to write to ": "Unable to write to ",
                       "Unused": "Unused",
-                      "Upper Prediction Limit": "Upper Prediction Limit",
+                      # "Upper Prediction Limit": "Upper Prediction Limit",
                       "Use bootstrap for confidence intervals around means":
                           "Use bootstrap for confidence intervals around means",
                       "Use randomization to test model structure": "Use randomization to test model structure",
@@ -378,7 +405,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Variance": "Variance",
                       "Version": "Version",
                       "Vertical Axis": "Vertical Axis",
-                      "Vertical Axis Mean Line": "Vertical Axis Mean Line",
+                      # "Vertical Axis Mean Line": "Vertical Axis Mean Line",
                       "Vertical Axis Tick Labels": "Vertical Axis Tick Labels",
                       "Vertical Axis Zero Line": "Vertical Axis Zero Line",
                       "Warning": "Warning",
