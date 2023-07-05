@@ -487,7 +487,7 @@ def predictor_table(predictor_data, decimal_places: int = 4, alpha: float = 0.05
     col_formats = ["", "f", "f", "", "f"]
     table_data = []
     for data in predictor_data:
-        tmp_lower, tmp_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=data.value, scale=data.se)
+        tmp_lower, tmp_upper = scipy.stats.norm.interval(confidence=1 - alpha, loc=data.value, scale=data.se)
         tmp_row = [data.predictor, data.value, data.se, interval_to_str(tmp_lower, tmp_upper, decimal_places),
                    data.p_norm]
         table_data.append(tmp_row)
@@ -622,9 +622,9 @@ def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         p = 1 - scipy.stats.chi2.cdf(qt, df=df)
 
         if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
 
         if (options.bootstrap_mean is not None) and (sender is not None):
             progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
@@ -650,7 +650,7 @@ def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         forest_data = [mean_data]
         for i in range(n):
             # individual study data has to use normal dist
-            tmp_lower, tmp_upper = scipy.stats.norm.interval(alpha=1-alpha, loc=e_data[i], scale=math.sqrt(v_data[i]))
+            tmp_lower, tmp_upper = scipy.stats.norm.interval(confidence=1-alpha, loc=e_data[i], scale=math.sqrt(v_data[i]))
             study_data = mean_data_tuple(study_names[i], plot_order, 0, e_data[i], None, 0, 0, tmp_lower, tmp_upper,
                                          None, None, None, None)
             forest_data.append(study_data)
@@ -799,10 +799,10 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             qe += group_qw
             group_p = 1 - scipy.stats.chi2.cdf(group_qw, df=group_df)
             if norm_ci:
-                group_lower, group_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=group_mean,
+                group_lower, group_upper = scipy.stats.norm.interval(confidence=1 - alpha, loc=group_mean,
                                                                      scale=math.sqrt(group_var))
             else:
-                group_lower, group_upper = scipy.stats.t.interval(alpha=1 - alpha, df=group_df, loc=group_mean,
+                group_lower, group_upper = scipy.stats.t.interval(confidence=1 - alpha, df=group_df, loc=group_mean,
                                                                   scale=math.sqrt(group_var))
             (group_lower_bs, group_upper_bs,
              group_lower_bias, group_upper_bias) = bootstrap_means(options.bootstrap_mean, group_boot,
@@ -820,9 +820,9 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
 
         mean_v = numpy.sum(v_data) / n
         if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
                                                                                  options.random_effects, alpha,
@@ -988,9 +988,9 @@ def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
                 mean_e, var_e, qt, *_ = mean_effect_var_and_q(tmp_e, ws_data)
             p = 1 - scipy.stats.chi2.cdf(qt, df=df)
             if norm_ci:
-                lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+                lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
             else:
-                lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
             lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, tmp_boot,
                                                                                      mean_e, pooled_var,
                                                                                      options.random_effects, alpha,
@@ -1115,9 +1115,9 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
         median_e = median_effect(e_data, ws_data)
         mean_v = numpy.sum(v_data) / n
         if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
                                                                                  options.random_effects, alpha,
@@ -1384,9 +1384,9 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
         mean_e, var_e, _, _, _, _ = mean_effect_var_and_q(e_data, ws_data)
         mean_v = numpy.sum(v_data) / n
         if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
                                                                                  options.random_effects, alpha,
@@ -1542,10 +1542,10 @@ class NestedGroup:
         group_p = 1 - scipy.stats.chi2.cdf(self.qw, df=group_df)
 
         if norm_ci:
-            group_lower, group_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=self.mean,
+            group_lower, group_upper = scipy.stats.norm.interval(confidence=1 - alpha, loc=self.mean,
                                                                  scale=math.sqrt(group_var))
         else:
-            group_lower, group_upper = scipy.stats.t.interval(alpha=1 - alpha, df=group_df, loc=self.mean,
+            group_lower, group_upper = scipy.stats.t.interval(confidence=1 - alpha, df=group_df, loc=self.mean,
                                                               scale=math.sqrt(group_var))
         (group_lower_bs, group_upper_bs,
          group_lower_bias, group_upper_bias) = bootstrap_means(bootstrap_mean, group_boot, self.mean,
@@ -1691,9 +1691,9 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         median_e = median_effect(e_data, w_data)
         mean_v = numpy.sum(v_data) / n
         if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, 0, False, alpha,
                                                                                  progress_bar=progress_bar)
@@ -1861,9 +1861,9 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
 #                                   format(pooled_var, inline_float(decimal_places))])
 #
 #         if norm_ci:
-#             lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+#             lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
 #         else:
-#             lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+#             lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
 #         original_mean_data = mean_data_tuple(get_text("Original Mean"), 0, n, mean_e, median_e, var_e, mean_v,
 #                                              lower_ci, upper_ci, 0, 0, 0, 0)
 #         original_mean = mean_e
@@ -1948,9 +1948,9 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
 #             mean_e, var_e, *_ = mean_effect_var_and_q(tmp_data[:, 0], ws)
 #
 #         if norm_ci:
-#             lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+#             lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
 #         else:
-#             lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+#             lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
 #         trim_mean_data = mean_data_tuple(get_text("Trim and Fill Mean"), 0, n+trim_n, mean_e, median_e, var_e, mean_v,
 #                                          lower_ci, upper_ci, 0, 0, 0, 0)
 #
@@ -2165,7 +2165,7 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
 
         # mean_e, var_e, _, _, _, _ = mean_effect_var_and_q(e_data, ws_data)
         # mean_v = numpy.sum(v_data) / n
-        # lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+        # lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
         # lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
         #                                                                          mean_e, pooled_var,
         #                                                                          options.random_effects, alpha)
@@ -2217,7 +2217,7 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
             mean_e = beta[0]
             var_e = sigma_b[0, 0]
             mean_v = numpy.sum(v_data) / n
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
             mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, None, var_e, mean_v, lower_ci, upper_ci,
                                         0, 0, 0, 0)
 
@@ -2296,9 +2296,9 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
 
         p = 1 - scipy.stats.chi2.cdf(qt, df=df)
         if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
 
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
@@ -2340,9 +2340,10 @@ def jackknife_meta_analysis(data, options, decimal_places: int = 4, alpha: float
                 median_e = median_effect(tmp_e, ws_data)
             p = 1 - scipy.stats.chi2.cdf(qt, df=df)
             if norm_ci:
-                lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+                lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
             else:
-                lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e,
+                                                            scale=math.sqrt(var_e))
             lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, tmp_boot,
                                                                                      mean_e, pooled_var,
                                                                                      options.random_effects, alpha,
