@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -133,7 +133,7 @@
                 <span class="metawin">MetaWin</span> 3 is free, open source software for conducting the quantitative
                 meta-analysis portion of research synthesis. It has been rewritten from scratch relative
                 to earlier versions (see <a href="#history">history</a>). The new version is written entirely
-                in Python, and the code is available on Github at
+                in Python, and the code is available on GitHub at
                 <a href="https://github.com/msrosenberg/MetaWin">https://github.com/msrosenberg/MetaWin</a>. Single
                 file executable versions of the software for Windows and Mac operating systems can be downloaded from
                 <a href="https://www.metawinsoft.com">https://www.metawinsoft.com</a>.
@@ -191,7 +191,7 @@
 
           <h2 id="suggestions">Suggestions and Bugs</h2>
           <p>
-            Suggestions and bug reports can be submitted either through the Github site
+            Suggestions and bug reports can be submitted either through the GitHub site
               (<a href="https://github.com/msrosenberg/MetaWin/issues">https://github.com/msrosenberg/MetaWin/issues</a>),
               which allows public and formal tracking of feedback.
           </p>
@@ -594,7 +594,7 @@
                 when not all experimental conditions were conducted in the same direction. As an example, if some
                 studies were based on the addition of CO<sub>2</sub> to a system while others were based on the
                 removal of CO<sub>2</sub> from a system, the expectation is that a positive effect for one would be
-                equivalent to a negative for the other. The polarity indicator let's a user specify which studies
+                equivalent to a negative for the other. The polarity indicator lets a user specify which studies
                 were measured in the same "direction" and will automatically reverse signs of those in the opposite
                 so that all calculated effect sizes represent the same thing.
             </p>
@@ -794,7 +794,7 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
 
           <h2 id="es_corr">Correlation Coefficients</h2>
             <p>When association between two continuous variables is of interest, Pearson's correlation coefficient
-                <em>r</em>, combined with it's sample size, is commonly used as an effect-size measure. </p>
+                <em>r</em>, combined with its sample size, is commonly used as an effect-size measure. </p>
             <figure><img src="images/effects_r.png"></figure>
             <h3 id="es_fisher_z">Fisher's <em>Z</em>-transform</h3>
             <p>
@@ -864,8 +864,6 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
                 indicate a significant effect of interest</li>
         </ul>
 
-            <figure><img src="images/xxxx"></figure>
-
            <h3>Drawing a Funnel Plot</h3>
             <p>
                 Funnel Plot creation is found as part of the <span class="menu">Publication Bias</span> /
@@ -885,10 +883,63 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
                 choose to plot the 95% pseudo-confidence interval, the contour confidence intervals, and/or the
                 power-enhancement (sunset) background colors.
             </p>
+
+            <figure><img src="images/pubbias_funnel.png"></figure>
+
             <p>
                 These methods are intrinsically graphical, so always produces a figure and the related text output is
                 fairly minimal.
             </p>
+
+           <h3>Output Examples</h3>
+            <figure><img src="images/example_funnel1.png"></figure>
+            <blockquote class="output-example">
+                <p>Funnel plot of effect vs. standard error. The dotted silver line represents the mean effect size.
+                The dashed silver line represents the 95% pseudo-confidence interval of the funnel, after Sterne and Egger (2001).</p>
+                <p>
+                    <strong>References</strong>
+                </p>
+                <p>Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing Research</em>.
+                    Harvard University Press: Cambridge.</p>
+                <p>Sterne, J.A.C., and M. Egger (2001) Funnel plots for detecting bias in meta-analysis: Guidelines on
+                    choice of axis. <em>Journal of Clinical Epidemiology</em> 54(10):1045–1055.
+                DOI: 10.1016/S0895-4356(01)00377-8</p>
+            </blockquote>
+
+            <figure><img src="images/example_funnel2.png"></figure>
+            <blockquote class="output-example">
+                <p>Funnel plot of effect vs. standard error. The dotted silver line represents the mean effect size.
+                The very light pink zone represents the area where effect sizes would have a probability of less than
+                1%, the silver zone a probability between 1 and 5%, and the cool grey zone a probability between 5 and
+                10%, after Peters et al. (2008).</p>
+                <p>
+                    <strong>References</strong>
+                </p>
+                <p>Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing Research</em>.
+                    Harvard University Press: Cambridge.</p>
+                <p>Peters, J.L., A.J. Sutton, D.R. Jones, K.R. Abrams, and L. Rushton (2008) Contour-enhanced
+                    meta-analysis funnel plots help distinguish publication bias from other causes of asymmetry.
+                    <em>Journal of Clinical Epidemiology</em> 61(10):991–996. DOI: 10.1016/j.jclinepi.2007.11.010</p>
+            </blockquote>
+
+            <figure><img src="images/example_funnel3.png"></figure>
+            <blockquote class="output-example">
+                <p>Funnel plot of effect vs. precision. The dotted silver line represents the mean effect size. The
+                    dashed silver line represents the 95% pseudo-confidence interval of the funnel, after Sterne
+                    and Egger (2001). The background colors indicate the power of an individual study to detect an
+                    underlying true effect equal to the mean, after Kossmeier et al. (2020).</p>
+                <p>
+                    <strong>References</strong>
+                </p>
+                <p>Kossmeier, M., U.S. Tran, and M. Voracek (2020) Power-enhanced funnel plots for meta-analysis:
+                    The sunset funnel plot. <em>Zeitschrift für Psychologie</em> 228(1):43–49.
+                    DOI: 10.1027/2151-2604/a000392</p>
+                <p>Light, R.J., and D.B. Pillemer (1984) <em>Summing Up: The Science of Reviewing Research</em>.
+                    Harvard University Press: Cambridge.</p>
+                <p>Sterne, J.A.C., and M. Egger (2001) Funnel plots for detecting bias in meta-analysis: Guidelines on
+                    choice of axis. <em>Journal of Clinical Epidemiology</em> 54(10):1045–1055.
+                    DOI: 10.1016/S0895-4356(01)00377-8</p>
+            </blockquote>
 
 
           <h2 id="egger_regression">Egger Regression</h2>
@@ -915,9 +966,41 @@ Hedges, L.V., J. Gurevitch, and P.S. Curtis (1999) The meta-analysis of response
                 (based on Student's t-distribution).
             </p>
 
-            <figure><img src="images/xxxx"></figure>
+                        <figure><img src="images/pubbias_egger.png"></figure>
+
+            <h3>Output</h3>
+            <p>
+                The following is an example of the output from an Egger Regression.
+            </p>
+
 <blockquote class="output-example">
-output pending
+<p><span style="font-weight: bold; font-size: 1.5em">Publication Bias</span></p>
+<p>Egger Regression<br/>
+→ Citations: Egger et al. (1997)<br/>
+→ Random Effects Model
+</p><p>
+→ Effect Sizes: Hedges' d<br/>
+→ Effect Size Variances: Var (d)
+</p><p>
+25 studies will be included in this analysis</p>
+<pre><code>
+Predictor    Value      SE     df        95% CI          P(t)
+--------------------------------------------------------------
+Intercept   -0.0236   1.0387   23   -2.1723 to 2.1251   0.9821
+Slope        0.3385   0.3468   23   -0.3789 to 1.0560   0.3392
+</code></pre>
+<p>
+<strong>References</strong>
+</p>
+<p>Egger, M., G.D. Smith, M. Schneider, and C. Minder (1997) Bias in meta-analysis detected by a simple, graphical
+    test. <em>BMJ</em> 315:629–634. DOI: 10.1136/bmj.315.7109.629</p>
+<p>Lin, L., and H. Chu (2018) Quantifying publication bias in meta-analysis. <em>Biometrics</em> 74(3):785–794.
+    DOI: 10.1111/biom.12817</p>
+</blockquote>
+
+<figure><img src="images/example_egger.png"></figure>
+<blockquote class="output-example">
+Plot of standardized effect size vs. precision, under a random effects model.
 </blockquote>
 
 
@@ -1902,7 +1985,7 @@ Forest plot of effect sizes for the mean of all studies, as well as subgroups of
             </p>
 
            <h3>Running a Nested Group Meta-Analysis</h3>
-            <p>The dialog for a Nested Grouped Meta-Analysis is a bit different than those already described. While
+            <p>The dialog for a Nested Grouped Meta-Analysis is a bit different from those already described. While
                 the basic options are the same (except for the absence of the random effects model), the bottom of
                 the first dialog window contains two boxes, starting with the one on the left listing all columns and
                 the one on the right blank. The right box will contain the nesting structure, with the top level
@@ -2369,7 +2452,7 @@ Plot of Hedges' d vs. %Polyandry, with a fixed effects meta-analytic linear regr
             <p>The options for a Complex/GLM Meta-Analysis are a bit more complex, as one can include any number
                 of independent variables to the analysis. Beneath the standard options are three boxes, one
                 indicating unused variables, one for categorical (grouping) variables, and one for continuous
-                variables. The user can drag an drop variables among these categories to create the model structure
+                variables. The user can drag and drop variables among these categories to create the model structure
                 they wish to conduct the meta-analysis under.
             </p>
             <figure><img src="images/analysis_glm1.png"></figure>
