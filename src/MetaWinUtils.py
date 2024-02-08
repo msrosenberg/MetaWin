@@ -246,8 +246,8 @@ def version_str() -> str:
     """
     standardized text for reporting metawin version
     """
-    return "{} {}.{}.{} beta".format(get_text("Version"), MetaWinConstants.MAJOR_VERSION,
-                                     MetaWinConstants.MINOR_VERSION, MetaWinConstants.PATCH_VERSION)
+    return "{} {}.{}.{}".format(get_text("Version"), MetaWinConstants.MAJOR_VERSION, MetaWinConstants.MINOR_VERSION,
+                                MetaWinConstants.PATCH_VERSION)
 
 
 def calculate_regression(x: numpy.array, y: numpy.array) -> Tuple[float, float, float, float]:

@@ -1560,7 +1560,7 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
             sey = 1/numpy.sqrt(curve_y)
 
         if do_pseudo:
-            curve_x_min, curve_x_max = scipy.stats.norm.interval(alpha=0.95, loc=mean_e, scale=sey)
+            curve_x_min, curve_x_max = scipy.stats.norm.interval(confidence=0.95, loc=mean_e, scale=sey)
             chart_data.caption.pseudo_ci = chart_data.add_multi_line(get_text("Pseudo-Confidence Limits"),
                                                                      curve_x_min, curve_y, linestyle="dashed",
                                                                      color="silver", zorder=3)
@@ -1571,9 +1571,9 @@ def chart_funnel_plot(x_data, y_data, mean_e, x_label: str = "x", y_label: str =
             x_max = max(numpy.max(curve_x_max), x_max)
 
         if do_contour:
-            curve_99_min, curve_99_max = scipy.stats.norm.interval(alpha=0.99, loc=0, scale=sey)
-            curve_95_min, curve_95_max = scipy.stats.norm.interval(alpha=0.95, loc=0, scale=sey)
-            curve_90_min, curve_90_max = scipy.stats.norm.interval(alpha=0.90, loc=0, scale=sey)
+            curve_99_min, curve_99_max = scipy.stats.norm.interval(confidence=0.99, loc=0, scale=sey)
+            curve_95_min, curve_95_max = scipy.stats.norm.interval(confidence=0.95, loc=0, scale=sey)
+            curve_90_min, curve_90_max = scipy.stats.norm.interval(confidence=0.90, loc=0, scale=sey)
             x_min = min(numpy.min(curve_99_min), x_min)
             x_max = max(numpy.max(curve_99_max), x_max)
             chart_data.caption.zone99 = chart_data.add_fill_area_x("P <0.01% zone", x_min, curve_99_min, curve_y,

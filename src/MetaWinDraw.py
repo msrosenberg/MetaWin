@@ -559,7 +559,7 @@ def draw_forest_plot(data, e_data_col, v_data_col, alpha: float = 0.05):
             v = data.check_value(r, v_data_col.position(), value_type=MetaWinConstants.VALUE_NUMBER)
             if (e is not None) and (v is not None) and (v > 0):
                 y += 1
-                tmp_lower, tmp_upper = scipy.stats.norm.interval(alpha=1 - alpha, loc=e, scale=math.sqrt(v))
+                tmp_lower, tmp_upper = scipy.stats.norm.interval(confidence=1 - alpha, loc=e, scale=math.sqrt(v))
                 data_list.append(mean_data_tuple(row.label, y, 0, e, None, 0, 0, tmp_lower, tmp_upper, 0, 0, 0, 0))
             else:
                 bad_data.append(row.label)

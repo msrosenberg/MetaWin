@@ -20,6 +20,8 @@ class MetaWinAbout(QDialog):
         ok_button = add_ok_button(self)
         version_label = QLabel(version_str())
         citation_label = QLabel(MetaWinConstants.mw3_citation)
+        citation_label.setWordWrap(True)
+        citation_label.setOpenExternalLinks(True)
         website_label = QLabel("<a href=\"{0}\">{0}</a>".format(MetaWinConstants.website))
         website_label.setOpenExternalLinks(True)
 

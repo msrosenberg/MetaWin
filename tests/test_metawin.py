@@ -1651,27 +1651,27 @@ def test_linear_regression():
     assert round(intercept, 3) == -39.062
     assert round(s2slope, 4) == 3.1539
     assert round(s2intercept, 5) == 8.63185
-    lower, upper = scipy.stats.t.interval(alpha=0.95, df=13, loc=slope, scale=math.sqrt(s2slope))
+    lower, upper = scipy.stats.t.interval(confidence=0.95, df=13, loc=slope, scale=math.sqrt(s2slope))
     print("Slope CI: {} - {}".format(lower, upper))
     assert round(lower, 1) == 57.4
     assert round(upper, 1) == 65.1
-    lower, upper = scipy.stats.t.interval(alpha=0.95, df=13, loc=intercept, scale=math.sqrt(s2intercept))
+    lower, upper = scipy.stats.t.interval(confidence=0.95, df=13, loc=intercept, scale=math.sqrt(s2intercept))
     print("Intercept CI: {} - {}".format(lower, upper))
     assert round(lower, 1) == -45.4
     assert round(upper, 1) == -32.7
 
     # print(scipy.stats.norm.ppf(0.025))
-    curve_y = numpy.linspace(2, 26, 25)
-    se = 1/curve_y
-    z = scipy.stats.norm.ppf(0.975)
-    power = 1 - scipy.stats.norm.cdf(z - 0.2/se) + scipy.stats.norm.cdf(-z - 0.2/se)
-    x = [-1, 1]
-    xc, yc = numpy.meshgrid(x, curve_y)
-    zc = numpy.array([power for _ in x])
-    print(xc)
-    print(yc)
-    print(zc)
-    pyplot.pcolormesh(xc, yc, zc.transpose(), shading="nearest")
-
-    pyplot.show()
+    # curve_y = numpy.linspace(2, 26, 25)
+    # se = 1/curve_y
+    # z = scipy.stats.norm.ppf(0.975)
+    # power = 1 - scipy.stats.norm.cdf(z - 0.2/se) + scipy.stats.norm.cdf(-z - 0.2/se)
+    # x = [-1, 1]
+    # xc, yc = numpy.meshgrid(x, curve_y)
+    # zc = numpy.array([power for _ in x])
+    # print(xc)
+    # print(yc)
+    # print(zc)
+    # pyplot.pcolormesh(xc, yc, zc.transpose(), shading="nearest")
+    #
+    # pyplot.show()
 

@@ -239,9 +239,9 @@ def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float 
                                   format(pooled_var, inline_float(decimal_places))])
 
         if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
         original_mean_data = mean_data_tuple(get_text("Original Mean"), 0, n, mean_e, median_e, var_e, mean_v,
                                              lower_ci, upper_ci, 0, 0, 0, 0)
         original_mean = mean_e
@@ -326,9 +326,9 @@ def trim_and_fill_analysis(data, options, decimal_places: int = 4, alpha: float 
             mean_e, var_e, *_ = mean_effect_var_and_q(tmp_data[:, 0], ws)
 
         if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(alpha=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(alpha=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
         trim_mean_data = mean_data_tuple(get_text("Trim and Fill Mean"), 0, n+trim_n, mean_e, median_e, var_e, mean_v,
                                          lower_ci, upper_ci, 0, 0, 0, 0)
 
@@ -474,8 +474,8 @@ def egger_regression(data, options, decimal_places: int = 4, alpha: float = 0.05
         slope, intercept, s2slope, s2intercept = calculate_regression(x_data, y_data)
         se_slope = math.sqrt(s2slope)
         se_intercept = math.sqrt(s2intercept)
-        slope_lower, slope_upper = scipy.stats.t.interval(alpha=1-alpha, df=n-2, loc=slope, scale=se_slope)
-        intercept_lower, intercept_upper = scipy.stats.t.interval(alpha=1-alpha, df=n-2, loc=intercept,
+        slope_lower, slope_upper = scipy.stats.t.interval(confidence=1-alpha, df=n-2, loc=slope, scale=se_slope)
+        intercept_lower, intercept_upper = scipy.stats.t.interval(confidence=1-alpha, df=n-2, loc=intercept,
                                                                   scale=se_intercept)
         p_slope = prob_t_score(slope/se_slope, df=n-2)
         p_intercept = prob_t_score(intercept/se_intercept, df=n-2)

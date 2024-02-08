@@ -13,7 +13,7 @@ mean_data_tuple = namedtuple("mean_data_tuple", ["name", "order", "n", "mean", "
 
 MAJOR_VERSION = 3
 MINOR_VERSION = 0
-PATCH_VERSION = 14
+PATCH_VERSION = 15
 
 # validity check when fetching value from data matrix
 VALUE_NUMBER = 0
@@ -40,7 +40,9 @@ def resource_path(relative_path: str, inc_file: bool = False) -> str:
     return os.path.join(base_path, relative_path)
 
 
-mw3_citation = "Rosenberg, M.S. (2022) <em>MetaWin</em>, Version 3..."
+mw3_citation = ("Rosenberg, M.S. (2024) MetaWin 3: Open-source software for meta-analysis. "
+                "<em>Frontiers in Bioinformatics</em> 4:1305969. "
+                "DOI: <a href=\"https://doi.org/10.3389/fbinf.2024.1305969\">10.3389/fbinf.2024.1305969</a>")
 website = "https://www.metawinsoft.com"
 download_website = "https://www.metawinsoft.com"
 
