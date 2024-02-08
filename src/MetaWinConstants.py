@@ -41,7 +41,8 @@ def resource_path(relative_path: str, inc_file: bool = False) -> str:
 
 
 mw3_citation = ("Rosenberg, M.S. (2024) MetaWin 3: Open-source software for meta-analysis. "
-                "<em>Frontiers in Bioinformatics</em> xxxxxxx. DOI: <a href=\"https://doi.org/xxxxx\">xxxxx</a>")
+                "<em>Frontiers in Bioinformatics</em> 4:1305969. "
+                "DOI: <a href=\"https://doi.org/10.3389/fbinf.2024.1305969\">10.3389/fbinf.2024.1305969</a>")
 website = "https://www.metawinsoft.com"
 download_website = "https://www.metawinsoft.com"
 
