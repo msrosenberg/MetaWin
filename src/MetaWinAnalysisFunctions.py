@@ -1347,107 +1347,113 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
     if check_data_for_glm(output_blocks, n, tmp_x_data, [c.label for c in categorical_vars]):
         output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
 
-        qm, qe, beta, sigma_b = calculate_glm(e_data, x_data, w_matrix)
-        pooled_var = pooled_var_glm(qe, n, w_matrix, x_data)
-        if options.random_effects:
-            output_blocks.append([get_text("Estimate of pooled variance") + ": " +
-                                  format(pooled_var, inline_float(decimal_places))])
-            ws_data = numpy.reciprocal(v_data + pooled_var)
-            w_matrix = numpy.diag(ws_data)
+        try:
             qm, qe, beta, sigma_b = calculate_glm(e_data, x_data, w_matrix)
-        else:
-            ws_data = w_data
-        median_e = median_effect(e_data, ws_data)
-
-        qt = qm + qe
-        df = n-1
-        dfm = numpy.shape(x_data)[1] - 1
-        dfe = n - dfm - 1
-        pqt = 1 - scipy.stats.chi2.cdf(qt, df=df)
-        pqe = 1 - scipy.stats.chi2.cdf(qe, df=dfe)
-        pqm = 1 - scipy.stats.chi2.cdf(qm, df=dfm)
-
-        if ((options.bootstrap_mean is not None) or (options.randomize_model is not None)) and (sender is not None):
-            if options.randomize_model is not None:
-                total_steps = options.randomize_model
+            pooled_var = pooled_var_glm(qe, n, w_matrix, x_data)
+            if options.random_effects:
+                output_blocks.append([get_text("Estimate of pooled variance") + ": " +
+                                      format(pooled_var, inline_float(decimal_places))])
+                ws_data = numpy.reciprocal(v_data + pooled_var)
+                w_matrix = numpy.diag(ws_data)
+                qm, qe, beta, sigma_b = calculate_glm(e_data, x_data, w_matrix)
             else:
-                total_steps = 0
-            if options.bootstrap_mean is not None:
-                total_steps += options.bootstrap_mean
-            progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
-                                                       get_text("Conducting Bootstrap Analysis"),
-                                                       total_steps)
-        else:
-            progress_bar = None
+                ws_data = w_data
+            median_e = median_effect(e_data, ws_data)
 
-        # basic global calcs
-        mean_e, var_e, _, _, _, _ = mean_effect_var_and_q(e_data, ws_data)
-        mean_v = numpy.sum(v_data) / n
-        if norm_ci:
-            lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
-        else:
-            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-        lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
-                                                                                 mean_e, pooled_var,
-                                                                                 options.random_effects, alpha,
-                                                                                 progress_bar=progress_bar)
-        mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, median_e, var_e, mean_v, lower_ci, upper_ci,
-                                    lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
+            qt = qm + qe
+            df = n-1
+            dfm = numpy.shape(x_data)[1] - 1
+            dfe = n - dfm - 1
+            pqt = 1 - scipy.stats.chi2.cdf(qt, df=df)
+            pqe = 1 - scipy.stats.chi2.cdf(qe, df=dfe)
+            pqm = 1 - scipy.stats.chi2.cdf(qm, df=dfm)
 
-        i2, i2_lower, i2_upper = calc_i2(qt, n, alpha)
-        i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
+            if ((options.bootstrap_mean is not None) or (options.randomize_model is not None)) and (sender is not None):
+                if options.randomize_model is not None:
+                    total_steps = options.randomize_model
+                else:
+                    total_steps = 0
+                if options.bootstrap_mean is not None:
+                    total_steps += options.bootstrap_mean
+                progress_bar = MetaWinWidgets.progress_bar(sender, get_text("Resampling Progress"),
+                                                           get_text("Conducting Bootstrap Analysis"),
+                                                           total_steps)
+            else:
+                progress_bar = None
 
-        # aic = calc_aic(qe, n, dfm + 1)
+            # basic global calcs
+            mean_e, var_e, _, _, _, _ = mean_effect_var_and_q(e_data, ws_data)
+            mean_v = numpy.sum(v_data) / n
+            if norm_ci:
+                lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
+            else:
+                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
+                                                                                     mean_e, pooled_var,
+                                                                                     options.random_effects, alpha,
+                                                                                     progress_bar=progress_bar)
+            mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, median_e, var_e, mean_v, lower_ci, upper_ci,
+                                        lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci)
 
-        global_values = simple_ma_values(mean_data, pooled_var, qt, n-1, pqt, i2)
+            i2, i2_lower, i2_upper = calc_i2(qt, n, alpha)
+            i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
 
-        # randomization test
-        if options.randomize_model:
-            if progress_bar is not None:
-                progress_bar.setLabelText(get_text("Conducting Randomization Analysis"))
-            nreps = options.randomize_model
-            # decimal places to use for randomization-based p-value
-            rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
-            cnt_q = 1
-            rng = numpy.random.default_rng()
-            for rep in range(nreps):
-                rand_e_data = rng.permutation(e_data)
-                rand_qm, _, _, _ = calculate_glm(rand_e_data, x_data, w_matrix)
-                if rand_qm >= qm:
-                    cnt_q += 1
+            # aic = calc_aic(qe, n, dfm + 1)
+
+            global_values = simple_ma_values(mean_data, pooled_var, qt, n-1, pqt, i2)
+
+            # randomization test
+            if options.randomize_model:
                 if progress_bar is not None:
-                    progress_bar.setValue(progress_bar.value() + 1)
-            p_random = cnt_q / (nreps + 1)
-            p_random_str = format(p_random, inline_float(rand_p_dec))
-        else:
-            p_random_str = ""
+                    progress_bar.setLabelText(get_text("Conducting Randomization Analysis"))
+                nreps = options.randomize_model
+                # decimal places to use for randomization-based p-value
+                rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
+                cnt_q = 1
+                rng = numpy.random.default_rng()
+                for rep in range(nreps):
+                    rand_e_data = rng.permutation(e_data)
+                    rand_qm, _, _, _ = calculate_glm(rand_e_data, x_data, w_matrix)
+                    if rand_qm >= qm:
+                        cnt_q += 1
+                    if progress_bar is not None:
+                        progress_bar.setValue(progress_bar.value() + 1)
+                p_random = cnt_q / (nreps + 1)
+                p_random_str = format(p_random, inline_float(rand_p_dec))
+            else:
+                p_random_str = ""
 
-        # output
-        output_blocks.append(["<h3>{}</h3>".format(get_text("Model Results"))])
-        output_blocks.append(["<h4>{}</h4>".format(get_text("Predictors"))])
+            # output
+            output_blocks.append(["<h3>{}</h3>".format(get_text("Model Results"))])
+            output_blocks.append(["<h4>{}</h4>".format(get_text("Predictors"))])
 
-        predictor_table_data = []
-        for b in range(len(beta)):
-            se = math.sqrt(sigma_b[b, b])
-            p = prob_z_score(beta[b]/se)
-            predictor_table_data.append(predictor_test_tuple("β{} ({})".format(b, predictor_labels[b]), beta[b], se, p))
-        output_blocks.append(predictor_table(predictor_table_data, decimal_places))
+            predictor_table_data = []
+            for b in range(len(beta)):
+                se = math.sqrt(sigma_b[b, b])
+                p = prob_z_score(beta[b]/se)
+                predictor_table_data.append(predictor_test_tuple("β{} ({})".format(b, predictor_labels[b]), beta[b], se, p))
+            output_blocks.append(predictor_table(predictor_table_data, decimal_places))
 
-        global_het_data = heterogeneity_test_tuple(get_text("Total"), qt, df, pqt, "")
-        if has_model:
-            output_blocks.append(["<h4>{}</h4>".format(get_text("Heterogeneity"))])
-            model_het = heterogeneity_test_tuple(get_text("Model"), qm, dfm, pqm, p_random_str)
-            error_het = heterogeneity_test_tuple(get_text("Error"), qe, dfe, pqe, "")
-            model_table = [model_het, error_het, global_het_data]
-            output_blocks.append(heterogeneity_table(model_table, decimal_places, total_line=True,
-                                                     randomization=options.randomize_model))
+            global_het_data = heterogeneity_test_tuple(get_text("Total"), qt, df, pqt, "")
+            if has_model:
+                output_blocks.append(["<h4>{}</h4>".format(get_text("Heterogeneity"))])
+                model_het = heterogeneity_test_tuple(get_text("Model"), qm, dfm, pqm, p_random_str)
+                error_het = heterogeneity_test_tuple(get_text("Error"), qe, dfe, pqe, "")
+                model_table = [model_het, error_het, global_het_data]
+                output_blocks.append(heterogeneity_table(model_table, decimal_places, total_line=True,
+                                                         randomization=options.randomize_model))
 
-        output_blocks.append(["<h3>{}</h3>".format(get_text("Global Results"))])
+            output_blocks.append(["<h3>{}</h3>".format(get_text("Global Results"))])
 
-        new_cites = create_global_output(output_blocks, effect_sizes.label, mean_data, global_het_data, pooled_var,
-                                         i2_data, options.bootstrap_mean, decimal_places, alpha,
-                                         options.log_transformed)
-        citations.extend(new_cites)
+            new_cites = create_global_output(output_blocks, effect_sizes.label, mean_data, global_het_data, pooled_var,
+                                             i2_data, options.bootstrap_mean, decimal_places, alpha,
+                                             options.log_transformed)
+            citations.extend(new_cites)
+        except numpy.linalg.LinAlgError as error_msg:
+            if str(error_msg) == "Singular matrix":
+                output_blocks.append([get_text("Analysis Error Encountered"), get_text("AE-singular")])
+            else:
+                output_blocks.append([get_text("Analysis Error Encountered"), get_text("AE-unknown")])
 
     return output_blocks, reg_ma_values(global_values, model_het, error_het, predictor_table_data), citations
 
@@ -2122,113 +2128,118 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
     # global_values = None
     citations = []
     if check_data_for_glm(output_blocks, n, tmp_x_data, [c.label for c in categorical_vars]):
-        output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
-        qm, qe, beta, sigma_b = calculate_glm(e_data, x_data, w_matrix)
-        pooled_var = pooled_var_glm(qe, n, w_matrix, x_data)
-        if options.random_effects:
-            output_blocks.append([get_text("Estimate of pooled variance") + ": " +
-                                  format(pooled_var, inline_float(decimal_places))])
-            vs_data = v_data + pooled_var
-            # ws_data = numpy.reciprocal(v_data + pooled_var)
-            v_matrix = numpy.diag(vs_data)  # convert w to n x n matrix with w on the diagonal
-            # add phylogenetic covariances to v_matrix
-            for i in range(n):
-                for j in range(i):
-                    v_matrix[i, j] = p_matrix[i, j] * math.sqrt(vs_data[i]) * math.sqrt(vs_data[j])
-                    v_matrix[j, i] = v_matrix[i, j]
-            w_matrix = numpy.linalg.inv(v_matrix)
-
+        try:
+            output_blocks.append([get_text("{} studies will be included in this analysis").format(n)])
             qm, qe, beta, sigma_b = calculate_glm(e_data, x_data, w_matrix)
-        # else:
-        #     ws_data = w_data
-        # median_e = median_effect(e_data, ws_data)
+            pooled_var = pooled_var_glm(qe, n, w_matrix, x_data)
+            if options.random_effects:
+                output_blocks.append([get_text("Estimate of pooled variance") + ": " +
+                                      format(pooled_var, inline_float(decimal_places))])
+                vs_data = v_data + pooled_var
+                # ws_data = numpy.reciprocal(v_data + pooled_var)
+                v_matrix = numpy.diag(vs_data)  # convert w to n x n matrix with w on the diagonal
+                # add phylogenetic covariances to v_matrix
+                for i in range(n):
+                    for j in range(i):
+                        v_matrix[i, j] = p_matrix[i, j] * math.sqrt(vs_data[i]) * math.sqrt(vs_data[j])
+                        v_matrix[j, i] = v_matrix[i, j]
+                w_matrix = numpy.linalg.inv(v_matrix)
 
-        qt = qm + qe
-        df = n-1
-        dfm = numpy.shape(x_data)[1] - 1
-        dfe = n - dfm - 1
-        pqt = 1 - scipy.stats.chi2.cdf(qt, df=df)
-        pqe = 1 - scipy.stats.chi2.cdf(qe, df=dfe)
-        pqm = 1 - scipy.stats.chi2.cdf(qm, df=dfm)
+                qm, qe, beta, sigma_b = calculate_glm(e_data, x_data, w_matrix)
+            # else:
+            #     ws_data = w_data
+            # median_e = median_effect(e_data, ws_data)
 
-        # aic = calc_aic(qe, n, dfm + 2)
-        # print("AIC:", round(aic, 4))
+            qt = qm + qe
+            df = n-1
+            dfm = numpy.shape(x_data)[1] - 1
+            dfe = n - dfm - 1
+            pqt = 1 - scipy.stats.chi2.cdf(qt, df=df)
+            pqe = 1 - scipy.stats.chi2.cdf(qe, df=dfe)
+            pqm = 1 - scipy.stats.chi2.cdf(qm, df=dfm)
+
+            # aic = calc_aic(qe, n, dfm + 2)
+            # print("AIC:", round(aic, 4))
 
 
-        """
-        everything to here has been cross-checked fairly well
-        """
+            """
+            everything to here has been cross-checked fairly well
+            """
 
-
-        # basic global calcs
-        """ need to pull the values from already calculated model """
-
-        # mean_e, var_e, _, _, _, _ = mean_effect_var_and_q(e_data, ws_data)
-        # mean_v = numpy.sum(v_data) / n
-        # lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-        # lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
-        #                                                                          mean_e, pooled_var,
-        #                                                                          options.random_effects, alpha)
-        # mean_data = mean_data_tuple("Global", 0, n, mean_e, var_e, mean_v, lower_ci, upper_ci, lower_bs_ci,
-        #                             upper_bs_ci, lower_bias_ci, upper_bias_ci)
-
-        # i2, i2_lower, i2_upper = calc_i2(qt, n, alpha)
-        # i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
-
-        # randomization test
-        p_random_str = ""  # temp
-        # if options.randomize_model and has_model:
-        #     nreps = options.randomize_model
-        #     # decimal places to use for randomization-based p-value
-        #     rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
-        #     cnt_q = 1
-        #     rng = numpy.random.default_rng()
-        #     for rep in range(nreps):
-        #         rand_x_data = rng.permutation(x_data)
-        #         rand_qm, _, _, _ = calculate_glm(e_data, rand_x_data, w_matrix)
-        #         if rand_qm >= qm:
-        #             cnt_q += 1
-        #     p_random = cnt_q / (nreps + 1)
-        #     p_random_str = format(p_random, inline_float(rand_p_dec))
-        # else:
-        #     p_random_str = ""
-
-        # output
-        output_blocks.append(["<h3>{}</h3>".format(get_text("Model Results"))])
-        output_blocks.append(["<h4>{}</h4>".format(get_text("Predictors"))])
-
-        predictor_table_data = []
-        for b in range(len(beta)):
-            se = math.sqrt(sigma_b[b, b])
-            p = prob_z_score(beta[b]/se)
-            predictor_table_data.append(predictor_test_tuple("β{} ({})".format(b, predictor_labels[b]), beta[b], se, p))
-        output_blocks.append(predictor_table(predictor_table_data, decimal_places))
-
-        global_het_data = heterogeneity_test_tuple(get_text("Total"), qt, df, pqt, "")
-        if has_model:
-            output_blocks.append(["<h4>{}</h4>".format(get_text("Heterogeneity"))])
-            model_het = heterogeneity_test_tuple(get_text("Model"), qm, dfm, pqm, p_random_str)
-            error_het = heterogeneity_test_tuple(get_text("Error"), qe, dfe, pqe, "")
-            model_table = [model_het, error_het, global_het_data]
-            output_blocks.append(heterogeneity_table(model_table, decimal_places, total_line=True,
-                                                     randomization=options.randomize_model))
-        else:
+            # basic global calcs
             """ need to pull the values from already calculated model """
-            mean_e = beta[0]
-            var_e = sigma_b[0, 0]
-            mean_v = numpy.sum(v_data) / n
-            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
-            mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, None, var_e, mean_v, lower_ci, upper_ci,
-                                        0, 0, 0, 0)
 
-            i2, i2_lower, i2_upper = calc_i2(qt, n, alpha)
-            i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
+            # mean_e, var_e, _, _, _, _ = mean_effect_var_and_q(e_data, ws_data)
+            # mean_v = numpy.sum(v_data) / n
+            # lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+            # lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
+            #                                                                          mean_e, pooled_var,
+            #                                                                          options.random_effects, alpha)
+            # mean_data = mean_data_tuple("Global", 0, n, mean_e, var_e, mean_v, lower_ci, upper_ci, lower_bs_ci,
+            #                             upper_bs_ci, lower_bias_ci, upper_bias_ci)
 
-            output_blocks.append(["<h3>{}</h3>".format(get_text("Global Results"))])
-            new_cites = create_global_output(output_blocks, effect_sizes.label, mean_data, global_het_data, pooled_var,
-                                             i2_data, options.bootstrap_mean, decimal_places, alpha,
-                                             options.log_transformed, inc_median=False)
-            citations.extend(new_cites)
+            # i2, i2_lower, i2_upper = calc_i2(qt, n, alpha)
+            # i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
+
+            # randomization test
+            p_random_str = ""  # temp
+            # if options.randomize_model and has_model:
+            #     nreps = options.randomize_model
+            #     # decimal places to use for randomization-based p-value
+            #     rand_p_dec = max(decimal_places, math.ceil(math.log10(nreps+1)))
+            #     cnt_q = 1
+            #     rng = numpy.random.default_rng()
+            #     for rep in range(nreps):
+            #         rand_x_data = rng.permutation(x_data)
+            #         rand_qm, _, _, _ = calculate_glm(e_data, rand_x_data, w_matrix)
+            #         if rand_qm >= qm:
+            #             cnt_q += 1
+            #     p_random = cnt_q / (nreps + 1)
+            #     p_random_str = format(p_random, inline_float(rand_p_dec))
+            # else:
+            #     p_random_str = ""
+
+            # output
+            output_blocks.append(["<h3>{}</h3>".format(get_text("Model Results"))])
+            output_blocks.append(["<h4>{}</h4>".format(get_text("Predictors"))])
+
+            predictor_table_data = []
+            for b in range(len(beta)):
+                se = math.sqrt(sigma_b[b, b])
+                p = prob_z_score(beta[b]/se)
+                predictor_table_data.append(predictor_test_tuple("β{} ({})".format(b, predictor_labels[b]), beta[b], se, p))
+            output_blocks.append(predictor_table(predictor_table_data, decimal_places))
+
+            global_het_data = heterogeneity_test_tuple(get_text("Total"), qt, df, pqt, "")
+            if has_model:
+                output_blocks.append(["<h4>{}</h4>".format(get_text("Heterogeneity"))])
+                model_het = heterogeneity_test_tuple(get_text("Model"), qm, dfm, pqm, p_random_str)
+                error_het = heterogeneity_test_tuple(get_text("Error"), qe, dfe, pqe, "")
+                model_table = [model_het, error_het, global_het_data]
+                output_blocks.append(heterogeneity_table(model_table, decimal_places, total_line=True,
+                                                         randomization=options.randomize_model))
+            else:
+                """ need to pull the values from already calculated model """
+                mean_e = beta[0]
+                var_e = sigma_b[0, 0]
+                mean_v = numpy.sum(v_data) / n
+                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+                mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, None, var_e, mean_v, lower_ci, upper_ci,
+                                            0, 0, 0, 0)
+
+                i2, i2_lower, i2_upper = calc_i2(qt, n, alpha)
+                i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
+
+                output_blocks.append(["<h3>{}</h3>".format(get_text("Global Results"))])
+                new_cites = create_global_output(output_blocks, effect_sizes.label, mean_data, global_het_data, pooled_var,
+                                                 i2_data, options.bootstrap_mean, decimal_places, alpha,
+                                                 options.log_transformed, inc_median=False)
+                citations.extend(new_cites)
+        except numpy.linalg.LinAlgError as error_msg:
+            if str(error_msg) == "Singular matrix":
+                output_blocks.append([get_text("Analysis Error Encountered"), get_text("AE-singular")])
+            else:
+                output_blocks.append([get_text("Analysis Error Encountered"), get_text("AE-unknown")])
 
     return output_blocks, citations
 
