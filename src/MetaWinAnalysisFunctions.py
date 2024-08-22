@@ -650,7 +650,8 @@ def simple_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         forest_data = [mean_data]
         for i in range(n):
             # individual study data has to use normal dist
-            tmp_lower, tmp_upper = scipy.stats.norm.interval(confidence=1-alpha, loc=e_data[i], scale=math.sqrt(v_data[i]))
+            tmp_lower, tmp_upper = scipy.stats.norm.interval(confidence=1-alpha, loc=e_data[i],
+                                                             scale=math.sqrt(v_data[i]))
             study_data = mean_data_tuple(study_names[i], plot_order, 0, e_data[i], None, 0, 0, tmp_lower, tmp_upper,
                                          None, None, None, None)
             forest_data.append(study_data)
@@ -822,7 +823,8 @@ def grouped_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
         if norm_ci:
             lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e,
+                                                        scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
                                                                                  options.random_effects, alpha,
@@ -990,7 +992,8 @@ def cumulative_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
             if norm_ci:
                 lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1-alpha, loc=mean_e, scale=math.sqrt(var_e))
             else:
-                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1-alpha, df=df, loc=mean_e,
+                                                            scale=math.sqrt(var_e))
             lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, tmp_boot,
                                                                                      mean_e, pooled_var,
                                                                                      options.random_effects, alpha,
@@ -1117,7 +1120,8 @@ def regression_meta_analysis(data, options, decimal_places: int = 4, alpha: floa
         if norm_ci:
             lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e,
+                                                        scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, pooled_var,
                                                                                  options.random_effects, alpha,
@@ -1387,7 +1391,8 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             if norm_ci:
                 lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
             else:
-                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e,
+                                                            scale=math.sqrt(var_e))
             lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                      mean_e, pooled_var,
                                                                                      options.random_effects, alpha,
@@ -1431,7 +1436,8 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             for b in range(len(beta)):
                 se = math.sqrt(sigma_b[b, b])
                 p = prob_z_score(beta[b]/se)
-                predictor_table_data.append(predictor_test_tuple("β{} ({})".format(b, predictor_labels[b]), beta[b], se, p))
+                predictor_table_data.append(predictor_test_tuple("β{} ({})".format(b, predictor_labels[b]),
+                                                                 beta[b], se, p))
             output_blocks.append(predictor_table(predictor_table_data, decimal_places))
 
             global_het_data = heterogeneity_test_tuple(get_text("Total"), qt, df, pqt, "")
@@ -1699,7 +1705,8 @@ def nested_meta_analysis(data, options, decimal_places: int = 4, alpha: float = 
         if norm_ci:
             lower_ci, upper_ci = scipy.stats.norm.interval(confidence=1 - alpha, loc=mean_e, scale=math.sqrt(var_e))
         else:
-            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e, scale=math.sqrt(var_e))
+            lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=n-1, loc=mean_e,
+                                                        scale=math.sqrt(var_e))
         lower_bs_ci, upper_bs_ci, lower_bias_ci, upper_bias_ci = bootstrap_means(options.bootstrap_mean, boot_data,
                                                                                  mean_e, 0, False, alpha,
                                                                                  progress_bar=progress_bar)
@@ -2207,7 +2214,8 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
             for b in range(len(beta)):
                 se = math.sqrt(sigma_b[b, b])
                 p = prob_z_score(beta[b]/se)
-                predictor_table_data.append(predictor_test_tuple("β{} ({})".format(b, predictor_labels[b]), beta[b], se, p))
+                predictor_table_data.append(predictor_test_tuple("β{} ({})".format(b, predictor_labels[b]),
+                                                                 beta[b], se, p))
             output_blocks.append(predictor_table(predictor_table_data, decimal_places))
 
             global_het_data = heterogeneity_test_tuple(get_text("Total"), qt, df, pqt, "")
@@ -2223,7 +2231,8 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
                 mean_e = beta[0]
                 var_e = sigma_b[0, 0]
                 mean_v = numpy.sum(v_data) / n
-                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e, scale=math.sqrt(var_e))
+                lower_ci, upper_ci = scipy.stats.t.interval(confidence=1 - alpha, df=df, loc=mean_e,
+                                                            scale=math.sqrt(var_e))
                 mean_data = mean_data_tuple(get_text("Global"), 0, n, mean_e, None, var_e, mean_v, lower_ci, upper_ci,
                                             0, 0, 0, 0)
 
@@ -2231,8 +2240,8 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
                 i2_data = [i2_values(get_text("Total"), i2, i2_lower, i2_upper)]
 
                 output_blocks.append(["<h3>{}</h3>".format(get_text("Global Results"))])
-                new_cites = create_global_output(output_blocks, effect_sizes.label, mean_data, global_het_data, pooled_var,
-                                                 i2_data, options.bootstrap_mean, decimal_places, alpha,
+                new_cites = create_global_output(output_blocks, effect_sizes.label, mean_data, global_het_data,
+                                                 pooled_var, i2_data, options.bootstrap_mean, decimal_places, alpha,
                                                  options.log_transformed, inc_median=False)
                 citations.extend(new_cites)
         except numpy.linalg.LinAlgError as error_msg:
