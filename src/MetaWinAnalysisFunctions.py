@@ -14,7 +14,7 @@ import scipy.stats
 import MetaWinConstants
 from MetaWinConstants import mean_data_tuple
 from MetaWinUtils import create_output_table, inline_float, interval_to_str, get_citation, exponential_label, \
-    prob_z_score
+    prob_z_score, strong_text
 import MetaWinCharts
 import MetaWinWidgets
 from MetaWinLanguage import get_text
@@ -1451,9 +1451,9 @@ def complex_meta_analysis(data, options, decimal_places: int = 4, alpha: float =
             citations.extend(new_cites)
         except numpy.linalg.LinAlgError as error_msg:
             if str(error_msg) == "Singular matrix":
-                output_blocks.append([get_text("Analysis Error Encountered"), get_text("AE-singular")])
+                output_blocks.append([strong_text(get_text("Analysis Error Encountered")), get_text("AE-singular")])
             else:
-                output_blocks.append([get_text("Analysis Error Encountered"), get_text("AE-unknown")])
+                output_blocks.append([strong_text(get_text("Analysis Error Encountered")), get_text("AE-unknown")])
 
     return output_blocks, reg_ma_values(global_values, model_het, error_het, predictor_table_data), citations
 
@@ -2237,9 +2237,9 @@ def phylogenetic_meta_analysis(data, options, tree, decimal_places: int = 4, alp
                 citations.extend(new_cites)
         except numpy.linalg.LinAlgError as error_msg:
             if str(error_msg) == "Singular matrix":
-                output_blocks.append([get_text("Analysis Error Encountered"), get_text("AE-singular")])
+                output_blocks.append([strong_text(get_text("Analysis Error Encountered")), get_text("AE-singular")])
             else:
-                output_blocks.append([get_text("Analysis Error Encountered"), get_text("AE-unknown")])
+                output_blocks.append([strong_text(get_text("Analysis Error Encountered")), get_text("AE-unknown")])
 
     return output_blocks, citations
 
