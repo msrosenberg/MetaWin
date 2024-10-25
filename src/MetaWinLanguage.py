@@ -27,6 +27,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Bar Color": "Bar Color",
                       "Basic Meta-Analysis": "Basic Meta-Analysis",
                       "Between": "Between",
+                      "blanks": "blanks",
                       "Bootstrap Mean Effect Size(s)": "Bootstrap Mean Effect Size(s)",
                       "bootstrap_caption": " Confidence intervals from a boostrap ({:,} iterations) procedure, "
                                            "following {}, are indicated by {}; the bias-corrected bootstrap interval "

@@ -513,9 +513,17 @@ class MainWindow(QMainWindow):
                     else:
                         new_item = QTableWidgetItem(dat.value)
                     if not not_filtered:
+                        # if dat is None:
+                        #     new_item.setBackground(QColor(self.filtered_row_color))
+                        # elif str(dat.value) in column.group_filter:
+                        #     new_item.setBackground(QColor(self.filtered_col_color))
+                        # else:
+                        #     new_item.setBackground(QColor(self.filtered_row_color))
                         if dat is None:
-                            new_item.setBackground(QColor(self.filtered_row_color))
-                        elif str(dat.value) in column.group_filter:
+                            dat_value = f"[{get_text("blanks")}]"
+                        else:
+                            dat_value = str(dat.value)
+                        if dat_value in column.group_filter:
                             new_item.setBackground(QColor(self.filtered_col_color))
                         else:
                             new_item.setBackground(QColor(self.filtered_row_color))

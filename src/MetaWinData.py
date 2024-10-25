@@ -6,6 +6,7 @@ from typing import Tuple, Optional, Union
 
 from MetaWinUtils import format_number
 from MetaWinConstants import VALUE_STRING, VALUE_NUMBER
+from MetaWinLanguage import get_text
 
 
 class MetaWinValue:
@@ -76,6 +77,8 @@ class MetaWinRow:
             d = self.data.value(self.position(), c)
             if d is not None:
                 d = d.value
+            else:
+                d = f"[{get_text("blanks")}]"
             if str(d) in col.group_filter:
                 return False
         return True
