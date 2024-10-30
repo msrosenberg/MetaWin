@@ -42,6 +42,10 @@ def interval_to_str(lower_value, upper_value, decimal_places: int = 4) -> str:
         format(upper_value, inline_float(decimal_places))
 
 
+def strong_text(text: str) -> str:
+    return "<strong>" + text + "</strong>"
+
+
 def strip_html(x: str) -> str:
     """
     remove any stray html tags from within string

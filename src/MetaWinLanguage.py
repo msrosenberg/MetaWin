@@ -14,6 +14,12 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "About MetaWin": "About MetaWin",
                       "Additional Options": "Additional Options",
                       "Analysis": "Analysis",
+                      "Analysis Error Encountered": "Analysis Error Encountered",
+                      "AE-singular": "The design matrix was singular and could not be inverted. This is most likely "
+                                     "caused by two or more categorical variables lacking independence, for example "
+                                     "if two data columns have identical values or perfectly reversed values.",
+                      "AE-unknown": "An unexpected linear algebra error was encountered and the analysis could not "
+                                    "be completed. There is likely a problem with the data structure.",
                       "Analysis Options": "Analysis Options",
                       "available": "available",
                       "Automatically check for udpates": "Automatically check for udpates",
@@ -21,6 +27,7 @@ ENGLISH_DICTIONARY = {"error_not_text_file": "{} does not appear to be a text fi
                       "Bar Color": "Bar Color",
                       "Basic Meta-Analysis": "Basic Meta-Analysis",
                       "Between": "Between",
+                      "blanks": "blanks",
                       "Bootstrap Mean Effect Size(s)": "Bootstrap Mean Effect Size(s)",
                       "bootstrap_caption": " Confidence intervals from a boostrap ({:,} iterations) procedure, "
                                            "following {}, are indicated by {}; the bias-corrected bootstrap interval "

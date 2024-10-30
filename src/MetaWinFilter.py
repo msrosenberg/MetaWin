@@ -25,11 +25,16 @@ class FilterWithinColumnDialog(QDialog):
         group_layout = QVBoxLayout()
         group_data = []
         c = data.col_number(column)
+        has_none = False
         for r in range(data.nrows()):
             g = data.value(r, c)
             if g is not None:
                 group_data.append(str(g.value))
+            else:
+                has_none = True
         self.group_names = sorted(set(group_data))
+        if has_none:
+            self.group_names.append(f"[{get_text("blanks")}]")
         for group in self.group_names:
             new_check_box = QCheckBox(group)
             group_layout.addWidget(new_check_box)
